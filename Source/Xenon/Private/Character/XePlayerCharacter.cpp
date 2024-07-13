@@ -22,7 +22,7 @@ AXePlayerCharacter::AXePlayerCharacter()
 	
 	/** Movement Setup */
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.f, 700.f, 0.f); // speed of character rotate
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 1000.f, 0.f); // speed of character rotate
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 

@@ -15,13 +15,7 @@ void AXePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	checkf(InputMappingContext, TEXT("InputMappingContext is not set in Player Controller."));
-
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-
-	// Set Input Mapping Context.
-	check(Subsystem);
-	Subsystem->AddMappingContext(InputMappingContext, 0);
+	
 
 	// Set mouse cursor.
 	bShowMouseCursor = true;
@@ -38,8 +32,14 @@ void AXePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
+	// Set Input Mapping Context.
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
+	check(Subsystem);
+	checkf(InputMappingContext, TEXT("InputMappingContext is not set in Player Controller."));
+	Subsystem->AddMappingContext(InputMappingContext, 0);
 
+	// Bind Input Actions.
+	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXePlayerController::Move);
 }
 
