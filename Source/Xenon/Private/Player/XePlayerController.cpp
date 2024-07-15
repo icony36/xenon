@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 
 AXePlayerController::AXePlayerController()
 {
@@ -14,8 +15,6 @@ AXePlayerController::AXePlayerController()
 void AXePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 
 	// Set mouse cursor.
 	bShowMouseCursor = true;
@@ -32,11 +31,21 @@ void AXePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	// Set Input Mapping Context.
+	// Add Input Mapping Context to Enhanced Input Local Player Subsystem.
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	check(Subsystem);
 	checkf(InputMappingContext, TEXT("InputMappingContext is not set in Player Controller."));
 	Subsystem->AddMappingContext(InputMappingContext, 0);
+
+	// Connect User Settings to Input Mapping Context.
+	if (UEnhancedInputUserSettings* UserSettings = Subsystem->GetUserSettings())
+	{
+		if (!UserSettings->IsMappingContextRegistered(InputMappingContext))
+		{
+			UserSettings->RegisterInputMappingContext(InputMappingContext);
+		}
+	}
+	
 
 	// Bind Input Actions.
 	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);

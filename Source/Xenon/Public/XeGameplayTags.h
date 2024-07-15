@@ -33,4 +33,4 @@ public:
 
 private:
  static FXeGameplayTags GameplayTags;
-};
+}; 
