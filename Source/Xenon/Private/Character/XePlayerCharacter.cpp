@@ -13,10 +13,12 @@ AXePlayerCharacter::AXePlayerCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->SetUsingAbsoluteRotation(true);
+	CameraBoom->TargetArmLength = 1400.f;
 	CameraBoom->bDoCollisionTest = false;
 
 	TopDownCameraComponent = CreateDefaultSubobject<UCameraComponent>("CamaraComponent");
 	TopDownCameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	TopDownCameraComponent->FieldOfView = 70.f;
 	TopDownCameraComponent->bUsePawnControlRotation = false;
 	
 	
