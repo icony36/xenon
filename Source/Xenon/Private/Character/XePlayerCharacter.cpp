@@ -11,7 +11,7 @@
 
 AXePlayerCharacter::AXePlayerCharacter()
 {
-	// Setup camera.
+	// Setup Camera Component.
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->SetUsingAbsoluteRotation(true);
@@ -24,7 +24,7 @@ AXePlayerCharacter::AXePlayerCharacter()
 	TopDownCameraComponent->bUsePawnControlRotation = false;
 	
 	
-	// Setup movement.
+	// Setup Movement Component.
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 1000.f, 0.f); // speed of character rotate
 	GetCharacterMovement()->bConstrainToPlane = true;
@@ -40,7 +40,7 @@ void AXePlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	// Setup combat Info for server.
+	// Setup combat info for server.
 	SetupCombatInfo();
 }
 
@@ -48,7 +48,7 @@ void AXePlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	// Setup combat Info for client.
+	// Setup combat info for client.
 	SetupCombatInfo();
 }
 

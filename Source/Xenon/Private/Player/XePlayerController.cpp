@@ -20,7 +20,7 @@ void AXePlayerController::BeginPlay()
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 
-	// Set input mode so the player can use input from keyboard and mouse and able to effect UI.
+	// Set input mode.
 	FInputModeGameAndUI InputModeData;
 	InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	InputModeData.SetHideCursorDuringCapture(false);
@@ -31,7 +31,7 @@ void AXePlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	// Add Input Mapping Context to Enhanced Input Local Player Subsystem.
+	// Add Input Mapping Context to Enhanced Input Subsystem.
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	check(Subsystem);
 	checkf(InputMappingContext, TEXT("InputMappingContext is not set in Player Controller."));
@@ -54,10 +54,10 @@ void AXePlayerController::SetupInputComponent()
 
 void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 {
-	// Retrieve vector 2D value from input.
+	// Retrieve vector 2D values from input.
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
 
-	if (APawn* ControlledPawn = GetPawn<APawn>()) // move might be called before Pawn is valid.
+	if (APawn* ControlledPawn = GetPawn<APawn>()) // *move might be called before Pawn is valid
 	{
 		ControlledPawn->AddMovementInput(FVector::RightVector, InputAxisVector.X);
 		ControlledPawn->AddMovementInput(FVector::ForwardVector, InputAxisVector.Y);

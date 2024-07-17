@@ -9,7 +9,7 @@
 
 AXePlayerState::AXePlayerState()
 {
-	// Set to update faster (this value is used by Fortnite and Lyra Project.
+	// Set to update faster (this value is used by Fortnite and Lyra Project).
 	NetUpdateFrequency = 100.f;
 	
 	// Setup Ability System Component.

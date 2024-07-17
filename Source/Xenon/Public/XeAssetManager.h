@@ -7,7 +7,7 @@
 #include "XeAssetManager.generated.h"
 
 /**
- * Singleton that is responsible for loading and unloading PrimaryAssets.
+ * Singleton - responsible for loading and unloading PrimaryAssets.
  */
 UCLASS()
 class XENON_API UXeAssetManager : public UAssetManager
@@ -18,6 +18,6 @@ public:
 	static UXeAssetManager& Get();
 
 protected:
-	// When asset manager start initial loading.
+	// Called when asset manager start initial loading.
 	virtual void StartInitialLoading() override;
 };
