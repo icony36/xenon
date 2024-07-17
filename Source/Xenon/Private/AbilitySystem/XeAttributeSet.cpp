@@ -25,6 +25,11 @@ void UXeAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, HealthRegen, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, ManaRegen, COND_None, REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, Damage, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, Armor, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, MovementSpeed, COND_None, REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, AttackSpeed, COND_None, REPNOTIFY_Always);
 }
 
 void UXeAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -66,7 +71,7 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 }
 
 void UXeAttributeSet::MakeEffectProperties(const FGameplayEffectModCallbackData& Data,
-	FEffectProperties& OutProperties)
+                                           FEffectProperties& OutProperties)
 {
 	/**
 	 * Source = Causer of the effect
@@ -158,4 +163,28 @@ void UXeAttributeSet::OnRep_ManaRegen(const FGameplayAttributeData& OldManaRegen
 {
 	// Handle attributes that will be predicted.
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, ManaRegen, OldManaRegen);
+}
+
+void UXeAttributeSet::OnRep_Damage(const FGameplayAttributeData& OldDamage) const
+{
+	// Handle attributes that will be predicted.
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, Damage, OldDamage);
+}
+
+void UXeAttributeSet::OnRep_Armor(const FGameplayAttributeData& OldArmor) const
+{
+	// Handle attributes that will be predicted.
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, Armor, OldArmor);
+}
+
+void UXeAttributeSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldMovementSpeed) const
+{
+	// Handle attributes that will be predicted.
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, MovementSpeed, OldMovementSpeed);
+}
+
+void UXeAttributeSet::OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const
+{
+	// Handle attributes that will be predicted.
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, AttackSpeed, OldAttackSpeed);
 }

@@ -100,6 +100,31 @@ protected:
 	void OnRep_ManaRegen(const FGameplayAttributeData& OldManaRegen) const;
 	//~ end Essential Attributes
 
+
+	//~ Basic Attributes
+	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_Damage)
+	FGameplayAttributeData Damage;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, Damage);
+	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_Armor)
+	FGameplayAttributeData Armor;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, Armor);
+	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_MovementSpeed)
+	FGameplayAttributeData MovementSpeed;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MovementSpeed);
+	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_AttackSpeed)
+	FGameplayAttributeData AttackSpeed;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, AttackSpeed);
+	
+	UFUNCTION()
+	void OnRep_Damage(const FGameplayAttributeData& OldDamage) const;
+	UFUNCTION()
+	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
+	UFUNCTION()
+	void OnRep_MovementSpeed(const FGameplayAttributeData& OldDamage) const;
+	UFUNCTION()
+	void OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const;
+	//~ end Basic Attributes
+
 private:
 	static void MakeEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& OutProperties);
 };
