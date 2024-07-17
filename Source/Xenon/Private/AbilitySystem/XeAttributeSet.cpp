@@ -20,6 +20,7 @@ void UXeAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	// Register replicated variables.
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, Mana, COND_None, REPNOTIFY_Always);
+	
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, HealthRegen, COND_None, REPNOTIFY_Always);
@@ -49,7 +50,7 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 
 	// Create Effect Properties that holds effect related data (instigator and victim data).
 	FEffectProperties Props;
-	MakeEffectProperties(Data, Props); // *Variables in Props might be null, check before using.
+	MakeEffectProperties(Data, Props); // * variables in Props might be null, check before using
 
 	// Clamp Health.
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())

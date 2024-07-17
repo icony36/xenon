@@ -52,6 +52,14 @@ void AXePlayerCharacter::OnRep_PlayerState()
 	SetupCombatInfo();
 }
 
+int32 AXePlayerCharacter::GetCombatLevel_Implementation()
+{
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	return XePlayerState->GetCombatLevel();
+}
+
 void AXePlayerCharacter::SetupCombatInfo()
 {
 	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
@@ -63,4 +71,7 @@ void AXePlayerCharacter::SetupCombatInfo()
 	// Set Character owned Ability System Component and Attribute Set.
 	AbilitySystemComponent = XePlayerState->GetAbilitySystemComponent();
 	AttributeSet = XePlayerState->GetAttributeSet();
+
+	// Initialize default Attributes.
+	InitializeDefaultAttributes();
 }

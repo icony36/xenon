@@ -57,7 +57,7 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 	// Retrieve vector 2D values from input.
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
 
-	if (APawn* ControlledPawn = GetPawn<APawn>()) // *move might be called before Pawn is valid
+	if (APawn* ControlledPawn = GetPawn<APawn>()) // * move might be called before Pawn is valid
 	{
 		ControlledPawn->AddMovementInput(FVector::RightVector, InputAxisVector.X);
 		ControlledPawn->AddMovementInput(FVector::ForwardVector, InputAxisVector.Y);

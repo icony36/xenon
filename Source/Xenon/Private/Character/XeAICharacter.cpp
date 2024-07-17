@@ -17,6 +17,11 @@ AXeAICharacter::AXeAICharacter()
 	AttributeSet = CreateDefaultSubobject<UXeAttributeSet>("AttributeSet");
 }
 
+int32 AXeAICharacter::GetCombatLevel_Implementation()
+{
+	return CombatLevel;
+}
+
 void AXeAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -29,4 +34,10 @@ void AXeAICharacter::SetupCombatInfo()
 	Super::SetupCombatInfo();
 
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+
+	// Initialize default Attributes.
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();
+	}
 }

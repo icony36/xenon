@@ -38,9 +38,9 @@ public:
 	
 	
 	//~ Combat
-	FORCEINLINE int32 GetCombatLevel() const {return CombatLevel;}
-	FORCEINLINE int32 GetExperience() const {return Experience;}
-	FORCEINLINE int32 GetSkillPoint() const {return SkillPoint;}
+	FORCEINLINE int32 GetCombatLevel() const { return CombatLevel; }
+	FORCEINLINE int32 GetExperience() const { return Experience; }
+	FORCEINLINE int32 GetSkillPoint() const { return SkillPoint; }
 	
 	void SetCombatLevel(int32 InCombatLevel);
 	void SetExperience(int32 InExperience);

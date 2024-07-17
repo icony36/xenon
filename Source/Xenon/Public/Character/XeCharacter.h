@@ -5,12 +5,14 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interface/CombatInterface.h"
 #include "XeCharacter.generated.h"
 
+class UGameplayEffect;
 class UAttributeSet;
 
 UCLASS(Abstract)
-class XENON_API AXeCharacter : public ACharacter, public IAbilitySystemInterface
+class XENON_API AXeCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -29,6 +31,16 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
+	
+	virtual void InitializeDefaultAttributes() const;
+
+	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, float Level) const;
 	//~ end Ability System
 
 	

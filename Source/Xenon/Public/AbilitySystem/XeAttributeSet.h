@@ -68,23 +68,28 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing=OnRep_Mana)
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, Mana);
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing=OnRep_MaxHealth)
-	FGameplayAttributeData MaxHealth;
-	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MaxHealth);
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing=OnRep_MaxMana)
-	FGameplayAttributeData MaxMana;
-	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MaxMana);
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing=OnRep_HealthRegen)
-	FGameplayAttributeData HealthRegen;
-	ATTRIBUTE_ACCESSORS(UXeAttributeSet, HealthRegen);
-	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing=OnRep_ManaRegen)
-	FGameplayAttributeData ManaRegen;
-	ATTRIBUTE_ACCESSORS(UXeAttributeSet, ManaRegen);
-
+	
 	UFUNCTION()
 	void OnRep_Health(const FGameplayAttributeData& OldHealth) const;
 	UFUNCTION()
 	void OnRep_Mana(const FGameplayAttributeData& OldMana) const;
+	//~ end Vital Attributes
+
+
+	//~ Primary Attributes
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing=OnRep_MaxHealth)
+	FGameplayAttributeData MaxHealth;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MaxHealth);
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing=OnRep_MaxMana)
+	FGameplayAttributeData MaxMana;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MaxMana);
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing=OnRep_HealthRegen)
+	FGameplayAttributeData HealthRegen;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, HealthRegen);
+	UPROPERTY(BlueprintReadOnly, Category="Primary Attributes", ReplicatedUsing=OnRep_ManaRegen)
+	FGameplayAttributeData ManaRegen;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, ManaRegen);
+
 	UFUNCTION()
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 	UFUNCTION()
@@ -93,7 +98,7 @@ protected:
 	void OnRep_HealthRegen(const FGameplayAttributeData& OldHealthRegen) const;
 	UFUNCTION()
 	void OnRep_ManaRegen(const FGameplayAttributeData& OldManaRegen) const;
-	//~ end Vital Attributes
+	//~ end Primary Attributes
 
 private:
 	static void MakeEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& OutProperties);

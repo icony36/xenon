@@ -23,6 +23,10 @@ public:
 
 	virtual auto OnRep_PlayerState() -> void override;
 
+	//~ Combat Interface
+	virtual int32 GetCombatLevel_Implementation() override;
+	//~ end Combat Interface
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;
@@ -30,5 +34,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
 
+	//~ Combat
 	virtual void SetupCombatInfo() override;
+	//~ Combat
 };
