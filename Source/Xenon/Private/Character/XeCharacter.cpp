@@ -18,8 +18,8 @@ UAbilitySystemComponent* AXeCharacter::GetAbilitySystemComponent() const
 
 void AXeCharacter::InitializeDefaultAttributes() const
 {
-	ApplyEffectToSelf(DefaultPrimaryAttributes, 1.f);
-	ApplyEffectToSelf(DefaultVitalAttributes, 1.f); // * apply Vital Attributes last as they depend on Primary Attribute 
+	ApplyEffectToSelf(DefaultEssentialAttributes, 1.f);
+	ApplyEffectToSelf(DefaultVitalAttributes, 1.f); // * apply Vital Attributes last as they depend on Essential Attributes
 }
 
 void AXeCharacter::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, float Level) const
