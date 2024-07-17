@@ -73,5 +73,8 @@ void AXePlayerCharacter::SetupCombatInfo()
 	AttributeSet = XePlayerState->GetAttributeSet();
 
 	// Initialize default Attributes.
-	InitializeDefaultAttributes();
+	if (HasAuthority())
+	{
+		InitializeDefaultAttributes();
+	}
 }
