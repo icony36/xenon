@@ -20,15 +20,11 @@ public:
 
  
  //~ Input Tags
- FGameplayTag InputAction_Movement_Forward;
- FGameplayTag InputAction_Movement_Backward;
- FGameplayTag InputAction_Movement_Left;
- FGameplayTag InputAction_Movement_Right;
- FGameplayTag InputAction_Combat_Attack;
- FGameplayTag InputAction_Combat_Skill1;
- FGameplayTag InputAction_Combat_Skill2;
- FGameplayTag InputAction_Combat_Skill3;
- FGameplayTag InputAction_Combat_Skill4;
+ FGameplayTag Input_Combat_Attack;
+ FGameplayTag Input_Combat_Skill1;
+ FGameplayTag Input_Combat_Skill2;
+ FGameplayTag Input_Combat_Skill3;
+ FGameplayTag Input_Combat_Skill4;
  //~ end Input Tags
 
 private:

@@ -9,7 +9,7 @@
 
 AXePlayerCharacter::AXePlayerCharacter()
 {
-	/** Camera Setup */
+	// Setup camera.
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->SetUsingAbsoluteRotation(true);
@@ -22,7 +22,7 @@ AXePlayerCharacter::AXePlayerCharacter()
 	TopDownCameraComponent->bUsePawnControlRotation = false;
 	
 	
-	/** Movement Setup */
+	// Setup movement.
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 1000.f, 0.f); // speed of character rotate
 	GetCharacterMovement()->bConstrainToPlane = true;
