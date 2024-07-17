@@ -11,13 +11,22 @@ AXeAICharacter::AXeAICharacter()
 	// Setup Ability System Component.
 	AbilitySystemComponent = CreateDefaultSubobject<UXeAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
 	// Setup Attribute Set.
 	AttributeSet = CreateDefaultSubobject<UXeAttributeSet>("AttributeSet");
 }
 
-UAbilitySystemComponent* AXeAICharacter::GetAbilitySystemComponent() const
+void AXeAICharacter::BeginPlay()
 {
-	return AbilitySystemComponent;
+	Super::BeginPlay();
+	
+	
+}
+
+void AXeAICharacter::SetupCombatInfo()
+{
+	Super::SetupCombatInfo();
+
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }

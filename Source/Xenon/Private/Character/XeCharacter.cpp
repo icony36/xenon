@@ -8,3 +8,12 @@ AXeCharacter::AXeCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 }
+
+UAbilitySystemComponent* AXeCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+void AXeCharacter::SetupCombatInfo()
+{
+}

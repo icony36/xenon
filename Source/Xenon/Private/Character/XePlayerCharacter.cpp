@@ -3,9 +3,11 @@
 
 #include "Character/XePlayerCharacter.h"
 
+#include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/XePlayerState.h"
 
 AXePlayerCharacter::AXePlayerCharacter()
 {
@@ -32,4 +34,33 @@ AXePlayerCharacter::AXePlayerCharacter()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
+}
+
+void AXePlayerCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	// Setup combat Info for server.
+	SetupCombatInfo();
+}
+
+void AXePlayerCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	// Setup combat Info for client.
+	SetupCombatInfo();
+}
+
+void AXePlayerCharacter::SetupCombatInfo()
+{
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	// Set Ability System Component ability actor info.
+	XePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(XePlayerState, this);
+
+	// Set Character owned Ability System Component and Attribute Set.
+	AbilitySystemComponent = XePlayerState->GetAbilitySystemComponent();
+	AttributeSet = XePlayerState->GetAttributeSet();
 }
