@@ -12,13 +12,13 @@
 struct XeDamageStatics 
 {
 	// Declare attribute captures with macro.
-	DECLARE_ATTRIBUTE_CAPTUREDEF(Damage); 
+	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor); 
 	
 	
 	XeDamageStatics()
 	{
 		// Define attribute captures with macro (AttributeSetClass, Attribute, AttributeOrigin, bShouldSnapshot).
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UXeAttributeSet, Damage, Source, true); 
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UXeAttributeSet, Armor, Target, true); 
 	}
 };
 
@@ -34,7 +34,7 @@ static const XeDamageStatics& DamageStatics()
 UExecCalc_Damage::UExecCalc_Damage()
 {
 	// Add Attributes to Capture List.
-	RelevantAttributesToCapture.Add(DamageStatics().DamageDef);
+	RelevantAttributesToCapture.Add(DamageStatics().ArmorDef);
 }
 
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
@@ -68,10 +68,22 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// Get Gameplay Effect Context Handle from Gameplay Effect Spec.
 	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
 
+	// Create Evaluation Parameters for captured Attributes.
+	FAggregatorEvaluateParameters EvaluationParameters;
+	EvaluationParameters.SourceTags = Spec.CapturedSourceTags.GetAggregatedTags();
+	EvaluationParameters.TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
+
 	// Get Damage from Set By Caller Magnitude.
 	float Damage = Spec.GetSetByCallerMagnitude(FXeGameplayTags::Get().Damage, false);
 
-	// TODO: Modify Damage.
+	// TODO: Modify Damage - Armor, Critical, Block, Shield
+
+	// Capture Armor on target.
+	float TargetArmor = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorDef, EvaluationParameters, TargetArmor);
+
+	// Get Armor Coefficient from curve table.
+	
 	
 	// Apply modified Damage.
 	const FGameplayModifierEvaluatedData EvaluatedData(UXeAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);

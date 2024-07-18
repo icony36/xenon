@@ -17,5 +17,6 @@ class XENON_API UExecCalc_Damage : public UGameplayEffectExecutionCalculation
 public:
 	UExecCalc_Damage();
 
+	// Called whenever the owning gameplay effect is executed.
 	virtual void Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const override;
 };

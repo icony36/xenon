@@ -16,7 +16,7 @@ class XENON_API UXeDamageAbility : public UXeAbility
 
 public:
 	UFUNCTION(BlueprintCallable, Category="DamageAbility")
-	virtual void CauseDamage(AActor* TargetActor) const;
+	virtual void CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute = false) const;
 	
 	UFUNCTION(BlueprintPure)
 	float GetDamageAtLevel() const;
@@ -26,5 +26,5 @@ protected:
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
 	UPROPERTY(EditDefaultsOnly, Category="Damage")
-	FScalableFloat Damage;
+	FScalableFloat SkillDamage;
 };

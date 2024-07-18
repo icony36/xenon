@@ -6,17 +6,35 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "XeGameplayTags.h"
+#include "AbilitySystem/XeAttributeSet.h"
 
-void UXeDamageAbility::CauseDamage(AActor* TargetActor) const
+void UXeDamageAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute) const
 {
+	if (TargetActor == nullptr) return;
+
 	// Create Effect Spec Handle.
 	const FGameplayEffectSpecHandle DamageSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass);
 
-	// Get damage value from curved table.
-	const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel());
+	float Damage = 0.f;
+
+	if (bShouldUseDamageAttribute)
+	{
+		// Get damage from Damage Attribute.
+		const FGameplayAttribute DamageAttribute = UXeAttributeSet::GetDamageAttribute();
+		const UAbilitySystemComponent* ASC = GetAbilitySystemComponentFromActorInfo();
+		if (ASC->HasAttributeSetForAttribute(DamageAttribute))
+		{
+			Damage = ASC->GetNumericAttribute(DamageAttribute);
+		}
+	}
+	else
+	{
+		// Get damage from curved table.
+       Damage = SkillDamage.GetValueAtLevel(GetAbilityLevel());
+	}
 
 	// Assign Tag and Damage for Set By Caller Magnitude.
-	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, FXeGameplayTags::Get().Damage, ScaledDamage);
+	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, FXeGameplayTags::Get().Damage, Damage);
 
 	// Apply damage to target.
 	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(
@@ -27,5 +45,5 @@ void UXeDamageAbility::CauseDamage(AActor* TargetActor) const
 
 float UXeDamageAbility::GetDamageAtLevel() const
 {
-	return Damage.GetValueAtLevel(GetAbilityLevel());	
+	return SkillDamage.GetValueAtLevel(GetAbilityLevel());	
 }
