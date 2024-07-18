@@ -68,6 +68,11 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	{
 		SetMana(FMath::Clamp(GetMana(), 0.f, GetMaxMana()));
 	}
+
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		HandleIncomingDamage(Props);
+	}
 }
 
 void UXeAttributeSet::MakeEffectProperties(const FGameplayEffectModCallbackData& Data,
@@ -127,6 +132,31 @@ void UXeAttributeSet::MakeEffectProperties(const FGameplayEffectModCallbackData&
 	}
 
 	/** Variables in OutProperties might be null, check before using. */
+}
+
+void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
+{
+	// Cached incoming damage.
+	const float LocalIncomingDamage = GetIncomingDamage();
+
+	// Zero out meta attribute after used.
+	SetIncomingDamage(0.f);
+
+	if (LocalIncomingDamage > 0.f)
+	{
+		// Reduce health based on incoming damage.
+		const float NewHealth = GetHealth() - LocalIncomingDamage;
+		SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
+
+		// If it is fatal.
+		if (NewHealth <= 0.f)
+		{
+			if(GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Dead!"));
+			}
+		}
+	}
 }
 
 void UXeAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

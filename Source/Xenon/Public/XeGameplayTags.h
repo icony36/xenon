@@ -27,6 +27,11 @@ public:
  FGameplayTag Input_Combat_Skill4;
  //~ end Input Tags
 
+
+ //~ Combat
+ FGameplayTag Damage;
+ //~ end Combat
+
 private:
  static FXeGameplayTags GameplayTags;
 }; 

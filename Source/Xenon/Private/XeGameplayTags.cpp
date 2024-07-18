@@ -30,5 +30,10 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Input_Combat_Skill4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Input.Combat.Skill4"),
 		FString("Input tag for Skill4."));
-	
+
+
+	/** Combat */
+	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Damage"),
+		FString("Damage tag for Set By Caller Magnitude."));
 }

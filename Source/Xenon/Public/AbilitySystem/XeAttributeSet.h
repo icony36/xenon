@@ -59,8 +59,8 @@ public:
 
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
 	
-protected:
 	//~ Vital Attributes
 	UPROPERTY(BlueprintReadOnly, Category="Vital Attributes", ReplicatedUsing=OnRep_Health)
 	FGameplayAttributeData Health;
@@ -125,6 +125,19 @@ protected:
 	void OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const;
 	//~ end Basic Attributes
 
+	
+	//~ Meta Attributes
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, IncomingDamage);
+	
+	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
+	FGameplayAttributeData IncomingXP;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, IncomingXP);
+	//~ end Meta Attributes
+
 private:
 	static void MakeEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& OutProperties);
+
+	void HandleIncomingDamage(const FEffectProperties& Properties);
 };
