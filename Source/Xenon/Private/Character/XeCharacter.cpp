@@ -4,6 +4,7 @@
 #include "Character/XeCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/XeAbilitySystemComponent.h"
 
 AXeCharacter::AXeCharacter()
 {
@@ -37,7 +38,16 @@ void AXeCharacter::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Gamepla
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(),ASC);
 }
 
+void AXeCharacter::AddStartupAbilities() const
+{
+	if (!HasAuthority()) return;
+	
+	UXeAbilitySystemComponent* XeASC = CastChecked<UXeAbilitySystemComponent>(AbilitySystemComponent);
+
+	XeASC->AddCharacterAbilities(StartupAbilityClasses);
+}
 
 void AXeCharacter::SetupCombatInfo()
 {
 }
+

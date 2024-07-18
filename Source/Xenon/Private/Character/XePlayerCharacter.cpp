@@ -42,6 +42,9 @@ void AXePlayerCharacter::PossessedBy(AController* NewController)
 
 	// Setup combat info for server.
 	SetupCombatInfo();
+	
+	// Add startup abilities.
+	AddStartupAbilities();
 }
 
 void AXePlayerCharacter::OnRep_PlayerState()

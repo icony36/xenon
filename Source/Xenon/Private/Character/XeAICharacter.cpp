@@ -25,8 +25,12 @@ int32 AXeAICharacter::GetCombatLevel_Implementation()
 void AXeAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	
+
+	// Add startup abilities only on server.
+	if (HasAuthority())
+	{
+		AddStartupAbilities();
+	}
 }
 
 void AXeAICharacter::SetupCombatInfo()

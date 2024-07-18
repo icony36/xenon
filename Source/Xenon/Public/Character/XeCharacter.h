@@ -8,6 +8,7 @@
 #include "Interface/CombatInterface.h"
 #include "XeCharacter.generated.h"
 
+class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
 
@@ -26,7 +27,7 @@ public:
 	
 protected:
 	//~ Ability System
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	
 	UPROPERTY()
@@ -47,10 +48,18 @@ protected:
 	virtual void InitializeDefaultAttributes() const;
 
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, float Level) const;
+	
+	void AddStartupAbilities() const;
 	//~ end Ability System
 
 	
 	//~ Combat
 	virtual void SetupCombatInfo();
 	//~ end Combat
+
+private:
+	//~ Ability System
+	UPROPERTY(EditAnywhere, Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilityClasses;
+	//~ end Ability System
 };

@@ -3,8 +3,10 @@
 
 #include "Player/XePlayerController.h"
 
-#include "EnhancedInputComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
+#include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "Input/XeInputComponent.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 
 AXePlayerController::AXePlayerController()
@@ -48,10 +50,13 @@ void AXePlayerController::SetupInputComponent()
 	
 
 	// Bind Input Actions.
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXePlayerController::Move);
+	UXeInputComponent* XeInputComponent = CastChecked<UXeInputComponent>(InputComponent);
+	XeInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXePlayerController::Move);
+	XeInputComponent->BindAbilityActions(InputTagConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
+
+// ReSharper disable once CppMemberFunctionMayBeConst
 void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	// Retrieve vector 2D values from input.
@@ -62,4 +67,35 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(FVector::RightVector, InputAxisVector.X);
 		ControlledPawn->AddMovementInput(FVector::ForwardVector, InputAxisVector.Y);
 	}
+}
+
+void AXePlayerController::AbilityInputTagPressed(const FGameplayTag InputTag)
+{
+	if (GetAbilitySystemComponent() == nullptr) return;
+
+	GetAbilitySystemComponent()->AbilityInputTagPressed(InputTag);
+}
+
+void AXePlayerController::AbilityInputTagReleased(const FGameplayTag InputTag)
+{
+	if (GetAbilitySystemComponent() == nullptr) return;
+	
+	GetAbilitySystemComponent()->AbilityInputTagReleased(InputTag);
+}
+
+void AXePlayerController::AbilityInputTagHeld(const FGameplayTag InputTag)
+{
+	if (GetAbilitySystemComponent() == nullptr) return;
+	
+	GetAbilitySystemComponent()->AbilityInputTagHeld(InputTag);
+}
+
+UXeAbilitySystemComponent* AXePlayerController::GetAbilitySystemComponent()
+{
+	if (XeAbilitySystemComponent == nullptr)
+	{
+		XeAbilitySystemComponent = Cast<UXeAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+
+	return XeAbilitySystemComponent;
 }
