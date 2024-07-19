@@ -9,12 +9,12 @@
 AXeAICharacter::AXeAICharacter()
 {
 	// Setup Ability System Component.
-	AbilitySystemComponent = CreateDefaultSubobject<UXeAbilitySystemComponent>("AbilitySystemComponent");
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	XeAbilitySystemComponent = CreateDefaultSubobject<UXeAbilitySystemComponent>("AbilitySystemComponent");
+	XeAbilitySystemComponent->SetIsReplicated(true);
+	XeAbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 	
 	// Setup Attribute Set.
-	AttributeSet = CreateDefaultSubobject<UXeAttributeSet>("AttributeSet");
+	XeAttributeSet = CreateDefaultSubobject<UXeAttributeSet>("AttributeSet");
 }
 
 int32 AXeAICharacter::GetCombatLevel_Implementation()
@@ -25,7 +25,8 @@ int32 AXeAICharacter::GetCombatLevel_Implementation()
 void AXeAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// Setup Ability System Component and default Attributes.
 	SetupCombatInfo();
 
 	// Add startup abilities only on server.
@@ -37,7 +38,7 @@ void AXeAICharacter::BeginPlay()
 
 void AXeAICharacter::SetupCombatInfo()
 {
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	XeAbilitySystemComponent->InitAbilityActorInfo(this, this);
 
 	// Initialize default Attributes.
 	if (HasAuthority())

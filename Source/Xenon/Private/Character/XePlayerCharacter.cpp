@@ -4,6 +4,7 @@
 #include "Character/XePlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
@@ -38,7 +39,6 @@ AXePlayerCharacter::AXePlayerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-	
 }
 
 void AXePlayerCharacter::PossessedBy(AController* NewController)
@@ -68,6 +68,13 @@ int32 AXePlayerCharacter::GetCombatLevel_Implementation()
 	return XePlayerState->GetCombatLevel();
 }
 
+void AXePlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetupOverheadWidget();
+}
+
 void AXePlayerCharacter::SetupCombatInfo()
 {
 	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
@@ -77,52 +84,52 @@ void AXePlayerCharacter::SetupCombatInfo()
 	XePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(XePlayerState, this);
 
 	// Set Character owned Ability System Component and Attribute Set.
-	AbilitySystemComponent = XePlayerState->GetAbilitySystemComponent();
-	AttributeSet = XePlayerState->GetAttributeSet();
+	XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
+	XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
 
 	// Initialize default Attributes.
 	if (HasAuthority())
 	{
 		InitializeDefaultAttributes();
 	}
-
 	
-	// Setup HUD
+	// Setup HUD on local controlled Character.
 	AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController());
 	if (XePlayerController != nullptr) // * character might not have Player Controller (non locally controlled character)
 	{
 		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>())
 		{
-			XeHUD->InitializeOverlay(XePlayerController, XePlayerState, AbilitySystemComponent, AttributeSet);
+			XeHUD->InitializeOverlay(XePlayerController, XePlayerState, XeAbilitySystemComponent, XeAttributeSet);
 		}
 	}
 
+	// Bind delegates for Attribute changed.
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
+	[this](const FOnAttributeChangeData& Data)
+	{
+		OnHealthChangedDelegate.Broadcast(Data.NewValue);
+	}
+	);
 	
-	// Setup Overhead Widget
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
+	[this](const FOnAttributeChangeData& Data)
+	{
+		OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
+	}
+	);
+	
+}
+
+void AXePlayerCharacter::SetupOverheadWidget()
+{
+	// Setup Overhead Widget Controller.
 	if (UXeUserWidget* XeOverheadWidget = Cast<UXeUserWidget>(OverheadWidget->GetUserWidgetObject()))
 	{
 		XeOverheadWidget->SetWidgetController(this);
 	}
+	
+	// Broadcast initial values for Overhead Widget
+	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
+	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
 
-	// Bind delegates for Attribute changed.
-	if (UXeAttributeSet* XeAttributeSet = CastChecked<UXeAttributeSet>(AttributeSet))
-	{
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data)
-		{
-			OnHealthChangedDelagete.Broadcast(Data.NewValue);
-		}
-		);
-		
-		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
-		[this](const FOnAttributeChangeData& Data)
-		{
-			OnMaxHealthChangedDelagete.Broadcast(Data.NewValue);
-		}
-		);
-
-		// Broadcast initial values for Overhead Widget
-		OnHealthChangedDelagete.Broadcast(XeAttributeSet->GetHealth());
-		OnMaxHealthChangedDelagete.Broadcast(XeAttributeSet->GetMaxHealth());
-	}
 }

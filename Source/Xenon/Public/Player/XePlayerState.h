@@ -24,13 +24,6 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	
-	//~ Delegates
-	FOnPlayerStateChanged OnCombatLevelChangedDelegate;
-	FOnPlayerStateChanged OnExperienceChangedDelegate;
-	FOnPlayerStateChanged OnSkillPointChangedDelegate;
-	//~ end Delegates
-
-	
 	//~ IAbilitySystem Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
@@ -38,6 +31,10 @@ public:
 	
 	
 	//~ Combat
+	FOnPlayerStateChanged OnCombatLevelChangedDelegate;
+	FOnPlayerStateChanged OnExperienceChangedDelegate;
+	FOnPlayerStateChanged OnSkillPointChangedDelegate;
+	
 	FORCEINLINE int32 GetCombatLevel() const { return CombatLevel; }
 	FORCEINLINE int32 GetExperience() const { return Experience; }
 	FORCEINLINE int32 GetSkillPoint() const { return SkillPoint; }

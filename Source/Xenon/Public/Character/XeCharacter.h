@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UI/WidgetController/XeOverlayWidgetController.h"
+#include "UI/WidgetController/XeWidgetController.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
@@ -12,7 +12,7 @@
 class UWidgetComponent;
 class UGameplayAbility;
 class UGameplayEffect;
-class UAttributeSet;
+class UXeAttributeSet;
 
 UCLASS(Abstract)
 class XENON_API AXeCharacter : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
@@ -24,16 +24,16 @@ public:
 
 	//~ IAbilitySystem Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
+	UAttributeSet* GetAttributeSet() const;
 	//~ end IAbilitySystem Interface
 	
 protected:
 	//~ Ability System
 	UPROPERTY()
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
+	TObjectPtr<UXeAbilitySystemComponent> XeAbilitySystemComponent;
 	
 	UPROPERTY()
-	TObjectPtr<UAttributeSet> AttributeSet;
+	TObjectPtr<UXeAttributeSet> XeAttributeSet;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
@@ -60,11 +60,13 @@ protected:
 	TObjectPtr<UWidgetComponent> OverheadWidget;
 
 	UPROPERTY(BlueprintAssignable)
-	FOnAttributeChanged OnHealthChangedDelagete;
+	FOnAttributeChanged OnHealthChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
-	FOnAttributeChanged OnMaxHealthChangedDelagete;
+	FOnAttributeChanged OnMaxHealthChangedDelegate;
 
 	virtual void SetupCombatInfo();
+
+	virtual void SetupOverheadWidget();
 	//~ end Combat
 
 private:

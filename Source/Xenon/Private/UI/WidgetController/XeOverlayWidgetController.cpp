@@ -3,34 +3,35 @@
 
 #include "UI/WidgetController/XeOverlayWidgetController.h"
 
+#include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "Player/XePlayerState.h"
 
 void UXeOverlayWidgetController::BindCallbacksToDependencies()
 {
 	/** Bind to Attribute Changed Delegate */
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXeAttributeSet()->GetHealthAttribute()).AddLambda(
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnHealthChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXeAttributeSet()->GetMaxHealthAttribute()).AddLambda(
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXeAttributeSet()->GetManaAttribute()).AddLambda(
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnManaChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(GetXeAttributeSet()->GetMaxManaAttribute()).AddLambda(
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxManaChangedDelegate.Broadcast(Data.NewValue);
@@ -39,9 +40,8 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 
 	
 	/** Bind to Player State Changed Delegate */
-	GetXePlayerState()->OnExperienceChangedDelegate.AddUObject(this, &UXeOverlayWidgetController::OnEXPChanged);
-
-	GetXePlayerState()->OnCombatLevelChangedDelegate.AddLambda(
+	XePlayerState->OnExperienceChangedDelegate.AddUObject(this, &UXeOverlayWidgetController::OnEXPChanged);
+	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
 		[this](int32 NewLevel)
 		{
 			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
@@ -53,10 +53,10 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 void UXeOverlayWidgetController::BroadcastInitialValues()
 {
 	// Broadcast the initial values of attributes.
-	OnHealthChangedDelegate.Broadcast(GetXeAttributeSet()->GetHealth());
-	OnMaxHealthChangedDelegate.Broadcast(GetXeAttributeSet()->GetMaxHealth());
-	OnManaChangedDelegate.Broadcast(GetXeAttributeSet()->GetMana());
-	OnMaxManaChangedDelegate.Broadcast(GetXeAttributeSet()->GetMaxMana());
+	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
+	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
+	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
+	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
 }
 
 void UXeOverlayWidgetController::OnEXPChanged(const int32 NewEXP) const

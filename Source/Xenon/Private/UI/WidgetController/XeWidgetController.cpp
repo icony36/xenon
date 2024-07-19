@@ -10,10 +10,10 @@
 
 void UXeWidgetController::SetWidgetControllerParams(const FWidgetControllerParams& WidgetControllerParams)
 {
-	PlayerController = WidgetControllerParams.PlayerController;
-	PlayerState = WidgetControllerParams.PlayerState;
-	AbilitySystemComponent = WidgetControllerParams.AbilitySystemComponent;
-	AttributeSet = WidgetControllerParams.AttributeSet;
+	XePlayerController = CastChecked<AXePlayerController>(WidgetControllerParams.PlayerController);
+	XePlayerState = CastChecked<AXePlayerState>(WidgetControllerParams.PlayerState);
+	XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(WidgetControllerParams.AbilitySystemComponent);
+	XeAttributeSet = CastChecked<UXeAttributeSet>(WidgetControllerParams.AttributeSet);
 }
 
 void UXeWidgetController::BroadcastInitialValues()
@@ -26,42 +26,3 @@ void UXeWidgetController::BindCallbacksToDependencies()
 	// Implement in child class.
 }
 
-AXePlayerController* UXeWidgetController::GetXePlayerController()
-{
-	if (XePlayerController == nullptr)
-	{
-		XePlayerController = Cast<AXePlayerController>(PlayerController);
-	}
-
-	return XePlayerController;
-}
-
-AXePlayerState* UXeWidgetController::GetXePlayerState()
-{
-	if (XePlayerState == nullptr)
-	{
-		XePlayerState = Cast<AXePlayerState>(PlayerState);
-	}
-
-	return XePlayerState;
-}
-
-UXeAbilitySystemComponent* UXeWidgetController::GetXeAbilitySystemComponent()
-{
-	if (XeAbilitySystemComponent == nullptr)
-	{
-		XeAbilitySystemComponent = Cast<UXeAbilitySystemComponent>(AbilitySystemComponent);
-	}
-
-	return XeAbilitySystemComponent;
-}
-
-UXeAttributeSet* UXeWidgetController::GetXeAttributeSet()
-{
-	if (XeAttributeSet == nullptr)
-	{
-		XeAttributeSet = Cast<UXeAttributeSet>(AttributeSet);
-	}
-
-	return XeAttributeSet;
-}

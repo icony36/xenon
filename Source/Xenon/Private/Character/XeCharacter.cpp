@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "AbilitySystem/XeAttributeSet.h"
 #include "Components/WidgetComponent.h"
 
 AXeCharacter::AXeCharacter()
@@ -18,7 +19,12 @@ AXeCharacter::AXeCharacter()
 
 UAbilitySystemComponent* AXeCharacter::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	return XeAbilitySystemComponent;
+}
+
+UAttributeSet* AXeCharacter::GetAttributeSet() const
+{
+	return XeAttributeSet;
 }
 
 void AXeCharacter::InitializeDefaultAttributes() const
@@ -46,12 +52,15 @@ void AXeCharacter::AddStartupAbilities() const
 {
 	if (!HasAuthority()) return;
 	
-	UXeAbilitySystemComponent* XeASC = CastChecked<UXeAbilitySystemComponent>(AbilitySystemComponent);
-
-	XeASC->AddCharacterAbilities(StartupAbilityClasses);
+	XeAbilitySystemComponent->AddCharacterAbilities(StartupAbilityClasses);
 }
 
 void AXeCharacter::SetupCombatInfo()
+{
+	// Implement in child class.
+}
+
+void AXeCharacter::SetupOverheadWidget()
 {
 	// Implement in child class.
 }

@@ -27,6 +27,9 @@ public:
 	virtual int32 GetCombatLevel_Implementation() override;
 	//~ end Combat Interface
 
+protected:
+	virtual void BeginPlay() override;
+	
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;
@@ -36,5 +39,7 @@ private:
 
 	//~ Combat
 	virtual void SetupCombatInfo() override;
+
+	virtual void SetupOverheadWidget() override;
 	//~ Combat
 };

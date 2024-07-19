@@ -61,26 +61,7 @@ public:
 	// TODO: Get Ability
 	// void BroadcastAbilityInfo();
 
-	// Getter
-	AXePlayerController* GetXePlayerController();
-	AXePlayerState* GetXePlayerState();
-	UXeAbilitySystemComponent* GetXeAbilitySystemComponent();
-	UXeAttributeSet* GetXeAttributeSet();
-	//~ end Getter
-
 protected:
-	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
-	TObjectPtr<APlayerController> PlayerController;
-
-	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
-	TObjectPtr<APlayerState> PlayerState;
-
-	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
-	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
-
-	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
-	TObjectPtr<UAttributeSet> AttributeSet;
-
 	UPROPERTY(BlueprintReadOnly, Category="WidgetController")
 	TObjectPtr<AXePlayerController> XePlayerController;
 
