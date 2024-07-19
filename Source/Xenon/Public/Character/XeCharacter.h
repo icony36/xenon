@@ -63,6 +63,12 @@ protected:
 	FOnAttributeChanged OnHealthChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChanged OnMaxHealthChangedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChanged OnManaChangedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChanged OnMaxManaChangedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnCombatStateChanged OnCombatLevelChangedDelegate;
 
 	virtual void SetupCombatInfo();
 

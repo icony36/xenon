@@ -106,18 +106,25 @@ void AXePlayerCharacter::SetupCombatInfo()
 	// Bind delegates for Attribute changed.
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
-	{
-		OnHealthChangedDelegate.Broadcast(Data.NewValue);
-	}
+		{
+			OnHealthChangedDelegate.Broadcast(Data.NewValue);
+		}
 	);
 	
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
-	{
-		OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
-	}
+		{
+			OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
+		}
 	);
-	
+
+	// Bind delegates for Level changed.
+	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
+		[this](const int32 NewLevel)
+		{
+			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
+		}
+	);
 }
 
 void AXePlayerCharacter::SetupOverheadWidget()
@@ -131,5 +138,9 @@ void AXePlayerCharacter::SetupOverheadWidget()
 	// Broadcast initial values for Overhead Widget
 	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
 	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
-
+	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
+	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
+	
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
 }

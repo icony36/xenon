@@ -36,6 +36,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
 	FOnCombatStateChanged OnCombatLevelChangedDelegate;
 
+	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
+	FOnCombatStateChanged OnSkillPointChangedDelegate;
+
 private:
 	void OnEXPChanged(const int32 NewEXP) const;
 };

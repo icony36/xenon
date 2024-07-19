@@ -41,10 +41,18 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 	
 	/** Bind to Player State Changed Delegate */
 	XePlayerState->OnExperienceChangedDelegate.AddUObject(this, &UXeOverlayWidgetController::OnEXPChanged);
+	
 	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
-		[this](int32 NewLevel)
+		[this](const int32 NewLevel)
 		{
 			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
+		}
+	);
+
+	XePlayerState->OnSkillPointChangedDelegate.AddLambda(
+		[this](const int32 SkillPoint)
+		{
+			OnSkillPointChangedDelegate.Broadcast(SkillPoint);
 		}
 	);
 }
