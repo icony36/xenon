@@ -15,12 +15,16 @@ class UAttributeSet;
 class UAbilitySystemComponent;
 class APlayerState;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeChanged, float, NewValue);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCombatStateChanged, int32, NewValue);
+
 USTRUCT(BlueprintType)
 struct FWidgetControllerParams
 {
 	GENERATED_BODY()
 
 	FWidgetControllerParams() {}
+	
 	FWidgetControllerParams(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 	: PlayerController(PC), PlayerState(PS), AbilitySystemComponent(ASC), AttributeSet(AS) {}
 
@@ -40,7 +44,7 @@ struct FWidgetControllerParams
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType, Blueprintable)
 class XENON_API UXeWidgetController : public UObject
 {
 	GENERATED_BODY()
@@ -49,10 +53,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams(const FWidgetControllerParams& WidgetControllerParams);
 	
+	virtual void BindCallbacksToDependencies();
+
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();
-
-	virtual void BindCallbacksToDependencies();
 
 	// TODO: Get Ability
 	// void BroadcastAbilityInfo();

@@ -36,7 +36,7 @@ void AXePlayerController::SetupInputComponent()
 	// Add Input Mapping Context to Enhanced Input Subsystem.
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
 	check(Subsystem);
-	checkf(InputMappingContext, TEXT("InputMappingContext is not set in Player Controller."));
+	checkf(InputMappingContext, TEXT("InputMappingContext is not set in BP_XePlayerController."));
 	Subsystem->AddMappingContext(InputMappingContext, 0);
 
 	// Connect User Settings to Input Mapping Context.

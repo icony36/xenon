@@ -25,7 +25,7 @@ template <class UserClass, typename PressedFuncType, typename ReleasedFuncType, 
 void UXeInputComponent::BindAbilityActions(const UXeInputTagConfig* InputTagConfig, UserClass* Object,
 	PressedFuncType PressedFunc, ReleasedFuncType ReleasedFunc, HeldFuncType HeldFunc)
 {
-	checkf(InputTagConfig, TEXT("InputTagConfig is not set in Player Controller."));
+	checkf(InputTagConfig, TEXT("InputTagConfig is not set in BP_XePlayerController."));
 
 	for (const FXeInputProperties& Props: InputTagConfig->AbilityInputProps)
 	{

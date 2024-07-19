@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "UI/WidgetController/XeOverlayWidgetController.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
 #include "XeCharacter.generated.h"
 
+class UWidgetComponent;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAttributeSet;
@@ -54,6 +56,14 @@ protected:
 
 	
 	//~ Combat
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> OverheadWidget;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChanged OnHealthChangedDelagete;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChanged OnMaxHealthChangedDelagete;
+
 	virtual void SetupCombatInfo();
 	//~ end Combat
 

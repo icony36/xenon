@@ -5,11 +5,15 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "Components/WidgetComponent.h"
 
 AXeCharacter::AXeCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Setup status widget above head.
+	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>("OverheadWidget");
+	OverheadWidget->SetupAttachment(GetRootComponent());
 }
 
 UAbilitySystemComponent* AXeCharacter::GetAbilitySystemComponent() const
@@ -31,7 +35,7 @@ void AXeCharacter::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Gamepla
 	check(IsValid(ASC));
 	check(GameplayEffectClass);
 	
-	// Apply effect to self.
+	// Apply effect.
 	FGameplayEffectContextHandle ContextHandle = ASC->MakeEffectContext();
 	ContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(GameplayEffectClass, Level, ContextHandle);
@@ -49,5 +53,6 @@ void AXeCharacter::AddStartupAbilities() const
 
 void AXeCharacter::SetupCombatInfo()
 {
+	// Implement in child class.
 }
 

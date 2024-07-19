@@ -18,10 +18,12 @@ void UXeWidgetController::SetWidgetControllerParams(const FWidgetControllerParam
 
 void UXeWidgetController::BroadcastInitialValues()
 {
+	// Implement in child class.
 }
 
 void UXeWidgetController::BindCallbacksToDependencies()
 {
+	// Implement in child class.
 }
 
 AXePlayerController* UXeWidgetController::GetXePlayerController()
@@ -48,7 +50,7 @@ UXeAbilitySystemComponent* UXeWidgetController::GetXeAbilitySystemComponent()
 {
 	if (XeAbilitySystemComponent == nullptr)
 	{
-		XeAbilitySystemComponent = Cast<UXeAbilitySystemComponent>(XeAbilitySystemComponent);
+		XeAbilitySystemComponent = Cast<UXeAbilitySystemComponent>(AbilitySystemComponent);
 	}
 
 	return XeAbilitySystemComponent;
@@ -58,7 +60,7 @@ UXeAttributeSet* UXeWidgetController::GetXeAttributeSet()
 {
 	if (XeAttributeSet == nullptr)
 	{
-		XeAttributeSet = Cast<UXeAttributeSet>(XeAttributeSet);
+		XeAttributeSet = Cast<UXeAttributeSet>(AttributeSet);
 	}
 
 	return XeAttributeSet;

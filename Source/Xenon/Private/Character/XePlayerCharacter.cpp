@@ -4,10 +4,15 @@
 #include "Character/XePlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/XeAttributeSet.h"
 #include "Camera/CameraComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Player/XePlayerController.h"
 #include "Player/XePlayerState.h"
+#include "UI/HUD/XeHUD.h"
+#include "UI/Widget/XeUserWidget.h"
 
 AXePlayerCharacter::AXePlayerCharacter()
 {
@@ -33,7 +38,7 @@ AXePlayerCharacter::AXePlayerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	
 }
 
 void AXePlayerCharacter::PossessedBy(AController* NewController)
@@ -79,5 +84,45 @@ void AXePlayerCharacter::SetupCombatInfo()
 	if (HasAuthority())
 	{
 		InitializeDefaultAttributes();
+	}
+
+	
+	// Setup HUD
+	AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController());
+	if (XePlayerController != nullptr) // * character might not have Player Controller (non locally controlled character)
+	{
+		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>())
+		{
+			XeHUD->InitializeOverlay(XePlayerController, XePlayerState, AbilitySystemComponent, AttributeSet);
+		}
+	}
+
+	
+	// Setup Overhead Widget
+	if (UXeUserWidget* XeOverheadWidget = Cast<UXeUserWidget>(OverheadWidget->GetUserWidgetObject()))
+	{
+		XeOverheadWidget->SetWidgetController(this);
+	}
+
+	// Bind delegates for Attribute changed.
+	if (UXeAttributeSet* XeAttributeSet = CastChecked<UXeAttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnHealthChangedDelagete.Broadcast(Data.NewValue);
+		}
+		);
+		
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxHealthChangedDelagete.Broadcast(Data.NewValue);
+		}
+		);
+
+		// Broadcast initial values for Overhead Widget
+		OnHealthChangedDelagete.Broadcast(XeAttributeSet->GetHealth());
+		OnMaxHealthChangedDelagete.Broadcast(XeAttributeSet->GetMaxHealth());
 	}
 }
