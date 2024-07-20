@@ -22,25 +22,12 @@ class XENON_API AXeCharacter : public ACharacter, public IAbilitySystemInterface
 public:
 	AXeCharacter();
 
-
 	//~ IAbilitySystem Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const;
 	//~ end IAbilitySystem Interface
-
-	
-	//~ Combat Interface
-	virtual AActor* GetAvatar_Implementation() override;
-	
-	virtual bool GetIsDead_Implementation() const override;
-	//~ end Combat Interface
 	
 protected:
-	//~ Combat Interface
-	bool IsDead = false;
-	//~ end Combat Interface
-	
-	
 	//~ Ability System
 	UPROPERTY()
 	TObjectPtr<UXeAbilitySystemComponent> XeAbilitySystemComponent;

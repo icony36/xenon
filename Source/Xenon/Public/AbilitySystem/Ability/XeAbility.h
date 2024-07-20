@@ -7,23 +7,6 @@
 #include "XeAbility.generated.h"
 
 class UNiagaraSystem;
-class UAnimMontage;
-
-USTRUCT(BlueprintType)
-struct FTaggedMontage
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UAnimMontage* Montage = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag MontageTag;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag SocketTag;
-};
-
 /**
  * 
  */
@@ -37,12 +20,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
-	TArray<FTaggedMontage> AbilityMontages;
+
+	// UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+	// TArray<FTaggedMontage> AbilityMontages;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
 	TArray<USoundBase*> AbilitySound;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
 	TArray<UNiagaraSystem*> AbilityEffects;
+
 };

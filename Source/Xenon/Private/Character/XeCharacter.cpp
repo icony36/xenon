@@ -27,16 +27,6 @@ UAttributeSet* AXeCharacter::GetAttributeSet() const
 	return XeAttributeSet;
 }
 
-AActor* AXeCharacter::GetAvatar_Implementation() 
-{
-	return this;
-}
-
-bool AXeCharacter::GetIsDead_Implementation() const
-{
-	return IsDead;
-}
-
 void AXeCharacter::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultBasicAttributes, 1.f);

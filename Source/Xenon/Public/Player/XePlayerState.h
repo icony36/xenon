@@ -31,7 +31,7 @@ public:
 	
 	
 	//~ Combat
-	FOnPlayerStateChanged OnCombatLevelChangedDelegate; 
+	FOnPlayerStateChanged OnCombatLevelChangedDelegate;
 	FOnPlayerStateChanged OnExperienceChangedDelegate;
 	FOnPlayerStateChanged OnSkillPointChangedDelegate;
 	

@@ -22,12 +22,6 @@ class XENON_API ICombatInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
-	AActor* GetAvatar();
-	
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent)
 	int32 GetCombatLevel();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
-	bool GetIsDead() const;
 };
