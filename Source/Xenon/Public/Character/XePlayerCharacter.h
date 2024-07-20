@@ -19,8 +19,10 @@ class XENON_API AXePlayerCharacter : public AXeCharacter
 public:
 	AXePlayerCharacter();
 
+	// Called in server only.
 	virtual void PossessedBy(AController* NewController) override;
 
+	// Called in client only.
 	virtual auto OnRep_PlayerState() -> void override;
 
 	//~ Combat Interface
@@ -43,5 +45,5 @@ private:
 	virtual void SetupOverheadWidget() override;
 
 	virtual void BindCallbacksToDependencies() override;
-	//~ Combat
+	//~ end Combat
 };

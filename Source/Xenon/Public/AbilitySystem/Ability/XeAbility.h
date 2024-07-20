@@ -6,6 +6,24 @@
 #include "Abilities/GameplayAbility.h"
 #include "XeAbility.generated.h"
 
+class UNiagaraSystem;
+class UAnimMontage;
+
+USTRUCT(BlueprintType)
+struct FTaggedMontage
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UAnimMontage* Montage = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag MontageTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	FGameplayTag SocketTag;
+};
+
 /**
  * 
  */
@@ -18,4 +36,13 @@ public:
 	// Input Tag only for startup.
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visuals")
+	TArray<FTaggedMontage> CastMontages;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visuals")
+	TArray<USoundBase*> CastSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visuals")
+	TArray<UNiagaraSystem*> CastEffects;
 };
