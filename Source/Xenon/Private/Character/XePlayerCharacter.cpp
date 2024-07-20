@@ -47,7 +47,10 @@ void AXePlayerCharacter::PossessedBy(AController* NewController)
 
 	// Setup combat info for server.
 	SetupCombatInfo();
-	
+
+	// Setup Overhead Widget for server (non-server controlled character).
+	SetupOverheadWidget();
+
 	// Add startup abilities.
 	AddStartupAbilities();
 }
@@ -58,6 +61,9 @@ void AXePlayerCharacter::OnRep_PlayerState()
 
 	// Setup combat info for client.
 	SetupCombatInfo();
+	
+	// Setup Overhead Widget for client.
+	SetupOverheadWidget();
 }
 
 int32 AXePlayerCharacter::GetCombatLevel_Implementation()
@@ -72,7 +78,11 @@ void AXePlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetupOverheadWidget();
+	// Setup Overhead Widget for server controlled character only (Overhead Widget is not ready yet in Possessed for server controlled character).
+	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
+	{
+		SetupOverheadWidget();
+	}
 }
 
 void AXePlayerCharacter::SetupCombatInfo()
