@@ -37,12 +37,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visuals")
-	TArray<FTaggedMontage> CastMontages;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+	TArray<FTaggedMontage> AbilityMontages;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visuals")
-	TArray<USoundBase*> CastSound;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+	TArray<USoundBase*> AbilitySound;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visuals")
-	TArray<UNiagaraSystem*> CastEffects;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+	TArray<UNiagaraSystem*> AbilityEffects;
 };
