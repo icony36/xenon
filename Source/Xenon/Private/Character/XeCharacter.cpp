@@ -65,3 +65,8 @@ void AXeCharacter::SetupOverheadWidget()
 	// Implement in child class.
 }
 
+void AXeCharacter::BindCallbacksToDependencies()
+{
+	// Implement in child class.
+}
+

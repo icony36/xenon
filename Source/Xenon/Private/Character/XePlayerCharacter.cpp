@@ -87,6 +87,9 @@ void AXePlayerCharacter::SetupCombatInfo()
 	XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
 	XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
 
+	// Bind callbacks to attributes changed.
+	BindCallbacksToDependencies();
+	
 	// Initialize default Attributes.
 	if (HasAuthority())
 	{
@@ -102,29 +105,6 @@ void AXePlayerCharacter::SetupCombatInfo()
 			XeHUD->InitializeOverlay(XePlayerController, XePlayerState, XeAbilitySystemComponent, XeAttributeSet);
 		}
 	}
-
-	// Bind delegates for Attribute changed.
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
-	[this](const FOnAttributeChangeData& Data)
-		{
-			OnHealthChangedDelegate.Broadcast(Data.NewValue);
-		}
-	);
-	
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
-	[this](const FOnAttributeChangeData& Data)
-		{
-			OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
-		}
-	);
-
-	// Bind delegates for Level changed.
-	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
-		[this](const int32 NewLevel)
-		{
-			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
-		}
-	);
 }
 
 void AXePlayerCharacter::SetupOverheadWidget()
@@ -143,4 +123,32 @@ void AXePlayerCharacter::SetupOverheadWidget()
 	
 	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
 	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
+}
+
+void AXePlayerCharacter::BindCallbacksToDependencies()
+{
+	// Bind delegates for Attribute changed.
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
+	[this](const FOnAttributeChangeData& Data)
+		{
+			OnHealthChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+	
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
+	[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
+	// Bind delegates for Level changed.
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	
+	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
+		[this](const int32 NewLevel)
+		{
+			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
+		}
+	);
 }

@@ -73,6 +73,8 @@ protected:
 	virtual void SetupCombatInfo();
 
 	virtual void SetupOverheadWidget();
+
+	virtual void BindCallbacksToDependencies();
 	//~ end Combat
 
 private:

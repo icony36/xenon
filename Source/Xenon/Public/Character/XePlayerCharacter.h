@@ -41,5 +41,7 @@ private:
 	virtual void SetupCombatInfo() override;
 
 	virtual void SetupOverheadWidget() override;
+
+	virtual void BindCallbacksToDependencies() override;
 	//~ Combat
 };

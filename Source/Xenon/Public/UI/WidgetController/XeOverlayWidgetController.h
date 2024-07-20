@@ -23,12 +23,27 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
 	FOnAttributeChanged OnMaxHealthChangedDelegate;
+	
+	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
+	FOnAttributeChanged OnHealthRegenChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
 	FOnAttributeChanged OnManaChangedDelegate;
 
 	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
 	FOnAttributeChanged OnMaxManaChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
+	FOnAttributeChanged OnManaRegenChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
+	FOnAttributeChanged OnDamageChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
+	FOnAttributeChanged OnArmorChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
+	FOnAttributeChanged OnMovementSpeedChangedDelegate;
 	
 	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")
 	FOnAttributeChanged OnEXPPercentChangedDelegate;

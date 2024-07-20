@@ -18,7 +18,7 @@ void AXeHUD::InitializeOverlay(APlayerController* PC, APlayerState* PS, UAbility
 	// Create Overlay Widget.
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(), OverlayWidgetClass);
 
-	// Assign to OverlayWidget and cast to XeUserWidget to add Widget Controller.
+	// Cast to XeUserWidget to add Widget Controller.
 	OverlayWidget = Cast<UXeUserWidget>(Widget);
 
 	// Add OverlayWidgetController and trigger WidgetControllerSet event in XeUserWidget.

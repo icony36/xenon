@@ -24,6 +24,13 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 		}
 	);
 
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthRegenAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnHealthRegenChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
@@ -38,6 +45,34 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 		}
 	);
 
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaRegenAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnManaRegenChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetDamageAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnDamageChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetArmorAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnArmorChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMovementSpeedAttribute()).AddLambda(
+		[this](const FOnAttributeChangeData& Data)
+		{
+			OnMovementSpeedChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+	
 	
 	/** Bind to Player State Changed Delegate */
 	XePlayerState->OnExperienceChangedDelegate.AddUObject(this, &UXeOverlayWidgetController::OnEXPChanged);
@@ -63,8 +98,13 @@ void UXeOverlayWidgetController::BroadcastInitialValues()
 	// Broadcast the initial values of attributes.
 	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
 	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
+	OnHealthRegenChangedDelegate.Broadcast(XeAttributeSet->GetHealthRegen());
 	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
 	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
+	OnManaRegenChangedDelegate.Broadcast(XeAttributeSet->GetManaRegen());
+	OnDamageChangedDelegate.Broadcast(XeAttributeSet->GetDamage());
+	OnArmorChangedDelegate.Broadcast(XeAttributeSet->GetArmor());
+	OnMovementSpeedChangedDelegate.Broadcast(XeAttributeSet->GetMovementSpeed());
 }
 
 void UXeOverlayWidgetController::OnEXPChanged(const int32 NewEXP) const
