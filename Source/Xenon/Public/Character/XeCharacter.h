@@ -31,7 +31,7 @@ public:
 	
 	//~ Combat Interface
 	virtual AActor* GetAvatar_Implementation() override;
-	
+	virtual FVector GetSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
 	virtual bool GetIsDead_Implementation() const override;
 	//~ end Combat Interface
 	

@@ -32,6 +32,25 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 		FString("Input tag for Skill4."));
 
 
+
+	/** Sockets */
+	GameplayTags.Socket_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+    	FName("Socket.LeftHand"),
+    	FString("Socket tag for LeftHand."));
+
+	GameplayTags.Socket_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Socket.RightHand"),
+		FString("Socket tag for RightHand."));
+
+	GameplayTags.Socket_Tail = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Socket.Tail"),
+		FString("Socket tag for Tail."));
+
+	GameplayTags.Socket_WeaponTip = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Socket.WeaponTip"),
+		FString("Socket tag for WeaponTip."));
+	
+
 	/** Combat */
 	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Damage"),

@@ -28,6 +28,14 @@ public:
  //~ end Input Tags
 
 
+ 
+ //~ Sockets
+ FGameplayTag Socket_LeftHand;
+ FGameplayTag Socket_RightHand;
+ FGameplayTag Socket_Tail;
+ FGameplayTag Socket_WeaponTip;
+ //~ end Sockets
+
  //~ Combat
  FGameplayTag Damage;
  //~ end Combat

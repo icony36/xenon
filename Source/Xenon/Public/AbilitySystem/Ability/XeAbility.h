@@ -18,7 +18,7 @@ struct FTaggedMontage
 	UAnimMontage* Montage = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag MontageTag;
+	FGameplayTag EventTag;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FGameplayTag SocketTag;

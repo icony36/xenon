@@ -4,6 +4,7 @@
 #include "Character/XeCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "Components/WidgetComponent.h"
@@ -30,6 +31,32 @@ UAttributeSet* AXeCharacter::GetAttributeSet() const
 AActor* AXeCharacter::GetAvatar_Implementation() 
 {
 	return this;
+}
+
+FVector AXeCharacter::GetSocketLocation_Implementation(const FGameplayTag& SocketTag)
+{
+	const FXeGameplayTags& GameplayTags = FXeGameplayTags::Get();
+	if (SocketTag.MatchesTagExact(GameplayTags.Socket_WeaponTip))
+	{
+		return GetMesh()->GetSocketLocation("WeaponTip");
+	}
+
+	if (SocketTag.MatchesTagExact(GameplayTags.Socket_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation("LeftHand");
+	}
+
+	if (SocketTag.MatchesTagExact(GameplayTags.Socket_RightHand))
+	{
+		return GetMesh()->GetSocketLocation("RightHand");
+	}
+
+	if (SocketTag.MatchesTagExact(GameplayTags.Socket_Tail))
+	{
+		return GetMesh()->GetSocketLocation("Tail");
+	}
+
+	return FVector();
 }
 
 bool AXeCharacter::GetIsDead_Implementation() const

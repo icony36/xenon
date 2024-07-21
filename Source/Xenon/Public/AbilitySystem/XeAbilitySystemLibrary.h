@@ -26,7 +26,7 @@ public:
 
 	//~ Gameplay Mechanics
 	UFUNCTION(BlueprintCallable, Category="AbilitySystemLibrary|GameplayMechanics")
-	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius);
+	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius, bool bShowDebug = false);
 	//~ end Gameplay Mechanics
 	
 };
