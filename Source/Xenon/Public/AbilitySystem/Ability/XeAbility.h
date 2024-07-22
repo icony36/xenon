@@ -45,4 +45,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
 	TArray<UNiagaraSystem*> AbilityEffects;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	bool bIsPassive = false;
 };
