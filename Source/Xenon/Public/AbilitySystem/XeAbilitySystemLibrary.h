@@ -3,9 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XeAbilitySystemLibrary.generated.h"
 
+class UCharacterInfo;
 class UXeOverlayWidgetController;
 /**
  * 
@@ -17,15 +19,24 @@ class XENON_API UXeAbilitySystemLibrary : public UBlueprintFunctionLibrary
 
 public:
 	//~ Widget Controller
-	UFUNCTION(BlueprintCallable, Category="AbilitySystemLibrary|WidgetController", meta=(DefaultToSelf="WorldContextObject"))
+	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|WidgetController", meta=(DefaultToSelf="WorldContextObject"))
 	static bool MakeWidgetControllerParams(const UObject* WorldContextObject, FWidgetControllerParams& OutWidgetControllerParams, AXeHUD*& OutXeHUD);
 	
-	UFUNCTION(BlueprintPure, Category="AbilitySystemLibrary|WidgetController", meta=(DefaultToSelf="WorldContextObject"))
+	UFUNCTION(BlueprintPure, Category="XeAbilitySystemLibrary|WidgetController", meta=(DefaultToSelf="WorldContextObject"))
 	static UXeOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 	//~ end Widget Controller
 
+	
+	// Character Class Info
+	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|CharacterDefaults")
+	static UCharacterInfo* GetCharacterInfo(const UObject* WorldContextObject);
+
+	static int32 GetEXPReward(const UObject* WorldContextObject, const FGameplayTag& CharacterTag, int32 CharacterLevel);
+	//~ end Character Class Info
+
+	
 	//~ Gameplay Mechanics
-	UFUNCTION(BlueprintCallable, Category="AbilitySystemLibrary|GameplayMechanics")
+	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius, bool bShowDebug = false);
 	//~ end Gameplay Mechanics
 	

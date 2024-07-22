@@ -3,7 +3,9 @@
 
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 
+#include "AbilitySystem/Data/CharacterInfo.h"
 #include "Engine/OverlapResult.h"
+#include "Game/XeGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Interface/CombatInterface.h"
 #include "Player/XePlayerState.h"
@@ -47,9 +49,29 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	return nullptr;
 }
 
+UCharacterInfo* UXeAbilitySystemLibrary::GetCharacterInfo(const UObject* WorldContextObject)
+{
+	const AXeGameModeBase* XeGameModeBase = Cast<AXeGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (XeGameModeBase == nullptr) return nullptr;
+
+	return XeGameModeBase->CharacterInfo;
+}
+
+int32 UXeAbilitySystemLibrary::GetEXPReward(const UObject* WorldContextObject, const FGameplayTag& CharacterTag,
+	int32 CharacterLevel)
+{
+	UCharacterInfo* CharacterInfo = GetCharacterInfo(WorldContextObject);
+	if (CharacterInfo == nullptr) return 0;
+
+	const FCharacterDefaultInfo Info = CharacterInfo->GetCharacterDefaultInfo(CharacterTag);
+	const float EXPReward = Info.EXPReward.GetValueAtLevel(CharacterLevel);
+
+	return static_cast<int32>(EXPReward);
+}
+
 void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,
-	TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin,
-	float Radius, bool bShowDebug)
+                                                         TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin,
+                                                         float Radius, bool bShowDebug)
 {
 	FCollisionQueryParams SphereParams;
 	SphereParams.AddIgnoredActors(ActorsToIgnore);

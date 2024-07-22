@@ -132,12 +132,15 @@ public:
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, IncomingDamage);
 	
 	UPROPERTY(BlueprintReadOnly, Category="Meta Attributes")
-	FGameplayAttributeData IncomingXP;
-	ATTRIBUTE_ACCESSORS(UXeAttributeSet, IncomingXP);
+	FGameplayAttributeData IncomingEXP;
+	ATTRIBUTE_ACCESSORS(UXeAttributeSet, IncomingEXP);
 	//~ end Meta Attributes
 
 private:
 	static void MakeEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& OutProperties);
 
 	void HandleIncomingDamage(const FEffectProperties& Properties);
+	void HandleIncomingEXP(const FEffectProperties& Properties);
+
+	static void SendEXPEvent(const FEffectProperties& Properties);
 };

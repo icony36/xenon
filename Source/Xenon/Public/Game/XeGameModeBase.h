@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "XeGameModeBase.generated.h"
 
+class UCharacterInfo;
 /**
  * 
  */
@@ -13,5 +14,8 @@ UCLASS()
 class XENON_API AXeGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category="Game Mode Defaults")
+	TObjectPtr<UCharacterInfo> CharacterInfo;
 };

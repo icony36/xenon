@@ -18,6 +18,11 @@ public:
  // Initialize all native gameplay tags.
  static void InitializeNativeGameplayTags();
 
+
+ //~ Character Tags
+ FGameplayTag Character_Player;
+ //~ end Character Tags
+ 
  
  //~ Input Tags
  FGameplayTag Input_Combat_Attack;
@@ -36,9 +41,15 @@ public:
  FGameplayTag Socket_WeaponTip;
  //~ end Sockets
 
+ 
  //~ Combat
  FGameplayTag Damage;
  //~ end Combat
+
+
+ //~ Attributes (for Listen For Event Gameplay Ability)
+ FGameplayTag Attribute_Meta_IncomingEXP;
+ //~ end Attributes
 
 private:
  static FXeGameplayTags GameplayTags;

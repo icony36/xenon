@@ -4,6 +4,7 @@
 #include "Character/XePlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "Camera/CameraComponent.h"
@@ -39,6 +40,10 @@ AXePlayerCharacter::AXePlayerCharacter()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+
+	// Setup Combat
+	CharacterTag = FXeGameplayTags::Get().Character_Player;
 }
 
 void AXePlayerCharacter::PossessedBy(AController* NewController)

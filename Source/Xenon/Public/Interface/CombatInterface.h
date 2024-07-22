@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "UObject/Interface.h"
 #include "CombatInterface.generated.h"
 
@@ -25,6 +26,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)  // * BlueprintNativeEvent allow executes without casting, it automatically generates virtual native version that exist in C++ that can be overriden in C++
 	AActor* GetAvatar();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
+	FGameplayTag GetCharacterTag(); 
+	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
 	FVector GetSocketLocation(const FGameplayTag& SocketTag);
 	

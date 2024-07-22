@@ -15,7 +15,8 @@ class XENON_API UXeAbilitySystemComponent : public UAbilitySystemComponent
 	GENERATED_BODY()
 
 public:
-	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
+	void AddCharacterActiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
+	void AddCharacterPassiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
 
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);

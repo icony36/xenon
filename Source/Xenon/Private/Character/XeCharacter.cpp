@@ -59,6 +59,11 @@ FVector AXeCharacter::GetSocketLocation_Implementation(const FGameplayTag& Socke
 	return FVector();
 }
 
+FGameplayTag AXeCharacter::GetCharacterTag_Implementation()
+{
+	return CharacterTag;
+}
+
 bool AXeCharacter::GetIsDead_Implementation() const
 {
 	return IsDead;
@@ -89,7 +94,8 @@ void AXeCharacter::AddStartupAbilities() const
 {
 	if (!HasAuthority()) return;
 	
-	XeAbilitySystemComponent->AddCharacterAbilities(StartupAbilityClasses);
+	XeAbilitySystemComponent->AddCharacterActiveAbilities(StartupActiveAbilities);
+	XeAbilitySystemComponent->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
 void AXeCharacter::SetupCombatInfo()

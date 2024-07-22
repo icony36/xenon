@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UI/WidgetController/XeWidgetController.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayTagContainer.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
 #include "XeCharacter.generated.h"
@@ -32,11 +33,15 @@ public:
 	//~ Combat Interface
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual FVector GetSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
+	virtual FGameplayTag GetCharacterTag_Implementation() override;
 	virtual bool GetIsDead_Implementation() const override;
 	//~ end Combat Interface
 	
 protected:
 	//~ Combat Interface
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
+	FGameplayTag CharacterTag;
+	
 	bool IsDead = false;
 	//~ end Combat Interface
 	
@@ -93,6 +98,9 @@ protected:
 private:
 	//~ Ability System
 	UPROPERTY(EditAnywhere, Category="Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupAbilityClasses;
+	TArray<TSubclassOf<UGameplayAbility>> StartupActiveAbilities;
+	
+	UPROPERTY(EditAnywhere, Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
 	//~ end Ability System
 };

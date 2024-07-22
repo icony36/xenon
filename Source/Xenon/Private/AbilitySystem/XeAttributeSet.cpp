@@ -5,7 +5,11 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
+#include "XeGameplayTags.h"
+#include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "GameFramework/Character.h"
+#include "Interface/CombatInterface.h"
 #include "Net/UnrealNetwork.h"
 
 UXeAttributeSet::UXeAttributeSet()
@@ -72,6 +76,11 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
 		HandleIncomingDamage(Props);
+	}
+
+	if (Data.EvaluatedData.Attribute == GetIncomingEXPAttribute())
+	{
+		HandleIncomingEXP(Props);
 	}
 }
 
@@ -151,9 +160,44 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 		// If it kills the character.
 		if (NewHealth <= 0.f)
 		{
-
+			SendEXPEvent(Properties);
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Dead!"));
 		}
+	}
+}
+
+void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
+{
+	// Cached incoming damage.
+	const float LocalIncomingEXP = GetIncomingEXP();
+
+	// Zero out meta attribute after used.
+	SetIncomingEXP(0.f);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Incoming EXP: %f"), LocalIncomingEXP));
+}
+
+void UXeAttributeSet::SendEXPEvent(const FEffectProperties& Properties)
+{
+	if (Properties.TargetCharacter->Implements<UCombatInterface>())
+	{
+		// Get target level.
+		const int32 TargetLevel = ICombatInterface::Execute_GetCombatLevel(Properties.TargetCharacter);
+
+		// Get target character tag.
+		const FGameplayTag TargetTag = ICombatInterface::Execute_GetCharacterTag(Properties.TargetCharacter);
+
+		// Get target character EXP reward.
+		const int32 EXPReward = UXeAbilitySystemLibrary::GetEXPReward(Properties.TargetCharacter, TargetTag, TargetLevel);
+
+		// Setup payload to send (EXP tag, EXP reward amount).
+		const FXeGameplayTags& GameplayTags = FXeGameplayTags::Get();
+		FGameplayEventData Payload;
+		Payload.EventTag = GameplayTags.Attribute_Meta_IncomingEXP;
+		Payload.EventMagnitude = EXPReward;
+
+		// Send Gameplay Event to source character (character that kills the target).
+		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Properties.SourceCharacter, GameplayTags.Attribute_Meta_IncomingEXP, Payload);
 	}
 }
 

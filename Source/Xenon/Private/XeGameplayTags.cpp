@@ -10,6 +10,12 @@ FXeGameplayTags FXeGameplayTags::GameplayTags;
 
 void FXeGameplayTags::InitializeNativeGameplayTags()
 {
+	/** Character Tags */
+	GameplayTags.Character_Player= UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Character.Player"),
+		FString("Character tag for Player."));
+
+
 	/** Input Tags */
 	GameplayTags.Input_Combat_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Input.Combat.Attack"),
@@ -55,4 +61,10 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Damage"),
 		FString("Damage tag for Set By Caller Magnitude."));
+
+
+	/** Attribute */
+	GameplayTags.Attribute_Meta_IncomingEXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attribute.Meta.IncomingEXP"),
+		FString("Attribute tag for IncomingEXp."));
 }
