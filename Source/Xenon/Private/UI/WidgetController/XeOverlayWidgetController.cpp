@@ -75,7 +75,12 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 	
 	
 	/** Bind to Player State Changed Delegate */
-	XePlayerState->OnExperienceChangedDelegate.AddUObject(this, &UXeOverlayWidgetController::OnEXPChanged);
+	XePlayerState->OnExperienceChangedDelegate.AddLambda(
+		[this](const int32 NewEXP)
+		{
+			OnEXPPercentChangedDelegate.Broadcast(GetEXPPercent(NewEXP));
+		}
+	);
 	
 	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
 		[this](const int32 NewLevel)
@@ -105,13 +110,18 @@ void UXeOverlayWidgetController::BroadcastInitialValues()
 	OnDamageChangedDelegate.Broadcast(XeAttributeSet->GetDamage());
 	OnArmorChangedDelegate.Broadcast(XeAttributeSet->GetArmor());
 	OnMovementSpeedChangedDelegate.Broadcast(XeAttributeSet->GetMovementSpeed());
+
+	// Broadcast the initial values of player state.
+	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
+	OnEXPPercentChangedDelegate.Broadcast(0.f);
+	OnSkillPointChangedDelegate.Broadcast(XePlayerState->GetSkillPoint());
 }
 
-void UXeOverlayWidgetController::OnEXPChanged(const int32 NewEXP) const
+float UXeOverlayWidgetController::GetEXPPercent(const int32 NewEXP)
 {
 	// const ULevelUpInfo* LevelUpInfo = GetAuraPS()->LevelUpInfo;
 	//
-	// checkf(LevelUpInfo, TEXT("Unabled to find LevelUpInfo. Please fill out AuraPlayerState Blueprint"));
+	// checkf(LevelUpInfo, TEXT("Unable to find LevelUpInfo. Please fill out AuraPlayerState Blueprint"));
 
 	// const int32 Level = LevelUpInfo->FindLevelForXP(NewXP);
 
@@ -125,9 +135,8 @@ void UXeOverlayWidgetController::OnEXPChanged(const int32 NewEXP) const
 	//
 	// 	const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaLevelUpRequirement);
 	//
-	// 	OnXPPercentChangedDelegate.Broadcast(XPBarPercent);
+	// 	return XPBarPercent;
 	// }
 
-	const float EXPPercent = static_cast<float>(NewEXP); 
-	OnEXPPercentChangedDelegate.Broadcast(EXPPercent);
+	return 0.f;
 }

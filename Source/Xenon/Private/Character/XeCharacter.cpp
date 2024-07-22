@@ -38,22 +38,22 @@ FVector AXeCharacter::GetSocketLocation_Implementation(const FGameplayTag& Socke
 	const FXeGameplayTags& GameplayTags = FXeGameplayTags::Get();
 	if (SocketTag.MatchesTagExact(GameplayTags.Socket_WeaponTip))
 	{
-		return GetMesh()->GetSocketLocation("WeaponTip");
+		return GetMesh()->GetSocketLocation("WeaponTipSocket");
 	}
 
 	if (SocketTag.MatchesTagExact(GameplayTags.Socket_LeftHand))
 	{
-		return GetMesh()->GetSocketLocation("LeftHand");
+		return GetMesh()->GetSocketLocation("LeftHandSocket");
 	}
 
 	if (SocketTag.MatchesTagExact(GameplayTags.Socket_RightHand))
 	{
-		return GetMesh()->GetSocketLocation("RightHand");
+		return GetMesh()->GetSocketLocation("RightHandSocket");
 	}
 
 	if (SocketTag.MatchesTagExact(GameplayTags.Socket_Tail))
 	{
-		return GetMesh()->GetSocketLocation("Tail");
+		return GetMesh()->GetSocketLocation("TailSocket");
 	}
 
 	return FVector();
