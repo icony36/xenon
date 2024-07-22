@@ -7,6 +7,7 @@
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
+#include "AbilitySystem/Data/LevelInfo.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -77,6 +78,67 @@ int32 AXePlayerCharacter::GetCombatLevel_Implementation()
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	return XePlayerState->GetCombatLevel();
+}
+
+int32 AXePlayerCharacter::FindCombatLevelWithEXP_Implementation(int32 InEXP) const
+{
+	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+    
+	return XePlayerState->GetLevelInfo()->FindLevelWithEXP(InEXP);
+}
+
+int32 AXePlayerCharacter::GetEXP_Implementation() const
+{
+	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+    
+	return XePlayerState->GetExperience();
+}
+
+int32 AXePlayerCharacter::GetSkillPoint_Implementation() const
+{
+	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	return XePlayerState->GetSkillPoint();
+}
+
+int32 AXePlayerCharacter::GetSkillPointReward_Implementation(int32 Level) const
+{
+	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	return XePlayerState->GetLevelInfo()->LevelUpInformation[Level].SkillPointReward;
+}
+
+void AXePlayerCharacter::AddToCombatLevel_Implementation(int32 InCombatLevel)
+{
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	XePlayerState->AddToCombatLevel(InCombatLevel);
+}
+
+void AXePlayerCharacter::AddToEXP_Implementation(int32 InEXP)
+{
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	XePlayerState->AddToExperience(InEXP);
+}
+
+void AXePlayerCharacter::AddToSkillPoint_Implementation(int32 InSkillPoint)
+{
+	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	XePlayerState->AddToSkillPoint(InSkillPoint);
+}
+
+void AXePlayerCharacter::LevelUp_Implementation()
+{
+	// Todo: Spawn effects
 }
 
 void AXePlayerCharacter::BeginPlay()

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/XeCharacter.h"
+#include "Interface/PlayerInterface.h"
 #include "XePlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -12,7 +13,7 @@ class UCameraComponent;
  * 
  */
 UCLASS()
-class XENON_API AXePlayerCharacter : public AXeCharacter
+class XENON_API AXePlayerCharacter : public AXeCharacter, public IPlayerInterface
 {
 	GENERATED_BODY()
 
@@ -28,6 +29,25 @@ public:
 	//~ Combat Interface
 	virtual int32 GetCombatLevel_Implementation() override;
 	//~ end Combat Interface
+
+
+	//~ Player Interface
+	virtual int32 FindCombatLevelWithEXP_Implementation(int32 InEXP) const override;
+
+	virtual int32 GetEXP_Implementation() const override;
+
+	virtual int32 GetSkillPoint_Implementation() const override;
+
+	virtual int32 GetSkillPointReward_Implementation(int32 Level) const override;
+
+	virtual void AddToCombatLevel_Implementation(int32 InCombatLevel) override;
+
+	virtual void AddToEXP_Implementation(int32 InEXP) override;
+
+	virtual void AddToSkillPoint_Implementation(int32 InSkillPoint) override;
+
+	virtual void LevelUp_Implementation() override;
+	//~ end Player Interface
 
 protected:
 	virtual void BeginPlay() override;

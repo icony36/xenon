@@ -10,6 +10,7 @@
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
+#include "Interface/PlayerInterface.h"
 #include "Net/UnrealNetwork.h"
 
 UXeAttributeSet::UXeAttributeSet()
@@ -168,13 +169,50 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 
 void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 {
-	// Cached incoming damage.
+	// Cached incoming EXP.
 	const float LocalIncomingEXP = GetIncomingEXP();
 
 	// Zero out meta attribute after used.
 	SetIncomingEXP(0.f);
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Incoming EXP: %f"), LocalIncomingEXP));
+
+	// Source character is the owner, GA_ListenForEvents applies GE_EventBasedEffect, adding to IncomingXP
+	if (Properties.SourceCharacter->Implements<UPlayerInterface>() && Properties.SourceCharacter->Implements<UCombatInterface>())
+	{
+		// Get source character current level and current EXP.
+		const int32 CurrentLevel = ICombatInterface::Execute_GetCombatLevel(Properties.SourceCharacter);
+		const int32 CurrentEXP = IPlayerInterface::Execute_GetEXP(Properties.SourceCharacter);
+
+		// Get new level with incoming EXP.
+		const int32 NewLevel = IPlayerInterface::Execute_FindCombatLevelWithEXP(Properties.SourceCharacter, CurrentEXP + LocalIncomingEXP);
+
+		// Check if there is difference between new level and current level.
+		const int32 NumLevelUps = NewLevel - CurrentLevel;
+
+		// If source character can level up.
+		if (NumLevelUps > 0)
+		{
+			// Add level.
+			IPlayerInterface::Execute_AddToCombatLevel(Properties.SourceCharacter, NumLevelUps);
+
+			// Get skill point reward based on how many level ups.
+			int32 SkillPointReward = 0;
+			for (int32 i=0; i<NumLevelUps; i++)
+			{
+				SkillPointReward += IPlayerInterface::Execute_GetSkillPointReward(Properties.SourceCharacter, CurrentLevel + i);
+			}
+
+			// Add skill points.
+			IPlayerInterface::Execute_AddToSkillPoint(Properties.SourceCharacter, SkillPointReward);
+
+			// Call level up.
+			IPlayerInterface::Execute_LevelUp(Properties.SourceCharacter);
+		}
+
+		// Add EXP.
+		IPlayerInterface::Execute_AddToEXP(Properties.SourceCharacter, LocalIncomingEXP);
+	}
 }
 
 void UXeAttributeSet::SendEXPEvent(const FEffectProperties& Properties)

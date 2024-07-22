@@ -15,7 +15,7 @@ struct FXeLevelUpInfo
 	int32 LevelUpRequirement = 0;
 	
 	UPROPERTY(EditDefaultsOnly)
-	int32 SpellPointReward = 1;
+	int32 SkillPointReward = 1;
 };
 
 
