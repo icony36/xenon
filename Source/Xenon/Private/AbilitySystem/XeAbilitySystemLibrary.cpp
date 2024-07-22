@@ -66,8 +66,8 @@ int32 UXeAbilitySystemLibrary::GetEXPReward(const UObject* WorldContextObject, c
 	UCharacterInfo* CharacterInfo = GetCharacterInfo(WorldContextObject);
 	if (CharacterInfo == nullptr) return 0;
 
-	const FCharacterProperties Info = CharacterInfo->GetCharacterProperties(CharacterTag);
-	const float EXPReward = Info.EXPReward.GetValueAtLevel(CharacterLevel);
+	const FCharacterProperties Props = CharacterInfo->GetCharacterProperties(CharacterTag);
+	const float EXPReward = Props.EXPReward.GetValueAtLevel(CharacterLevel);
 
 	return static_cast<int32>(EXPReward);
 }
