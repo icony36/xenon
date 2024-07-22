@@ -53,13 +53,13 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UXeAttributeSet> XeAttributeSet;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
 	TSubclassOf<UGameplayEffect> DefaultEssentialAttributes;
 	
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
 	TSubclassOf<UGameplayEffect> DefaultBasicAttributes;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
@@ -97,10 +97,10 @@ protected:
 
 private:
 	//~ Ability System
-	UPROPERTY(EditAnywhere, Category="Abilities")
+	UPROPERTY(EditAnywhere, Category="Combat|Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupActiveAbilities;
 	
-	UPROPERTY(EditAnywhere, Category="Abilities")
+	UPROPERTY(EditAnywhere, Category="Combat|Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
 	//~ end Ability System
 };

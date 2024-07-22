@@ -27,7 +27,7 @@ protected:
 	
 	
 	//~ Combat
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="AI Character Defaults") // * this is not replicated as we only check AI level on server
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat|AI") // * this is not replicated as we only check AI level on server
 	int32 CombatLevel = 1;
 
 	virtual void SetupCombatInfo() override;

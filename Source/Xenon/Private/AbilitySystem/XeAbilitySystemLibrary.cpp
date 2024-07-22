@@ -3,6 +3,9 @@
 
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "XeGameplayTags.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "AbilitySystem/Data/CharacterInfo.h"
 #include "Engine/OverlapResult.h"
 #include "Game/XeGameModeBase.h"
@@ -63,10 +66,22 @@ int32 UXeAbilitySystemLibrary::GetEXPReward(const UObject* WorldContextObject, c
 	UCharacterInfo* CharacterInfo = GetCharacterInfo(WorldContextObject);
 	if (CharacterInfo == nullptr) return 0;
 
-	const FCharacterDefaultInfo Info = CharacterInfo->GetCharacterDefaultInfo(CharacterTag);
+	const FCharacterProperties Info = CharacterInfo->GetCharacterProperties(CharacterTag);
 	const float EXPReward = Info.EXPReward.GetValueAtLevel(CharacterLevel);
 
 	return static_cast<int32>(EXPReward);
+}
+
+void UXeAbilitySystemLibrary::SendEXP(const UObject* WorldContextObject, AActor* Recipient, float InEXP)
+{
+	// Setup payload to send (EXP tag, EXP reward amount).
+	const FXeGameplayTags& GameplayTags = FXeGameplayTags::Get();
+	FGameplayEventData Payload;
+	Payload.EventTag = GameplayTags.Attribute_Meta_IncomingEXP;
+	Payload.EventMagnitude = InEXP;
+
+	// Send EXP to target actor through Gameplay Event.
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Recipient, GameplayTags.Attribute_Meta_IncomingEXP, Payload);
 }
 
 void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,

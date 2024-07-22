@@ -63,8 +63,8 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 		FString("Damage tag for Set By Caller Magnitude."));
 
 
-	/** Attribute */
+	/** Attributes */
 	GameplayTags.Attribute_Meta_IncomingEXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attribute.Meta.IncomingEXP"),
-		FString("Attribute tag for IncomingEXp."));
+		FString("Attribute tag for IncomingEXP."));
 }

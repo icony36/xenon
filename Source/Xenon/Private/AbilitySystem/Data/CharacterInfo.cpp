@@ -3,7 +3,7 @@
 
 #include "AbilitySystem/Data/CharacterInfo.h"
 
-FCharacterDefaultInfo UCharacterInfo::GetCharacterDefaultInfo(const FGameplayTag& CharacterTag)
+FCharacterProperties UCharacterInfo::GetCharacterProperties(const FGameplayTag& CharacterTag)
 {
 	return CharacterClasses.FindChecked(CharacterTag);
 }

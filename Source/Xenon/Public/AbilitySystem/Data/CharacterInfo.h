@@ -10,7 +10,7 @@
 
 
 USTRUCT()
-struct FCharacterDefaultInfo
+struct FCharacterProperties
 {
 	GENERATED_BODY()
 	
@@ -28,8 +28,8 @@ class XENON_API UCharacterInfo : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category="Character Class Defaults")
-	TMap<FGameplayTag, FCharacterDefaultInfo> CharacterClasses;
+	TMap<FGameplayTag, FCharacterProperties> CharacterClasses;
 
-	FCharacterDefaultInfo GetCharacterDefaultInfo(const FGameplayTag& CharacterTag);
+	FCharacterProperties GetCharacterProperties(const FGameplayTag& CharacterTag);
 	
 };

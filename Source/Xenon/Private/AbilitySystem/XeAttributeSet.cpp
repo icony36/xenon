@@ -228,14 +228,8 @@ void UXeAttributeSet::SendEXPEvent(const FEffectProperties& Properties)
 		// Get target character EXP reward.
 		const int32 EXPReward = UXeAbilitySystemLibrary::GetEXPReward(Properties.TargetCharacter, TargetTag, TargetLevel);
 
-		// Setup payload to send (EXP tag, EXP reward amount).
-		const FXeGameplayTags& GameplayTags = FXeGameplayTags::Get();
-		FGameplayEventData Payload;
-		Payload.EventTag = GameplayTags.Attribute_Meta_IncomingEXP;
-		Payload.EventMagnitude = EXPReward;
-
-		// Send Gameplay Event to source character (character that kills the target).
-		UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Properties.SourceCharacter, GameplayTags.Attribute_Meta_IncomingEXP, Payload);
+		// Send EXP to source character (character that kills the target character).
+		UXeAbilitySystemLibrary::SendEXP(Properties.TargetCharacter, Properties.SourceCharacter, EXPReward);
 	}
 }
 
