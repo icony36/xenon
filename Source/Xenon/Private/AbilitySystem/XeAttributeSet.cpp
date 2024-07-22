@@ -148,13 +148,11 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 		const float NewHealth = GetHealth() - LocalIncomingDamage;
 		SetHealth(FMath::Clamp(NewHealth, 0.f, GetMaxHealth()));
 
-		// If it is fatal.
+		// If it kills the character.
 		if (NewHealth <= 0.f)
 		{
-			if(GEngine)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Dead!"));
-			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Dead!"));
 		}
 	}
 }

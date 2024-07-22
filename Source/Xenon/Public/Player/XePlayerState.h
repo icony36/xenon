@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerState.h"
 #include "XePlayerState.generated.h"
 
+class ULevelInfo;
 class UAttributeSet;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnPlayerStateChanged, int32 /*StateValue*/);
 
@@ -38,6 +39,7 @@ public:
 	FORCEINLINE int32 GetCombatLevel() const { return CombatLevel; }
 	FORCEINLINE int32 GetExperience() const { return Experience; }
 	FORCEINLINE int32 GetSkillPoint() const { return SkillPoint; }
+	FORCEINLINE ULevelInfo* GetLevelInfo() const { return PlayerLevelInfo; }
 	
 	void SetCombatLevel(int32 InCombatLevel);
 	void SetExperience(int32 InExperience);
@@ -59,6 +61,9 @@ protected:
 	
 private:
 	//~ Combat
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
+	TObjectPtr<ULevelInfo> PlayerLevelInfo;
+	
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_CombatLevel)
 	int32 CombatLevel = 1;
 

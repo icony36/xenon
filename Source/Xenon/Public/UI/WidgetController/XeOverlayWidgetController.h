@@ -55,5 +55,5 @@ public:
 	FOnCombatStateChanged OnSkillPointChangedDelegate;
 
 private:
-	static float GetEXPPercent(const int32 NewEXP);
+	float GetEXPPercent(const int32 NewEXP) const;
 };

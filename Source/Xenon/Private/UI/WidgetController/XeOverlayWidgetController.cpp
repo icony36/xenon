@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/XeOverlayWidgetController.h"
 
+#include "AbilitySystem/Data/LevelInfo.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "Player/XePlayerState.h"
@@ -117,26 +118,35 @@ void UXeOverlayWidgetController::BroadcastInitialValues()
 	OnSkillPointChangedDelegate.Broadcast(XePlayerState->GetSkillPoint());
 }
 
-float UXeOverlayWidgetController::GetEXPPercent(const int32 NewEXP)
+float UXeOverlayWidgetController::GetEXPPercent(const int32 NewEXP) const
 {
-	// const ULevelUpInfo* LevelUpInfo = GetAuraPS()->LevelUpInfo;
-	//
-	// checkf(LevelUpInfo, TEXT("Unable to find LevelUpInfo. Please fill out AuraPlayerState Blueprint"));
+	const ULevelInfo* LevelInfo = XePlayerState->GetLevelInfo();
+	
+	checkf(LevelInfo, TEXT("PlayerLevelInfo is not set in BP_XePlayerState."));
 
-	// const int32 Level = LevelUpInfo->FindLevelForXP(NewXP);
+	// Get current level with accumulated EXP.
+	const int32 CurrentLevel = LevelInfo->FindLevelWithEXP(NewEXP);
 
-	// if (Level <= LevelUpInfo->LevelUpInformation.Num() && Level > 0)
-	// {
-	// 	const int32 LevelUpRequirement = LevelUpInfo->LevelUpInformation[Level].LevelUpRequirement;
-	// 	const int32 PreviousLevelUpRequirement = LevelUpInfo->LevelUpInformation[Level-1].LevelUpRequirement;
-	// 	const int32 DeltaLevelUpRequirement = LevelUpRequirement - PreviousLevelUpRequirement;
-	//
-	// 	const int32 XPForThisLevel = NewXP - PreviousLevelUpRequirement;
-	//
-	// 	const float XPBarPercent = static_cast<float>(XPForThisLevel) / static_cast<float>(DeltaLevelUpRequirement);
-	//
-	// 	return XPBarPercent;
-	// }
+	// Check if current level is between max level and 0.
+	if (CurrentLevel <= LevelInfo->LevelUpInformation.Num() && CurrentLevel > 0)
+	{
+		// Get current level up requirement.
+		const int32 CurrentLevelUpRequirement = LevelInfo->LevelUpInformation[CurrentLevel].LevelUpRequirement;
+
+		// Get level up requirement of previous level.
+		const int32 PreviousLevelUpRequirement = LevelInfo->LevelUpInformation[CurrentLevel-1].LevelUpRequirement;
+
+		// Calculate the difference of previous level requirement and current level requirement.
+		const int32 DeltaLevelUpRequirement = CurrentLevelUpRequirement - PreviousLevelUpRequirement;
+
+		// Calculate the current EXP.
+		const int32 EXPForThisLevel = NewEXP - PreviousLevelUpRequirement;
+
+		// Get EXP percent
+		const float EXPBarPercent = static_cast<float>(EXPForThisLevel) / static_cast<float>(DeltaLevelUpRequirement);
+	
+		return EXPBarPercent;
+	}
 
 	return 0.f;
 }
