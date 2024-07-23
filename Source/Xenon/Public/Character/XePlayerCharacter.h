@@ -38,7 +38,7 @@ public:
 
 	virtual int32 GetSkillPoint_Implementation() const override;
 
-	virtual int32 GetSkillPointReward_Implementation(int32 Level) const override;
+	virtual FLevelUpProperties GetLevelUpProperties_Implementation(int32 Level) const override;
 
 	virtual void AddToCombatLevel_Implementation(int32 InCombatLevel) override;
 

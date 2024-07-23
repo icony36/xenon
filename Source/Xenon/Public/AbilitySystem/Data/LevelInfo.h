@@ -7,7 +7,7 @@
 #include "LevelInfo.generated.h"
 
 USTRUCT(BlueprintType)
-struct FXeLevelUpInfo
+struct FLevelUpProperties
 {
 	GENERATED_BODY()
 
@@ -16,6 +16,18 @@ struct FXeLevelUpInfo
 	
 	UPROPERTY(EditDefaultsOnly)
 	int32 SkillPointReward = 1;
+
+	UPROPERTY(EditDefaultsOnly)
+	float DamageReward  = 5;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float ArmorReward  = 1;
+
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealthReward  = 10;
+	
+	UPROPERTY(EditDefaultsOnly)
+	float MaxManaReward  = 10;
 };
 
 
@@ -29,7 +41,7 @@ class XENON_API ULevelInfo : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly)
-	TArray<FXeLevelUpInfo> LevelUpInformation;
+	TArray<FLevelUpProperties> LevelUpInformation;
 
 	int32 FindLevelWithEXP(int32 EXP) const;
 };

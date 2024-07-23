@@ -104,12 +104,12 @@ int32 AXePlayerCharacter::GetSkillPoint_Implementation() const
 	return XePlayerState->GetSkillPoint();
 }
 
-int32 AXePlayerCharacter::GetSkillPointReward_Implementation(int32 Level) const
+FLevelUpProperties AXePlayerCharacter::GetLevelUpProperties_Implementation(int32 Level) const
 {
 	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
-
-	return XePlayerState->GetLevelInfo()->LevelUpInformation[Level].SkillPointReward;
+	
+	return XePlayerState->GetLevelInfo()->LevelUpInformation[Level];
 }
 
 void AXePlayerCharacter::AddToCombatLevel_Implementation(int32 InCombatLevel)

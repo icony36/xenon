@@ -16,6 +16,6 @@ class XENON_API AXeGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category="Game Mode Defaults")
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
 	TObjectPtr<UCharacterInfo> CharacterInfo;
 };

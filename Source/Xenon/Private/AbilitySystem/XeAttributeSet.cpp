@@ -5,9 +5,9 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
-#include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
+#include "AbilitySystem/Data/LevelInfo.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
 #include "Interface/PlayerInterface.h"
@@ -196,15 +196,34 @@ void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 			// Add level.
 			IPlayerInterface::Execute_AddToCombatLevel(Properties.SourceCharacter, NumLevelUps);
 
-			// Get skill point reward based on how many level ups.
+			// Get level up rewards based on how many level ups.
 			int32 SkillPointReward = 0;
+			float DamageReward = 0.f;
+			float ArmorReward = 0.f;
+			float MaxHealthReward = 0.f;
+			float MaxManaReward = 0.f;
 			for (int32 i=0; i<NumLevelUps; i++)
 			{
-				SkillPointReward += IPlayerInterface::Execute_GetSkillPointReward(Properties.SourceCharacter, CurrentLevel + i);
+				FLevelUpProperties LevelUpProps = IPlayerInterface::Execute_GetLevelUpProperties(Properties.SourceCharacter, CurrentLevel + i);
+				SkillPointReward += LevelUpProps.SkillPointReward;
+				DamageReward += LevelUpProps.DamageReward;
+				ArmorReward += LevelUpProps.ArmorReward;
+				MaxHealthReward += LevelUpProps.MaxHealthReward;
+				MaxManaReward += LevelUpProps.MaxManaReward;
 			}
 
 			// Add skill points.
 			IPlayerInterface::Execute_AddToSkillPoint(Properties.SourceCharacter, SkillPointReward);
+
+			// Add damage and armor.
+			SetDamage(GetDamage() + DamageReward);
+			SetArmor(GetArmor() + ArmorReward);
+
+			// Add health and mana.
+			SetMaxHealth(GetMaxHealth() + MaxHealthReward);
+			SetHealth(GetHealth() + MaxHealthReward);
+			SetMaxMana(GetMaxMana() + MaxManaReward);
+			SetMana(GetMana() + MaxManaReward);
 
 			// Call level up.
 			IPlayerInterface::Execute_LevelUp(Properties.SourceCharacter);

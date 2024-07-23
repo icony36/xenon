@@ -44,8 +44,10 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	FWidgetControllerParams WidgetControllerParams;
 	AXeHUD* XeHUD = nullptr;
 
+	// Make one WidgetController Params.
 	if (MakeWidgetControllerParams(WorldContextObject, WidgetControllerParams, XeHUD))
 	{
+		// Return OverlayWidgetController from HUD. HUD will create one if it is null.
 		return XeHUD->GetOverlayWidgetController(WidgetControllerParams);
 	}
 
@@ -66,7 +68,10 @@ int32 UXeAbilitySystemLibrary::GetEXPReward(const UObject* WorldContextObject, c
 	UCharacterInfo* CharacterInfo = GetCharacterInfo(WorldContextObject);
 	if (CharacterInfo == nullptr) return 0;
 
+	// Get Character Properties form Character Tag.
 	const FCharacterProperties Props = CharacterInfo->GetCharacterProperties(CharacterTag);
+
+	// Get EXP reward at the level.
 	const float EXPReward = Props.EXPReward.GetValueAtLevel(CharacterLevel);
 
 	return static_cast<int32>(EXPReward);
@@ -95,6 +100,7 @@ void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCon
 	{
 		TArray<FOverlapResult> Overlaps;
 
+		// Get overlap actors from World.
 		World->OverlapMultiByObjectType(
 			Overlaps,
 			SphereOrigin,
@@ -104,6 +110,7 @@ void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCon
 			SphereParams
 		);
 
+		// Draw debug sphere
 		if (bShowDebug)
 		{
 			DrawDebugSphere(
@@ -117,6 +124,7 @@ void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCon
 			);
 		}
 
+		// Add non-dead overlapped actors to out array.
 		for (FOverlapResult& Overlap : Overlaps)
 		{
 			// Check if the overlapped actor is Combat Interface and not dead.

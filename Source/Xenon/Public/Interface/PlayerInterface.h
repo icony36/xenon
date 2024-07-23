@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/Data/LevelInfo.h"
 #include "UObject/Interface.h"
 #include "PlayerInterface.generated.h"
 
@@ -30,9 +31,9 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	int32 GetSkillPoint() const;
-	
+
 	UFUNCTION(BlueprintNativeEvent)
-	int32 GetSkillPointReward(int32 Level) const;
+	FLevelUpProperties GetLevelUpProperties(int32 Level) const;
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void AddToEXP(int32 InEXP);
