@@ -7,6 +7,8 @@
 #include "UObject/Interface.h"
 #include "CombatInterface.generated.h"
 
+struct FEffectProperties;
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UCombatInterface : public UInterface
@@ -37,4 +39,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
 	bool GetIsDead() const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
+	void Die(const FEffectProperties& Properties);
 };

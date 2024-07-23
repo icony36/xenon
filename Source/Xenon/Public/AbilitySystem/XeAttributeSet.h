@@ -15,7 +15,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
 // Struct that is used to store and send Gameplay Effect-related data.
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FEffectProperties
 {
 	GENERATED_BODY()

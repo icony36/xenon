@@ -35,7 +35,9 @@ public:
 	virtual FVector GetSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
 	virtual FGameplayTag GetCharacterTag_Implementation() override;
 	virtual bool GetIsDead_Implementation() const override;
+	virtual void Die_Implementation(const FEffectProperties& Properties) override;
 	//~ end Combat Interface
+	
 	
 protected:
 	//~ Combat Interface

@@ -4,6 +4,7 @@
 #include "Character/XePlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "NiagaraComponent.h"
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
@@ -45,6 +46,12 @@ AXePlayerCharacter::AXePlayerCharacter()
 
 	// Setup Combat
 	CharacterTag = FXeGameplayTags::Get().Character_Player;
+
+	
+	// Level Up Effect
+	LevelUpNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("LevelUpNiagaraComponent");
+	LevelUpNiagaraComponent->SetupAttachment(GetRootComponent());
+	LevelUpNiagaraComponent->bAutoActivate = false;
 }
 
 void AXePlayerCharacter::PossessedBy(AController* NewController)
@@ -138,7 +145,7 @@ void AXePlayerCharacter::AddToSkillPoint_Implementation(int32 InSkillPoint)
 
 void AXePlayerCharacter::LevelUp_Implementation()
 {
-	// Todo: Spawn effects
+	MulticastLevelUpEffects();
 }
 
 void AXePlayerCharacter::BeginPlay()
@@ -228,4 +235,12 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
 		}
 	);
+}
+
+void AXePlayerCharacter::MulticastLevelUpEffects_Implementation() const
+{
+	if (IsValid(LevelUpNiagaraComponent))
+	{
+		LevelUpNiagaraComponent->Activate(true);
+	}
 }

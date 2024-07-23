@@ -161,8 +161,12 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 		// If it kills the character.
 		if (NewHealth <= 0.f)
 		{
+			if (Properties.TargetCharacter->Implements<UCombatInterface>())
+			{
+				ICombatInterface::Execute_Die(Properties.TargetCharacter, Properties);
+			}
+		
 			SendEXPEvent(Properties);
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Dead!"));
 		}
 	}
 }

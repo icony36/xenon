@@ -5,5 +5,5 @@
 
 FCharacterProperties UCharacterInfo::GetCharacterProperties(const FGameplayTag& CharacterTag)
 {
-	return CharacterClasses.FindChecked(CharacterTag);
+	return CharacterPool.FindChecked(CharacterTag);
 }

@@ -28,7 +28,7 @@ class XENON_API UCharacterInfo : public UDataAsset
 
 public:
 	UPROPERTY(EditDefaultsOnly, Category="Character Class Defaults")
-	TMap<FGameplayTag, FCharacterProperties> CharacterClasses;
+	TMap<FGameplayTag, FCharacterProperties> CharacterPool;
 
 	FCharacterProperties GetCharacterProperties(const FGameplayTag& CharacterTag);
 	

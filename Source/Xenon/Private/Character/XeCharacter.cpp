@@ -69,6 +69,11 @@ bool AXeCharacter::GetIsDead_Implementation() const
 	return IsDead;
 }
 
+void AXeCharacter::Die_Implementation(const FEffectProperties& Properties)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%s died"), *this->GetClass()->GetName()));
+}
+
 void AXeCharacter::InitializeDefaultAttributes() const
 {
 	ApplyEffectToSelf(DefaultBasicAttributes, 1.f);

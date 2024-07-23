@@ -7,6 +7,7 @@
 #include "Interface/PlayerInterface.h"
 #include "XePlayerCharacter.generated.h"
 
+class UNiagaraComponent;
 class USpringArmComponent;
 class UCameraComponent;
 /**
@@ -51,6 +52,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
 	
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -66,4 +70,7 @@ private:
 
 	virtual void BindCallbacksToDependencies() override;
 	//~ end Combat
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastLevelUpEffects() const;
 };
