@@ -166,7 +166,7 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 			// Ask game mode to eliminate player (only works on server).
 			if (AXeGameMode* XeGameMode = GetWorld()->GetAuthGameMode<AXeGameMode>())
 			{
-				XeGameMode->PlayerEliminated(Properties.TargetCharacter, Properties.SourceCharacter, Properties.TargetController, Properties.SourceController);
+				XeGameMode->EliminatePlayer(Properties.TargetCharacter, Properties.SourceCharacter, Properties.TargetController, Properties.SourceController);
 			}
 		}
 	}

@@ -7,7 +7,7 @@
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
 
-void AKillRaceGameMode::PlayerEliminated(ACharacter* VictimCharacter, ACharacter* AttackerCharacter,
+void AKillRaceGameMode::EliminatePlayer(ACharacter* VictimCharacter, ACharacter* AttackerCharacter,
 	AController* VictimController, AController* AttackerController)
 {
 	if (VictimCharacter->Implements<UCombatInterface>())
@@ -32,7 +32,7 @@ void AKillRaceGameMode::PlayerEliminated(ACharacter* VictimCharacter, ACharacter
 	}
 }
 
-void AKillRaceGameMode::PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn)
+void AKillRaceGameMode::RespawnPlayer(ACharacter* CharacterToSpawn, AController* ControllerToSpawn)
 {
 	
 }

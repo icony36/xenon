@@ -10,13 +10,13 @@
 
 struct FXeGameplayTags;
 
-void AXeGameMode::PlayerEliminated(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController,
+void AXeGameMode::EliminatePlayer(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController,
                                    AController* AttackerController)
 {
 	// Implement in child class.
 }
 
-void AXeGameMode::PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn)
+void AXeGameMode::RespawnPlayer(ACharacter* CharacterToSpawn, AController* ControllerToSpawn)
 {
 	// Implement in child class.
 }

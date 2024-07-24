@@ -145,7 +145,7 @@ void AXePlayerCharacter::AddToSkillPoint_Implementation(int32 InSkillPoint)
 
 void AXePlayerCharacter::LevelUp_Implementation()
 {
-	MulticastLevelUpEffects();
+	MulticastPlayLevelUpEffects();
 }
 
 void AXePlayerCharacter::BeginPlay()
@@ -236,7 +236,7 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 	);
 }
 
-void AXePlayerCharacter::MulticastLevelUpEffects_Implementation() const
+void AXePlayerCharacter::MulticastPlayLevelUpEffects_Implementation() const
 {
 	if (IsValid(LevelUpNiagaraComponent))
 	{

@@ -36,7 +36,7 @@ void UXeDamageAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDam
 	// Assign Tag and Damage for Set By Caller Magnitude.
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, FXeGameplayTags::Get().Damage, Damage);
 
-	// Apply damage to target.
+	// Apply damage Gameplay Effect to target.
 	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(
 		*DamageSpecHandle.Data.Get(),
 		UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor)

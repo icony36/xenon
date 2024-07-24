@@ -57,6 +57,15 @@ protected:
 	//~ Combat
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
+
+	virtual void SetupCombatInfo() override;
+
+	virtual void SetupOverheadWidget() override;
+
+	virtual void BindCallbacksToDependencies() override;
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastPlayLevelUpEffects() const;
 	//~ Combat
 	
 private:
@@ -73,16 +82,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	//~ end Camera
-
 	
-	//~ Combat
-	virtual void SetupCombatInfo() override;
-
-	virtual void SetupOverheadWidget() override;
-
-	virtual void BindCallbacksToDependencies() override;
-	
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastLevelUpEffects() const;
-	//~ end Combat
 };

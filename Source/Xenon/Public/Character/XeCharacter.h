@@ -40,7 +40,6 @@ public:
 	
 	
 protected:
-	
 	//~ Ability System
 	UPROPERTY()
 	TObjectPtr<UXeAbilitySystemComponent> XeAbilitySystemComponent;
@@ -69,19 +68,6 @@ protected:
 
 	
 	//~ Combat
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
-	FGameplayTag CharacterTag;
-	
-	bool bIsDead = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	USoundBase* DeathSound;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UWidgetComponent> OverheadWidget;
-	
-	UPROPERTY(BlueprintAssignable)
-	FOnDeath OnDeathDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChanged OnHealthChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
@@ -93,15 +79,34 @@ protected:
 	UPROPERTY(BlueprintAssignable)
 	FOnCombatStateChanged OnCombatLevelChangedDelegate;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
+	FGameplayTag CharacterTag;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> OverheadWidget;
+	
 	virtual void SetupCombatInfo();
 
 	virtual void SetupOverheadWidget();
 
 	virtual void BindCallbacksToDependencies();
+	//~ end Combat
+
+	
+	// Death
+	bool bIsDead = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundBase* DeathSound;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnDeath OnDeathDelegate;
 
 	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
-	//~ end Combat
+
+	virtual void PlayDeathEffects();
+	//~ end Death
 
 private:
 	//~ Ability System

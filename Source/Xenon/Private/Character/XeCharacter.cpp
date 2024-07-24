@@ -121,6 +121,16 @@ void AXeCharacter::BindCallbacksToDependencies()
 
 void AXeCharacter::MulticastHandleDeath_Implementation()
 {
+	// Set bIsDead to true (calling in Multicast will apply to both client and server without making it replicated).
+	bIsDead = true;
+	
+	OnDeathDelegate.Broadcast(this);
+
+	PlayDeathEffects();
+}
+
+void AXeCharacter::PlayDeathEffects()
+{
 	// Set ragdoll effect.
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetEnableGravity(true);
@@ -129,10 +139,5 @@ void AXeCharacter::MulticastHandleDeath_Implementation()
 
 	// Disable collision.
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	// Set bIsDead to true (calling in Multicast will apply to both client and server without making it replicated).
-	bIsDead = true;
-	
-	OnDeathDelegate.Broadcast(this);
 }
 

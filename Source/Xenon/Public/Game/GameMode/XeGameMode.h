@@ -19,9 +19,9 @@ class XENON_API AXeGameMode : public AGameMode
 	GENERATED_BODY()
 
 public:
-	virtual void PlayerEliminated(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController, AController* AttackerController);
+	virtual void EliminatePlayer(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController, AController* AttackerController);
 
-	virtual void PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn);
+	virtual void RespawnPlayer(ACharacter* CharacterToSpawn, AController* ControllerToSpawn);
 	
 	virtual void PlayerLeftGame(AXePlayerState* LeavingPlayerState);
 	
