@@ -134,8 +134,5 @@ void AXeCharacter::MulticastHandleDeath_Implementation()
 	bIsDead = true;
 	
 	OnDeathDelegate.Broadcast(this);
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%s died"), *this->GetClass()->GetName()));
-
 }
 

@@ -80,6 +80,7 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 		HandleIncomingDamage(Props);
 	}
 
+	// GA_ListenForAttributeEvents listen for Gameplay Event with IncomingXP tag and applies GE_AttributeEvents, adding to IncomingXP
 	if (Data.EvaluatedData.Attribute == GetIncomingEXPAttribute())
 	{
 		HandleIncomingEXP(Props);
@@ -179,9 +180,7 @@ void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 	// Zero out meta attribute after used.
 	SetIncomingEXP(0.f);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Incoming EXP: %f"), LocalIncomingEXP));
-
-	// Source character is the owner, GA_ListenForEvents applies GE_EventBasedEffect, adding to IncomingXP
+	// Source character is the owner of this Attribute Set.
 	if (Properties.SourceCharacter->Implements<UPlayerInterface>() && Properties.SourceCharacter->Implements<UCombatInterface>())
 	{
 		// Get source character current level and current EXP.
