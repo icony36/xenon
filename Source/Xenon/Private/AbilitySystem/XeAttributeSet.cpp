@@ -8,6 +8,7 @@
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "AbilitySystem/Data/LevelInfo.h"
+#include "Game/GameMode/XeGameMode.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
 #include "Interface/PlayerInterface.h"
@@ -161,7 +162,11 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 		// If it kills the character.
 		if (NewHealth <= 0.f)
 		{
-			UXeAbilitySystemLibrary::NoticeGameModePlayerDied(Properties.TargetCharacter, Properties);
+			// Ask game mode to eliminate player (only works on server).
+			if (AXeGameMode* XeGameMode = GetWorld()->GetAuthGameMode<AXeGameMode>())
+			{
+				XeGameMode->PlayerEliminated(Properties.TargetCharacter, Properties.SourceCharacter, Properties.TargetController, Properties.SourceController);
+			}
 		}
 	}
 }

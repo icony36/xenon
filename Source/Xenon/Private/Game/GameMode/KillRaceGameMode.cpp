@@ -3,7 +3,6 @@
 
 #include "Game/GameMode/KillRaceGameMode.h"
 
-#include "XeGameplayTags.h"
 #include "AbilitySystem/Data/CharacterInfo.h"
 #include "GameFramework/Character.h"
 #include "Interface/CombatInterface.h"
@@ -13,7 +12,7 @@ void AKillRaceGameMode::PlayerEliminated(ACharacter* VictimCharacter, ACharacter
 {
 	if (VictimCharacter->Implements<UCombatInterface>())
 	{
-		// Execute victim die.
+		// Kill victim character.
 		ICombatInterface::Execute_Die(VictimCharacter);
 
 		// Get victim level.
@@ -31,4 +30,14 @@ void AKillRaceGameMode::PlayerEliminated(ACharacter* VictimCharacter, ACharacter
 		// Send EXP to attacker character.
 		SendEXP(AttackerCharacter, EXPReward);
 	}
+}
+
+void AKillRaceGameMode::PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn)
+{
+	
+}
+
+void AKillRaceGameMode::PlayerLeftGame(AXePlayerState* LeavingPlayerState)
+{
+	
 }

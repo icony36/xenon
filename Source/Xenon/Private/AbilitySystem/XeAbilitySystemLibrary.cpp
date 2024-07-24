@@ -55,18 +55,6 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	return nullptr;
 }
 
-void UXeAbilitySystemLibrary::NoticeGameModePlayerDied(const UObject* WorldContextObject,
-	const FEffectProperties& Properties)
-{
-	if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
-	{
-		if (AXeGameMode* XeGameMode = World->GetAuthGameMode<AXeGameMode>())
-		{
-			XeGameMode->PlayerEliminated(Properties.TargetCharacter, Properties.SourceCharacter, Properties.TargetController, Properties.SourceController);
-		}
-	}
-}
-
 void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,
                                                          TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin,
                                                          float Radius, bool bShowDebug)

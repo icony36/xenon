@@ -16,4 +16,8 @@ class XENON_API AKillRaceGameMode : public AXeGameMode
 
 public:
 	virtual void PlayerEliminated(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController, AController* AttackerController) override;
+
+	virtual void PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn) override;
+
+	virtual void PlayerLeftGame(AXePlayerState* LeavingPlayerState) override; // Called by ServerLeaveGame() in XePlayerCharacter
 };

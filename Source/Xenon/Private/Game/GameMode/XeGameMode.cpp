@@ -18,11 +18,12 @@ void AXeGameMode::PlayerEliminated(ACharacter* VictimCharacter, ACharacter* Atta
 
 void AXeGameMode::PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn)
 {
+	// Implement in child class.
 }
 
 void AXeGameMode::PlayerLeftGame(AXePlayerState* LeavingPlayerState)
 {
-	
+	// Implement in child class.
 }
 
 void AXeGameMode::SendEXP(AActor* Recipient, float InEXP)

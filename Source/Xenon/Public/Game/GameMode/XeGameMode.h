@@ -22,12 +22,11 @@ public:
 	virtual void PlayerEliminated(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController, AController* AttackerController);
 
 	virtual void PlayerRespawn(ACharacter* CharacterToSpawn, AController* ControllerToSpawn);
-
-	// Called by ServerLeaveGame() in XePlayerCharacter
-	void PlayerLeftGame(AXePlayerState* LeavingPlayerState);
-
+	
+	virtual void PlayerLeftGame(AXePlayerState* LeavingPlayerState);
+	
 	static void SendEXP(AActor* Recipient,  float InEXP);
-
+	
 	//~ Data
 	UPROPERTY(EditDefaultsOnly, Category="Combat")
 	TObjectPtr<UCharacterInfo> CharacterInfo;

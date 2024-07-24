@@ -28,12 +28,6 @@ public:
 	//~ end Widget Controller
 
 	
-	//~ Game Mode
-	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
-	static void NoticeGameModePlayerDied(const UObject* WorldContextObject, const FEffectProperties& Properties);
-	//~ end Game Mode
-
-	
 	//~ Gameplay Mechanics
 	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius, bool bShowDebug = false);
