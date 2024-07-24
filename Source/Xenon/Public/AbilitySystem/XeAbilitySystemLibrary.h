@@ -7,6 +7,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XeAbilitySystemLibrary.generated.h"
 
+struct FEffectProperties;
 class UCharacterInfo;
 class UXeOverlayWidgetController;
 /**
@@ -27,18 +28,13 @@ public:
 	//~ end Widget Controller
 
 	
-	// Character Class Info
-	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|CharacterDefaults")
-	static UCharacterInfo* GetCharacterInfo(const UObject* WorldContextObject);
-
-	static int32 GetEXPReward(const UObject* WorldContextObject, const FGameplayTag& CharacterTag, int32 CharacterLevel);
-	//~ end Character Class Info
+	//~ Game Mode
+	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
+	static void NoticeGameModePlayerDied(const UObject* WorldContextObject, const FEffectProperties& Properties);
+	//~ end Game Mode
 
 	
 	//~ Gameplay Mechanics
-	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
-	static void SendEXP(const UObject* WorldContextObject, AActor* Recipient,  float InEXP);
-	
 	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin, float Radius, bool bShowDebug = false);
 	//~ end Gameplay Mechanics

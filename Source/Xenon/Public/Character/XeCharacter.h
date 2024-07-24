@@ -35,18 +35,11 @@ public:
 	virtual FVector GetSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
 	virtual FGameplayTag GetCharacterTag_Implementation() override;
 	virtual bool GetIsDead_Implementation() const override;
-	virtual void Die_Implementation(const FEffectProperties& Properties) override;
+	virtual void Die_Implementation() override;
 	//~ end Combat Interface
 	
 	
 protected:
-	//~ Combat Interface
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
-	FGameplayTag CharacterTag;
-	
-	bool IsDead = false;
-	//~ end Combat Interface
-	
 	
 	//~ Ability System
 	UPROPERTY()
@@ -76,9 +69,19 @@ protected:
 
 	
 	//~ Combat
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
+	FGameplayTag CharacterTag;
+	
+	bool bIsDead = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundBase* DeathSound;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> OverheadWidget;
-
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnDeath OnDeathDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnAttributeChanged OnHealthChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
@@ -95,6 +98,9 @@ protected:
 	virtual void SetupOverheadWidget();
 
 	virtual void BindCallbacksToDependencies();
+
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastHandleDeath();
 	//~ end Combat
 
 private:

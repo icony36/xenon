@@ -24,16 +24,16 @@ class XENON_API IPlayerInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent)
-	int32 FindCombatLevelWithEXP(int32 InEXP) const;
+	int32 FindCombatLevelWithEXP(int32 InEXP);
 	
 	UFUNCTION(BlueprintNativeEvent)
-	int32 GetEXP() const;
+	int32 GetEXP();
 
 	UFUNCTION(BlueprintNativeEvent)
-	int32 GetSkillPoint() const;
+	int32 GetSkillPoint();
 
 	UFUNCTION(BlueprintNativeEvent)
-	FLevelUpProperties GetLevelUpProperties(int32 Level) const;
+	FLevelUpProperties GetLevelUpProperties(int32 Level);
 	
 	UFUNCTION(BlueprintNativeEvent)
 	void AddToEXP(int32 InEXP);

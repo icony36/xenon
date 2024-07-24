@@ -9,6 +9,8 @@
 
 struct FEffectProperties;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AActor*, DeadActor);
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UCombatInterface : public UInterface
@@ -41,5 +43,5 @@ public:
 	bool GetIsDead() const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
-	void Die(const FEffectProperties& Properties);
+	void Die();
 };

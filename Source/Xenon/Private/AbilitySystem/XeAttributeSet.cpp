@@ -161,12 +161,7 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 		// If it kills the character.
 		if (NewHealth <= 0.f)
 		{
-			if (Properties.TargetCharacter->Implements<UCombatInterface>())
-			{
-				ICombatInterface::Execute_Die(Properties.TargetCharacter, Properties);
-			}
-		
-			SendEXPEvent(Properties);
+			UXeAbilitySystemLibrary::NoticeGameModePlayerDied(Properties.TargetCharacter, Properties);
 		}
 	}
 }
@@ -238,23 +233,6 @@ void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 	}
 }
 
-void UXeAttributeSet::SendEXPEvent(const FEffectProperties& Properties)
-{
-	if (Properties.TargetCharacter->Implements<UCombatInterface>())
-	{
-		// Get target level.
-		const int32 TargetLevel = ICombatInterface::Execute_GetCombatLevel(Properties.TargetCharacter);
-
-		// Get target character tag.
-		const FGameplayTag TargetTag = ICombatInterface::Execute_GetCharacterTag(Properties.TargetCharacter);
-
-		// Get target character EXP reward.
-		const int32 EXPReward = UXeAbilitySystemLibrary::GetEXPReward(Properties.TargetCharacter, TargetTag, TargetLevel);
-
-		// Send EXP to source character (character that kills the target character).
-		UXeAbilitySystemLibrary::SendEXP(Properties.TargetCharacter, Properties.SourceCharacter, EXPReward);
-	}
-}
 
 void UXeAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {

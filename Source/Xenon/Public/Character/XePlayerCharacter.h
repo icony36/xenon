@@ -33,13 +33,13 @@ public:
 
 
 	//~ Player Interface
-	virtual int32 FindCombatLevelWithEXP_Implementation(int32 InEXP) const override;
+	virtual int32 FindCombatLevelWithEXP_Implementation(int32 InEXP) override;
 
-	virtual int32 GetEXP_Implementation() const override;
+	virtual int32 GetEXP_Implementation() override;
 
-	virtual int32 GetSkillPoint_Implementation() const override;
+	virtual int32 GetSkillPoint_Implementation() override;
 
-	virtual FLevelUpProperties GetLevelUpProperties_Implementation(int32 Level) const override;
+	virtual FLevelUpProperties GetLevelUpProperties_Implementation(int32 Level) override;
 
 	virtual void AddToCombatLevel_Implementation(int32 InCombatLevel) override;
 
@@ -53,24 +53,36 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+
+	//~ Combat
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
+	//~ Combat
 	
 private:
+	UPROPERTY()
+	AXePlayerController* XePlayerController = nullptr;
+
+	UPROPERTY()
+	AXePlayerState* XePlayerState = nullptr;
+	
+	//~ Camera
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
+	//~ end Camera
 
+	
 	//~ Combat
 	virtual void SetupCombatInfo() override;
 
 	virtual void SetupOverheadWidget() override;
 
 	virtual void BindCallbacksToDependencies() override;
-	//~ end Combat
 	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastLevelUpEffects() const;
+	//~ end Combat
 };

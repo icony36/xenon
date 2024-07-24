@@ -6,9 +6,10 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "XeGameplayTags.h"
 #include "Abilities/GameplayAbilityTypes.h"
+#include "AbilitySystem/XeAttributeSet.h"
 #include "AbilitySystem/Data/CharacterInfo.h"
 #include "Engine/OverlapResult.h"
-#include "Game/XeGameModeBase.h"
+#include "Game/GameMode/XeGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Interface/CombatInterface.h"
 #include "Player/XePlayerState.h"
@@ -54,39 +55,16 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	return nullptr;
 }
 
-UCharacterInfo* UXeAbilitySystemLibrary::GetCharacterInfo(const UObject* WorldContextObject)
+void UXeAbilitySystemLibrary::NoticeGameModePlayerDied(const UObject* WorldContextObject,
+	const FEffectProperties& Properties)
 {
-	const AXeGameModeBase* XeGameModeBase = Cast<AXeGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (XeGameModeBase == nullptr) return nullptr;
-
-	return XeGameModeBase->CharacterInfo;
-}
-
-int32 UXeAbilitySystemLibrary::GetEXPReward(const UObject* WorldContextObject, const FGameplayTag& CharacterTag,
-	int32 CharacterLevel)
-{
-	UCharacterInfo* CharacterInfo = GetCharacterInfo(WorldContextObject);
-	if (CharacterInfo == nullptr) return 0;
-
-	// Get Character Properties form Character Tag.
-	const FCharacterProperties Props = CharacterInfo->GetCharacterProperties(CharacterTag);
-
-	// Get EXP reward at the level.
-	const float EXPReward = Props.EXPReward.GetValueAtLevel(CharacterLevel);
-
-	return static_cast<int32>(EXPReward);
-}
-
-void UXeAbilitySystemLibrary::SendEXP(const UObject* WorldContextObject, AActor* Recipient, float InEXP)
-{
-	// Setup payload to send (EXP tag, EXP reward amount).
-	const FXeGameplayTags& GameplayTags = FXeGameplayTags::Get();
-	FGameplayEventData Payload;
-	Payload.EventTag = GameplayTags.Attribute_Meta_IncomingEXP;
-	Payload.EventMagnitude = InEXP;
-
-	// Send EXP to target actor through Gameplay Event.
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Recipient, GameplayTags.Attribute_Meta_IncomingEXP, Payload);
+	if (const UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		if (AXeGameMode* XeGameMode = World->GetAuthGameMode<AXeGameMode>())
+		{
+			XeGameMode->PlayerEliminated(Properties.TargetCharacter, Properties.SourceCharacter, Properties.TargetController, Properties.SourceController);
+		}
+	}
 }
 
 void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,

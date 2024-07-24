@@ -81,39 +81,39 @@ void AXePlayerCharacter::OnRep_PlayerState()
 
 int32 AXePlayerCharacter::GetCombatLevel_Implementation()
 {
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	return XePlayerState->GetCombatLevel();
 }
 
-int32 AXePlayerCharacter::FindCombatLevelWithEXP_Implementation(int32 InEXP) const
+int32 AXePlayerCharacter::FindCombatLevelWithEXP_Implementation(int32 InEXP)
 {
-	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
     
 	return XePlayerState->GetLevelInfo()->FindLevelWithEXP(InEXP);
 }
 
-int32 AXePlayerCharacter::GetEXP_Implementation() const
+int32 AXePlayerCharacter::GetEXP_Implementation()
 {
-	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
     
 	return XePlayerState->GetExperience();
 }
 
-int32 AXePlayerCharacter::GetSkillPoint_Implementation() const
+int32 AXePlayerCharacter::GetSkillPoint_Implementation()
 {
-	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	return XePlayerState->GetSkillPoint();
 }
 
-FLevelUpProperties AXePlayerCharacter::GetLevelUpProperties_Implementation(int32 Level) const
+FLevelUpProperties AXePlayerCharacter::GetLevelUpProperties_Implementation(int32 Level)
 {
-	const AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 	
 	return XePlayerState->GetLevelInfo()->LevelUpInformation[Level];
@@ -121,7 +121,7 @@ FLevelUpProperties AXePlayerCharacter::GetLevelUpProperties_Implementation(int32
 
 void AXePlayerCharacter::AddToCombatLevel_Implementation(int32 InCombatLevel)
 {
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	XePlayerState->AddToCombatLevel(InCombatLevel);
@@ -129,7 +129,7 @@ void AXePlayerCharacter::AddToCombatLevel_Implementation(int32 InCombatLevel)
 
 void AXePlayerCharacter::AddToEXP_Implementation(int32 InEXP)
 {
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	XePlayerState->AddToExperience(InEXP);
@@ -137,7 +137,7 @@ void AXePlayerCharacter::AddToEXP_Implementation(int32 InEXP)
 
 void AXePlayerCharacter::AddToSkillPoint_Implementation(int32 InSkillPoint)
 {
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	XePlayerState->AddToSkillPoint(InSkillPoint);
@@ -161,7 +161,7 @@ void AXePlayerCharacter::BeginPlay()
 
 void AXePlayerCharacter::SetupCombatInfo()
 {
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 	
 	// Set Ability System Component ability actor info.
@@ -181,7 +181,7 @@ void AXePlayerCharacter::SetupCombatInfo()
 	}
 	
 	// Setup HUD on local controlled Character.
-	AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController());
+	XePlayerController = XePlayerController == nullptr ?  Cast<AXePlayerController>(GetController()) : XePlayerController;
 	if (XePlayerController != nullptr) // * character might not have Player Controller (non locally controlled character)
 	{
 		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>())
@@ -205,7 +205,7 @@ void AXePlayerCharacter::SetupOverheadWidget()
 	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
 	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
 	
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
 }
 
@@ -227,8 +227,7 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 	);
 
 	// Bind delegates for Level changed.
-	AXePlayerState* XePlayerState = GetPlayerState<AXePlayerState>();
-	
+	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
 		[this](const int32 NewLevel)
 		{

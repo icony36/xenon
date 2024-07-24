@@ -141,6 +141,4 @@ private:
 
 	void HandleIncomingDamage(const FEffectProperties& Properties);
 	void HandleIncomingEXP(const FEffectProperties& Properties);
-
-	static void SendEXPEvent(const FEffectProperties& Properties);
 };

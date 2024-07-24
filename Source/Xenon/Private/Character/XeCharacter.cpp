@@ -7,6 +7,7 @@
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAttributeSet.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 
 AXeCharacter::AXeCharacter()
@@ -66,12 +67,12 @@ FGameplayTag AXeCharacter::GetCharacterTag_Implementation()
 
 bool AXeCharacter::GetIsDead_Implementation() const
 {
-	return IsDead;
+	return bIsDead;
 }
 
-void AXeCharacter::Die_Implementation(const FEffectProperties& Properties)
+void AXeCharacter::Die_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%s died"), *this->GetClass()->GetName()));
+	MulticastHandleDeath();	
 }
 
 void AXeCharacter::InitializeDefaultAttributes() const
@@ -116,5 +117,25 @@ void AXeCharacter::SetupOverheadWidget()
 void AXeCharacter::BindCallbacksToDependencies()
 {
 	// Implement in child class.
+}
+
+void AXeCharacter::MulticastHandleDeath_Implementation()
+{
+	// Set ragdoll effect.
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+
+	// Disable collision.
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// Set bIsDead to true (calling in Multicast will apply to both client and server without making it replicated).
+	bIsDead = true;
+	
+	OnDeathDelegate.Broadcast(this);
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("%s died"), *this->GetClass()->GetName()));
+
 }
 
