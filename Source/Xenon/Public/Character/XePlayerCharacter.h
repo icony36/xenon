@@ -7,6 +7,7 @@
 #include "Interface/PlayerInterface.h"
 #include "XePlayerCharacter.generated.h"
 
+class AXeGameMode;
 class UNiagaraComponent;
 class USpringArmComponent;
 class UCameraComponent;
@@ -27,6 +28,7 @@ public:
 	// Called in client only.
 	virtual auto OnRep_PlayerState() -> void override;
 
+	
 	//~ Combat Interface
 	virtual int32 GetCombatLevel_Implementation() override;
 	//~ end Combat Interface
@@ -50,10 +52,27 @@ public:
 	virtual void LevelUp_Implementation() override;
 	//~ end Player Interface
 
+
+
+	//~ Death
+	virtual void MulticastHandleDeath_Implementation(float RespawnTime) override;
+	//~ end Death
+
+
 protected:
 	virtual void BeginPlay() override;
 
+	
+	UPROPERTY()
+	AXePlayerController* XePlayerController = nullptr;
 
+	UPROPERTY()
+	AXePlayerState* XePlayerState = nullptr;
+
+	UPROPERTY()
+	AXeGameMode* XeGameMode = nullptr;
+
+	
 	//~ Combat
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
@@ -67,14 +86,15 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastPlayLevelUpEffects() const;
 	//~ Combat
+
+	
+	//~ Death
+	FTimerHandle RespawnTimer;
+
+	void RespawnTimerFinished();
+	//~ end Death
 	
 private:
-	UPROPERTY()
-	AXePlayerController* XePlayerController = nullptr;
-
-	UPROPERTY()
-	AXePlayerState* XePlayerState = nullptr;
-	
 	//~ Camera
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCameraComponent> TopDownCameraComponent;
@@ -82,5 +102,4 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	//~ end Camera
-	
 };

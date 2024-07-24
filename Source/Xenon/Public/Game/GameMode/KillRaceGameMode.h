@@ -15,9 +15,13 @@ class XENON_API AKillRaceGameMode : public AXeGameMode
 	GENERATED_BODY()
 
 public:
-	virtual void EliminatePlayer(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController, AController* AttackerController) override;
+	virtual void EliminateCharacter(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController, AController* AttackerController) override;
 
-	virtual void RespawnPlayer(ACharacter* CharacterToSpawn, AController* ControllerToSpawn) override;
+	virtual void RespawnPlayer(ACharacter* CharacterToRespawn, AController* ControllerToRespawn) override;
 
 	virtual void PlayerLeftGame(AXePlayerState* LeavingPlayerState) override; // Called by ServerLeaveGame() in XePlayerCharacter
+
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	float PlayerRespawnTime = 3.f;
 };

@@ -43,5 +43,5 @@ public:
 	bool GetIsDead() const;
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
-	void Die();
+	void Die(float RespawnTime = -1.f);
 };

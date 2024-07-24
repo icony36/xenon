@@ -70,9 +70,16 @@ bool AXeCharacter::GetIsDead_Implementation() const
 	return bIsDead;
 }
 
-void AXeCharacter::Die_Implementation()
+void AXeCharacter::Die_Implementation(float RespawnTime)
 {
-	MulticastHandleDeath();	
+	MulticastHandleDeath(RespawnTime);	
+}
+
+void AXeCharacter::Destroyed()
+{
+	UnbindAllCallbacksToDependencies();
+
+	Super::Destroyed();
 }
 
 void AXeCharacter::InitializeDefaultAttributes() const
@@ -119,7 +126,17 @@ void AXeCharacter::BindCallbacksToDependencies()
 	// Implement in child class.
 }
 
-void AXeCharacter::MulticastHandleDeath_Implementation()
+void AXeCharacter::UnbindAllCallbacksToDependencies()
+{
+	OnHealthChangedDelegate.RemoveAll(this);
+	OnMaxHealthChangedDelegate.RemoveAll(this);
+	OnManaChangedDelegate.RemoveAll(this);
+	OnMaxManaChangedDelegate.RemoveAll(this);
+	OnCombatLevelChangedDelegate.RemoveAll(this);
+	OnDeathDelegate.RemoveAll(this);
+}
+
+void AXeCharacter::MulticastHandleDeath_Implementation(float RespawnTime)
 {
 	// Set bIsDead to true (calling in Multicast will apply to both client and server without making it replicated).
 	bIsDead = true;

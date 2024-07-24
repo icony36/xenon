@@ -11,8 +11,10 @@
 #include "AbilitySystem/Data/LevelInfo.h"
 #include "Camera/CameraComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Game/GameMode/XeGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/XePlayerController.h"
 #include "Player/XePlayerState.h"
 #include "UI/HUD/XeHUD.h"
@@ -60,7 +62,7 @@ void AXePlayerCharacter::PossessedBy(AController* NewController)
 
 	// Setup combat info for server.
 	SetupCombatInfo();
-
+	
 	// Setup Overhead Widget for server (non-server controlled character).
 	SetupOverheadWidget();
 
@@ -146,6 +148,18 @@ void AXePlayerCharacter::AddToSkillPoint_Implementation(int32 InSkillPoint)
 void AXePlayerCharacter::LevelUp_Implementation()
 {
 	MulticastPlayLevelUpEffects();
+}
+
+void AXePlayerCharacter::MulticastHandleDeath_Implementation(float RespawnTime)
+{
+	Super::MulticastHandleDeath_Implementation(RespawnTime);
+
+	if (RespawnTime >= 0)
+	{
+		// Start respawn cooldown.
+		GetWorldTimerManager().SetTimer(RespawnTimer, this, &AXePlayerCharacter::RespawnTimerFinished, RespawnTime);
+	}
+	
 }
 
 void AXePlayerCharacter::BeginPlay()
@@ -234,6 +248,15 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
 		}
 	);
+}
+
+void AXePlayerCharacter::RespawnTimerFinished()
+{
+	XeGameMode = XeGameMode == nullptr ? Cast<AXeGameMode>(UGameplayStatics::GetGameMode(this)) : XeGameMode;
+	if (XeGameMode)
+	{
+		XeGameMode->RespawnPlayer(this, Controller);
+	}
 }
 
 void AXePlayerCharacter::MulticastPlayLevelUpEffects_Implementation() const

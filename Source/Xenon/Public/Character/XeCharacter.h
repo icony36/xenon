@@ -35,11 +35,13 @@ public:
 	virtual FVector GetSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
 	virtual FGameplayTag GetCharacterTag_Implementation() override;
 	virtual bool GetIsDead_Implementation() const override;
-	virtual void Die_Implementation() override;
+	virtual void Die_Implementation(float RespawnTime) override;
 	//~ end Combat Interface
 	
 	
 protected:
+	virtual void Destroyed() override;
+	
 	//~ Ability System
 	UPROPERTY()
 	TObjectPtr<UXeAbilitySystemComponent> XeAbilitySystemComponent;
@@ -90,6 +92,8 @@ protected:
 	virtual void SetupOverheadWidget();
 
 	virtual void BindCallbacksToDependencies();
+	
+	virtual void UnbindAllCallbacksToDependencies();
 	//~ end Combat
 
 	
@@ -103,7 +107,7 @@ protected:
 	FOnDeath OnDeathDelegate;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath();
+	virtual void MulticastHandleDeath(float RespawnTime);
 
 	virtual void PlayDeathEffects();
 	//~ end Death
