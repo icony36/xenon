@@ -59,12 +59,9 @@ AXePlayerCharacter::AXePlayerCharacter()
 void AXePlayerCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-
-	// Setup combat info for server.
-	SetupCombatInfo();
 	
-	// Setup Overhead Widget for server (non-server controlled character).
-	SetupOverheadWidget();
+	// Initialize player on server.
+	InitializePlayer();
 
 	// Add startup abilities.
 	AddStartupAbilities();
@@ -74,11 +71,8 @@ void AXePlayerCharacter::OnRep_PlayerState()
 {
 	Super::OnRep_PlayerState();
 
-	// Setup combat info for client.
-	SetupCombatInfo();
-	
-	// Setup Overhead Widget for client.
-	SetupOverheadWidget();
+	// Initialize player on client.
+	InitializePlayer();
 }
 
 int32 AXePlayerCharacter::GetCombatLevel_Implementation()
@@ -162,15 +156,13 @@ void AXePlayerCharacter::MulticastHandleDeath_Implementation(float RespawnTime)
 	
 }
 
-void AXePlayerCharacter::BeginPlay()
+void AXePlayerCharacter::InitializePlayer()
 {
-	Super::BeginPlay();
-
-	// Setup Overhead Widget for server controlled character only (Overhead Widget is not ready yet in Possessed for server controlled character).
-	if (GetLocalRole() == ROLE_Authority && IsLocallyControlled())
-	{
-		SetupOverheadWidget();
-	}
+	// Setup combat info.
+	SetupCombatInfo();
+	
+	// Setup Overhead Widget.
+	SetupOverheadWidget();
 }
 
 void AXePlayerCharacter::SetupCombatInfo()
@@ -182,8 +174,9 @@ void AXePlayerCharacter::SetupCombatInfo()
 	XePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(XePlayerState, this);
 
 	// Set Character owned Ability System Component and Attribute Set.
-	XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
-	XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
+	if (!IsValid(XeAbilitySystemComponent)) XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
+	if (!IsValid(XeAttributeSet)) XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
+	
 
 	// Bind callbacks to attributes changed.
 	BindCallbacksToDependencies();
@@ -207,6 +200,9 @@ void AXePlayerCharacter::SetupCombatInfo()
 
 void AXePlayerCharacter::SetupOverheadWidget()
 {
+	// Ensure the widget is initialized.
+	OverheadWidget->InitWidget();
+	
 	// Setup Overhead Widget Controller.
 	if (UXeUserWidget* XeOverheadWidget = Cast<UXeUserWidget>(OverheadWidget->GetUserWidgetObject()))
 	{
@@ -258,6 +254,7 @@ void AXePlayerCharacter::RespawnTimerFinished()
 		XeGameMode->RespawnPlayer(this, Controller);
 	}
 }
+
 
 void AXePlayerCharacter::MulticastPlayLevelUpEffects_Implementation() const
 {

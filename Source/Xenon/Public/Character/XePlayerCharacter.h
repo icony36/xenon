@@ -26,7 +26,7 @@ public:
 	virtual void PossessedBy(AController* NewController) override;
 
 	// Called in client only.
-	virtual auto OnRep_PlayerState() -> void override;
+	virtual void OnRep_PlayerState() override;
 
 	
 	//~ Combat Interface
@@ -60,9 +60,6 @@ public:
 
 
 protected:
-	virtual void BeginPlay() override;
-
-	
 	UPROPERTY()
 	AXePlayerController* XePlayerController = nullptr;
 
@@ -102,4 +99,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	//~ end Camera
+
+	//~ Combat
+	void InitializePlayer();
+	//~ end Combat
 };
