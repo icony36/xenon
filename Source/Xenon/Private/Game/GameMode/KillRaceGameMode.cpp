@@ -48,7 +48,7 @@ void AKillRaceGameMode::EliminateCharacter(ACharacter* VictimCharacter, ACharact
 
 void AKillRaceGameMode::RespawnPlayer(ACharacter* CharacterToRespawn, AController* ControllerToRespawn)
 {
-	// Reset player controller and destroy character.
+	// Reset (detach player controller from pawn) and destroy character.
 	if (CharacterToRespawn)
 	{
 		CharacterToRespawn->Reset();
