@@ -22,7 +22,7 @@ void AKillRaceGameMode::EliminateCharacter(ACharacter* VictimCharacter, ACharact
 		}
 		else
 		{
-			// Execute Die function with -1.f for no respawn for non-player character.
+			// For non-player character, execute Die with no respawn by passing 1.f.
 			ICombatInterface::Execute_Die(VictimCharacter, -1.f);
 		}
 		
