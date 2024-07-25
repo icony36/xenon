@@ -24,7 +24,9 @@ public:
 
 	// Get OverlayWidgetController, create one if it is null.
 	UXeOverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WidgetControllerParams);
-
+	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	
 private:
 	UPROPERTY()
 	TObjectPtr<UXeUserWidget> OverlayWidget;

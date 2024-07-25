@@ -11,63 +11,63 @@
 void UXeOverlayWidgetController::BindCallbacksToDependencies()
 {
 	/** Bind to Attribute Changed Delegate */
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
+	OnHealthChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnHealthChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
+	OnMaxHealthChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthRegenAttribute()).AddLambda(
+	OnHealthRegenChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthRegenAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnHealthRegenChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
+	OnManaChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnManaChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).AddLambda(
+	OnMaxManaChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxManaChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaRegenAttribute()).AddLambda(
+	OnManaRegenChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaRegenAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnManaRegenChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetDamageAttribute()).AddLambda(
+	OnDamageChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetDamageAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnDamageChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetArmorAttribute()).AddLambda(
+	OnArmorChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetArmorAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnArmorChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMovementSpeedAttribute()).AddLambda(
+	OnMovementSpeedChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMovementSpeedAttribute()).AddLambda(
 		[this](const FOnAttributeChangeData& Data)
 		{
 			OnMovementSpeedChangedDelegate.Broadcast(Data.NewValue);
@@ -76,28 +76,44 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 	
 	
 	/** Bind to Player State Changed Delegate */
-	XePlayerState->OnExperienceChangedDelegate.AddLambda(
+	OnEXPPercentChangedDelegateHandle = XePlayerState->OnExperienceChangedDelegate.AddLambda(
 		[this](const int32 NewEXP)
 		{
 			OnEXPPercentChangedDelegate.Broadcast(GetEXPPercent(NewEXP));
 		}
 	);
 	
-	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
+	OnCombatLevelChangedDelegateHandle = XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
 		[this](const int32 NewLevel)
 		{
 			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
 		}
 	);
 
-	XePlayerState->OnSkillPointChangedDelegate.AddLambda(
+	OnSkillPointChangedDelegateHandle = XePlayerState->OnSkillPointChangedDelegate.AddLambda(
 		[this](const int32 SkillPoint)
 		{
 			OnSkillPointChangedDelegate.Broadcast(SkillPoint);
 		}
 	);
 }
-	
+
+void UXeOverlayWidgetController::UnbindCallbacksToDependencies()
+{
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).Remove(OnHealthChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).Remove(OnMaxHealthChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthRegenAttribute()).Remove(OnHealthRegenChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).Remove(OnManaChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).Remove(OnMaxManaChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaRegenAttribute()).Remove(OnManaRegenChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetDamageAttribute()).Remove(OnDamageChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetArmorAttribute()).Remove(OnArmorChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMovementSpeedAttribute()).Remove(OnMovementSpeedChangedDelegateHandle);
+
+	XePlayerState->OnExperienceChangedDelegate.Remove(OnEXPPercentChangedDelegateHandle);
+	XePlayerState->OnCombatLevelChangedDelegate.Remove(OnCombatLevelChangedDelegateHandle);
+	XePlayerState->OnSkillPointChangedDelegate.Remove(OnSkillPointChangedDelegateHandle);
+}
 
 void UXeOverlayWidgetController::BroadcastInitialValues()
 {

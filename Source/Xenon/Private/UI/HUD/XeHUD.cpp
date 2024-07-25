@@ -48,3 +48,14 @@ UXeOverlayWidgetController* AXeHUD::GetOverlayWidgetController(const FWidgetCont
 	return  OverlayWidgetController;
 }
 
+void AXeHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	// Unbind delegate callbacks.
+	if (OverlayWidgetController)
+	{
+		OverlayWidgetController->UnbindCallbacksToDependencies();
+	}
+	
+	Super::EndPlay(EndPlayReason);
+}
+

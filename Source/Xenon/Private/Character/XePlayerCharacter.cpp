@@ -196,9 +196,9 @@ void AXePlayerCharacter::HandleRespawn()
 
 void AXePlayerCharacter::SetupHUD()
 {
-	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * character might not have Player Controller (non locally controlled character)
+	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * only server and locally controller character have HUD
 	{
-		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>())
+		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>()) // * only locally controller character has HUD
 		{
 			XeHUD->InitializeOverlay(XePlayerController, XePlayerState, XeAbilitySystemComponent, XeAttributeSet);
 		}
