@@ -197,7 +197,7 @@ void AXePlayerCharacter::HandleRespawn() const
 
 void AXePlayerCharacter::SetupHUD() const
 {
-	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * only server and locally controlled character have HUD
+	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * only server and locally controlled character have Player Controller
 	{
 		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>()) // * only locally controlled character has HUD
 		{
