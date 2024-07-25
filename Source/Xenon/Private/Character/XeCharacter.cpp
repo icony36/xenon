@@ -139,7 +139,7 @@ void AXeCharacter::UnbindCallbacksFromDependencies()
 
 void AXeCharacter::BroadcastInitialValues()
 {
-	// Implemt in child class.
+	// Implement in child class.
 }
 
 void AXeCharacter::MulticastHandleDeath_Implementation()
