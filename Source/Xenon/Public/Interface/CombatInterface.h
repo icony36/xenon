@@ -26,8 +26,9 @@ class XENON_API ICombatInterface
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
+	// BlueprintNativeEvent allow executes without casting, it automatically generates virtual native version that exist in C++ that can be overriden in C++.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)  // * BlueprintNativeEvent allow executes without casting, it automatically generates virtual native version that exist in C++ that can be overriden in C++
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)  
 	AActor* GetAvatar();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
@@ -41,7 +42,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
 	bool GetIsDead() const;
-	
+
+	/**
+	 * @param	RespawnTime		Time delay for character respawn. Less than 0 means no respawn.
+	 */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
-	void Die(float RespawnTime = -1.f);
+	void Die(float RespawnTime = -1.f); 
 };

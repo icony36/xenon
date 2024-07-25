@@ -74,10 +74,14 @@ void AXeCharacter::Die_Implementation(float RespawnTime)
 {
 	MulticastHandleDeath();
 
-	if (RespawnTime >= 0)
+	if (RespawnTime > 0)
 	{
 		// Start respawn cooldown.
 		GetWorldTimerManager().SetTimer(RespawnTimer, this, &ThisClass::RespawnTimerFinished, RespawnTime);
+	}
+	else if (RespawnTime == 0) // * SetTimer with 0 time will clear the existing timer
+	{
+		RespawnTimerFinished();
 	}
 }
 

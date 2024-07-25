@@ -28,7 +28,7 @@ public:
 	static void SendEXP(AActor* Recipient,  float InEXP);
 	
 	//~ Data
-	UPROPERTY(EditDefaultsOnly, Category="Combat|CharacterPool")
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
 	TObjectPtr<UCharacterInfo> CharacterInfo;
 	//~ end Data
 	

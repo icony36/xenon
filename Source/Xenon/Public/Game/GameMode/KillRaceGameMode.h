@@ -22,6 +22,6 @@ public:
 	virtual void PlayerLeftGame(AXePlayerState* LeavingPlayerState) override; // Called by ServerLeaveGame() in XePlayerCharacter
 
 protected:
-	UPROPERTY(EditDefaultsOnly)
-	float PlayerRespawnTime = 3.f;
+	UPROPERTY(EditDefaultsOnly, Category="Combat")
+	float PlayerRespawnTime = 1.f;
 };

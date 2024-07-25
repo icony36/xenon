@@ -22,6 +22,7 @@ void AKillRaceGameMode::EliminateCharacter(ACharacter* VictimCharacter, ACharact
 		}
 		else
 		{
+			// Execute Die function with -1.f for no respawn for non-player character.
 			ICombatInterface::Execute_Die(VictimCharacter, -1.f);
 		}
 		
@@ -52,15 +53,6 @@ void AKillRaceGameMode::RespawnPlayer(ACharacter* CharacterToRespawn, AControlle
 	{
 		CharacterToRespawn->Reset();
 		CharacterToRespawn->Destroy();
-
-		// TArray<AActor*> PlayerStarts;
-		// UGameplayStatics::GetAllActorsOfClass(this, APlayerStart::StaticClass(), PlayerStarts);
-		//
-		// // Random an index.
-		// int32 Selection = FMath::RandRange(0, PlayerStarts.Num() - 1);
-		//
-		// // CharacterToRespawn->SetActorLocation(PlayerStarts[Selection]->GetActorLocation());
-		// CharacterToRespawn->SetActorTransform(PlayerStarts[Selection]->GetActorTransform());
 	}
 
 	// Respawn player
