@@ -32,6 +32,8 @@ public:
 	
 	
 	//~ Combat
+	bool bIsRespawn = false;
+	
 	FOnPlayerStateChanged OnCombatLevelChangedDelegate; 
 	FOnPlayerStateChanged OnExperienceChangedDelegate;
 	FOnPlayerStateChanged OnSkillPointChangedDelegate;

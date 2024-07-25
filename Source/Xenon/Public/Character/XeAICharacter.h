@@ -26,10 +26,13 @@ protected:
 	virtual void BeginPlay() override;
 	
 	
-	//~ Combat
+	//~ Xe AI Character
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat|AI") // * this is not replicated as we only check AI level on server
 	int32 CombatLevel = 1;
+	//~ end Xe AI Character
 
-	virtual void SetupCombatInfo() override;
-	//~ end Combat
+	
+	//~ Xe Character
+	virtual void InitializeCharacter() override;
+	//~ end Xe Character
 };

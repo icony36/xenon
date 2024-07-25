@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/XeCharacter.h"
 #include "Interface/PlayerInterface.h"
+#include "Player/XePlayerState.h"
 #include "XePlayerCharacter.generated.h"
 
 class AXeGameMode;
@@ -52,43 +53,40 @@ public:
 	virtual void LevelUp_Implementation() override;
 	//~ end Player Interface
 
-
-
-	//~ Death
-	virtual void MulticastHandleDeath_Implementation(float RespawnTime) override;
-	//~ end Death
-
-
 protected:
 	UPROPERTY()
-	AXePlayerController* XePlayerController = nullptr;
-
+	TObjectPtr<AXePlayerController> XePlayerController;
 	UPROPERTY()
-	AXePlayerState* XePlayerState = nullptr;
-
-	UPROPERTY()
-	AXeGameMode* XeGameMode = nullptr;
+	TObjectPtr<AXePlayerState> XePlayerState;
 
 	
-	//~ Combat
+	//~ Xe Character
+	virtual void InitializeCharacter() override;
+
+	virtual void BindCallbacksToDependencies() override;
+
+	virtual void SetupOverheadWidget() override;
+	//~ end Xe Character
+
+	
+	//~ Xe Player Character
+	void SetupHUD(); 
+	//~ end Xe Player Character
+
+
+	//~ Level Up
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UNiagaraComponent> LevelUpNiagaraComponent;
 
-	virtual void SetupCombatInfo() override;
-
-	virtual void SetupOverheadWidget() override;
-
-	virtual void BindCallbacksToDependencies() override;
-	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastPlayLevelUpEffects() const;
-	//~ Combat
+	//~ end Level Up
 
-	
+
 	//~ Death
-	FTimerHandle RespawnTimer;
-
-	void RespawnTimerFinished();
+	virtual void Die_Implementation(float RespawnTime) override;
+	
+	virtual void RespawnTimerFinished() override;
 	//~ end Death
 	
 private:
@@ -99,8 +97,4 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	//~ end Camera
-
-	//~ Combat
-	void InitializePlayer();
-	//~ end Combat
 };

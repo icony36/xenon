@@ -72,12 +72,18 @@ bool AXeCharacter::GetIsDead_Implementation() const
 
 void AXeCharacter::Die_Implementation(float RespawnTime)
 {
-	MulticastHandleDeath(RespawnTime);	
+	MulticastHandleDeath();
+
+	if (RespawnTime >= 0)
+	{
+		// Start respawn cooldown.
+		GetWorldTimerManager().SetTimer(RespawnTimer, this, &ThisClass::RespawnTimerFinished, RespawnTime);
+	}
 }
 
 void AXeCharacter::Destroyed()
 {
-	UnbindAllCallbacksToDependencies();
+	// UnbindAllCallbacksToDependencies();
 
 	Super::Destroyed();
 }
@@ -111,7 +117,7 @@ void AXeCharacter::AddStartupAbilities() const
 	XeAbilitySystemComponent->AddCharacterPassiveAbilities(StartupPassiveAbilities);
 }
 
-void AXeCharacter::SetupCombatInfo()
+void AXeCharacter::InitializeCharacter()
 {
 	// Implement in child class.
 }
@@ -134,9 +140,10 @@ void AXeCharacter::UnbindAllCallbacksToDependencies()
 	OnMaxManaChangedDelegate.RemoveAll(this);
 	OnCombatLevelChangedDelegate.RemoveAll(this);
 	OnDeathDelegate.RemoveAll(this);
+	OnRespawnDelegate.RemoveAll(this);
 }
 
-void AXeCharacter::MulticastHandleDeath_Implementation(float RespawnTime)
+void AXeCharacter::MulticastHandleDeath_Implementation()
 {
 	// Set bIsDead to true (calling in Multicast will apply to both client and server without making it replicated).
 	bIsDead = true;
@@ -156,5 +163,10 @@ void AXeCharacter::PlayDeathEffects()
 
 	// Disable collision.
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void AXeCharacter::RespawnTimerFinished()
+{
+	// Implement in child class.
 }
 

@@ -27,7 +27,7 @@ void AXeAICharacter::BeginPlay()
 	Super::BeginPlay();
 
 	// Setup Ability System Component and default Attributes.
-	SetupCombatInfo();
+	InitializeCharacter();
 
 	// Add startup abilities only on server.
 	if (HasAuthority())
@@ -36,7 +36,7 @@ void AXeAICharacter::BeginPlay()
 	}
 }
 
-void AXeAICharacter::SetupCombatInfo()
+void AXeAICharacter::InitializeCharacter()
 {
 	XeAbilitySystemComponent->InitAbilityActorInfo(this, this);
 

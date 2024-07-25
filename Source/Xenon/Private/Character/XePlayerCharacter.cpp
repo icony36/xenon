@@ -10,6 +10,7 @@
 #include "AbilitySystem/XeAttributeSet.h"
 #include "AbilitySystem/Data/LevelInfo.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Game/GameMode/XeGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -61,7 +62,7 @@ void AXePlayerCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	
 	// Initialize player on server.
-	InitializePlayer();
+	InitializeCharacter();
 
 	// Add startup abilities.
 	AddStartupAbilities();
@@ -72,12 +73,12 @@ void AXePlayerCharacter::OnRep_PlayerState()
 	Super::OnRep_PlayerState();
 
 	// Initialize player on client.
-	InitializePlayer();
+	InitializeCharacter();
 }
 
 int32 AXePlayerCharacter::GetCombatLevel_Implementation()
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	return XePlayerState->GetCombatLevel();
@@ -85,7 +86,7 @@ int32 AXePlayerCharacter::GetCombatLevel_Implementation()
 
 int32 AXePlayerCharacter::FindCombatLevelWithEXP_Implementation(int32 InEXP)
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
     
 	return XePlayerState->GetLevelInfo()->FindLevelWithEXP(InEXP);
@@ -93,7 +94,7 @@ int32 AXePlayerCharacter::FindCombatLevelWithEXP_Implementation(int32 InEXP)
 
 int32 AXePlayerCharacter::GetEXP_Implementation()
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
     
 	return XePlayerState->GetExperience();
@@ -101,7 +102,7 @@ int32 AXePlayerCharacter::GetEXP_Implementation()
 
 int32 AXePlayerCharacter::GetSkillPoint_Implementation()
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	return XePlayerState->GetSkillPoint();
@@ -109,7 +110,7 @@ int32 AXePlayerCharacter::GetSkillPoint_Implementation()
 
 FLevelUpProperties AXePlayerCharacter::GetLevelUpProperties_Implementation(int32 Level)
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 	
 	return XePlayerState->GetLevelInfo()->LevelUpInformation[Level];
@@ -117,7 +118,7 @@ FLevelUpProperties AXePlayerCharacter::GetLevelUpProperties_Implementation(int32
 
 void AXePlayerCharacter::AddToCombatLevel_Implementation(int32 InCombatLevel)
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	XePlayerState->AddToCombatLevel(InCombatLevel);
@@ -125,7 +126,7 @@ void AXePlayerCharacter::AddToCombatLevel_Implementation(int32 InCombatLevel)
 
 void AXePlayerCharacter::AddToEXP_Implementation(int32 InEXP)
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	XePlayerState->AddToExperience(InEXP);
@@ -133,7 +134,7 @@ void AXePlayerCharacter::AddToEXP_Implementation(int32 InEXP)
 
 void AXePlayerCharacter::AddToSkillPoint_Implementation(int32 InSkillPoint)
 {
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	XePlayerState->AddToSkillPoint(InSkillPoint);
@@ -144,30 +145,10 @@ void AXePlayerCharacter::LevelUp_Implementation()
 	MulticastPlayLevelUpEffects();
 }
 
-void AXePlayerCharacter::MulticastHandleDeath_Implementation(float RespawnTime)
+void AXePlayerCharacter::InitializeCharacter()
 {
-	Super::MulticastHandleDeath_Implementation(RespawnTime);
-
-	if (RespawnTime >= 0)
-	{
-		// Start respawn cooldown.
-		GetWorldTimerManager().SetTimer(RespawnTimer, this, &AXePlayerCharacter::RespawnTimerFinished, RespawnTime);
-	}
-	
-}
-
-void AXePlayerCharacter::InitializePlayer()
-{
-	// Setup combat info.
-	SetupCombatInfo();
-	
-	// Setup Overhead Widget.
-	SetupOverheadWidget();
-}
-
-void AXePlayerCharacter::SetupCombatInfo()
-{
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
+	// Set Character owned Player State;
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 	
 	// Set Ability System Component ability actor info.
@@ -177,18 +158,36 @@ void AXePlayerCharacter::SetupCombatInfo()
 	if (!IsValid(XeAbilitySystemComponent)) XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
 	if (!IsValid(XeAttributeSet)) XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
 	
-
 	// Bind callbacks to attributes changed.
 	BindCallbacksToDependencies();
 	
-	// Initialize default Attributes.
+	// Set Attributes.
 	if (HasAuthority())
 	{
-		InitializeDefaultAttributes();
+		if (!XePlayerState->bIsRespawn)
+		{
+			// Initialize default Attributes for first spawning in the world.
+			InitializeDefaultAttributes();
+			XePlayerState->bIsRespawn = true;
+		}
+		else
+		{
+			// Reset health and mana for respawn.
+			XeAttributeSet->SetHealth(XeAttributeSet->GetMaxHealth());
+			XeAttributeSet->SetMana(XeAttributeSet->GetMaxMana());
+		}
 	}
 	
 	// Setup HUD on local controlled Character.
-	XePlayerController = XePlayerController == nullptr ?  Cast<AXePlayerController>(GetController()) : XePlayerController;
+	SetupHUD();
+
+	// Setup Overhead Widget.
+	SetupOverheadWidget();
+}
+
+void AXePlayerCharacter::SetupHUD()
+{
+	if (!IsValid(XePlayerController)) XePlayerController = Cast<AXePlayerController>(GetController());
 	if (XePlayerController != nullptr) // * character might not have Player Controller (non locally controlled character)
 	{
 		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>())
@@ -214,14 +213,12 @@ void AXePlayerCharacter::SetupOverheadWidget()
 	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
 	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
 	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
-	
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
 }
 
 void AXePlayerCharacter::BindCallbacksToDependencies()
 {
-	// Bind delegates for Attribute changed.
+	// Bind delegates for Attributes changed.
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
 		{
@@ -236,8 +233,21 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 		}
 	);
 
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
+	[this](const FOnAttributeChangeData& Data)
+		{
+			OnManaChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).AddLambda(
+	[this](const FOnAttributeChangeData& Data)
+		{
+			OnMaxManaChangedDelegate.Broadcast(Data.NewValue);
+		}
+	);
+
 	// Bind delegates for Level changed.
-	XePlayerState = XePlayerState == nullptr ? GetPlayerState<AXePlayerState>() : XePlayerState;
 	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
 		[this](const int32 NewLevel)
 		{
@@ -246,20 +256,35 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 	);
 }
 
-void AXePlayerCharacter::RespawnTimerFinished()
-{
-	XeGameMode = XeGameMode == nullptr ? Cast<AXeGameMode>(UGameplayStatics::GetGameMode(this)) : XeGameMode;
-	if (XeGameMode)
-	{
-		XeGameMode->RespawnPlayer(this, Controller);
-	}
-}
-
-
 void AXePlayerCharacter::MulticastPlayLevelUpEffects_Implementation() const
 {
 	if (IsValid(LevelUpNiagaraComponent))
 	{
 		LevelUpNiagaraComponent->Activate(true);
 	}
+}
+
+void AXePlayerCharacter::Die_Implementation(float RespawnTime)
+{
+	Super::Die_Implementation(RespawnTime);
+
+	TopDownCameraComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+}
+
+void AXePlayerCharacter::RespawnTimerFinished()
+{
+	if (AXeGameMode* XeGameMode = Cast<AXeGameMode>(UGameplayStatics::GetGameMode(this))) // * only server have game mode
+	{
+		XeGameMode->RespawnPlayer(this, Controller);
+	}
+
+	// // Disable ragdoll effect.
+	// GetMesh()->SetSimulatePhysics(false);
+	// GetMesh()->SetEnableGravity(true);
+	// GetCapsuleComponent()->SetCollisionProfileName(FName("CharacterMesh"));
+	//
+	// // Set collision.
+	// GetCapsuleComponent()->SetCollisionProfileName(FName("Pawn"));
+
+	// OnRespawnDelegate.Broadcast();
 }

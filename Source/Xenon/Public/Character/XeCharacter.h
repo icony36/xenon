@@ -10,6 +10,8 @@
 #include "Interface/CombatInterface.h"
 #include "XeCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRespawn);
+
 class UWidgetComponent;
 class UGameplayAbility;
 class UGameplayEffect;
@@ -58,7 +60,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
 	TSubclassOf<UGameplayEffect> DefaultBasicAttributes;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
 	TSubclassOf<UGameplayEffect> DefaultAdvancedAttributes;
 	
 	virtual void InitializeDefaultAttributes() const;
@@ -80,6 +82,8 @@ protected:
 	FOnAttributeChanged OnMaxManaChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnCombatStateChanged OnCombatLevelChangedDelegate;
+	UPROPERTY(BlueprintAssignable)
+	FOnRespawn OnRespawnDelegate;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
 	FGameplayTag CharacterTag;
@@ -87,7 +91,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> OverheadWidget;
 	
-	virtual void SetupCombatInfo();
+	virtual void InitializeCharacter();
 
 	virtual void SetupOverheadWidget();
 
@@ -98,8 +102,11 @@ protected:
 
 	
 	// Death
+	UPROPERTY(BlueprintReadOnly)
 	bool bIsDead = false;
 
+	FTimerHandle RespawnTimer;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	USoundBase* DeathSound;
 
@@ -107,9 +114,11 @@ protected:
 	FOnDeath OnDeathDelegate;
 
 	UFUNCTION(NetMulticast, Reliable)
-	virtual void MulticastHandleDeath(float RespawnTime);
+	virtual void MulticastHandleDeath(); // RespawnTime < 0 -> No respawn.
 
 	virtual void PlayDeathEffects();
+
+	virtual void RespawnTimerFinished();
 	//~ end Death
 
 private:

@@ -114,7 +114,7 @@ void UXeOverlayWidgetController::BroadcastInitialValues()
 
 	// Broadcast the initial values of player state.
 	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
-	OnEXPPercentChangedDelegate.Broadcast(0.f);
+	OnEXPPercentChangedDelegate.Broadcast(GetEXPPercent(XePlayerState->GetExperience()));
 	OnSkillPointChangedDelegate.Broadcast(XePlayerState->GetSkillPoint());
 }
 
