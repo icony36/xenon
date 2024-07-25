@@ -199,8 +199,9 @@ void AXePlayerCharacter::SetupHUD() const
 {
 	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * only server and locally controller character have HUD
 	{
-		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>()) // * only locally controller character has HUD
+		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>()) // * only locally controlled character has HUD
 		{
+			// HUD will create Overlay Widget and Overlay Widget Controller.
 			XeHUD->InitializeOverlay(XePlayerController, XePlayerState, XeAbilitySystemComponent, XeAttributeSet);
 		}
 	}
