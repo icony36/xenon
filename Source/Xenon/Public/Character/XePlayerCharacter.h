@@ -65,12 +65,14 @@ protected:
 
 	virtual void UnbindCallbacksFromDependencies() override;
 
+	virtual void BroadcastInitialValues() override;
+
 	virtual void SetupOverheadWidget() override;
 	//~ end Xe Character
 
 	
 	//~ Xe Player Character
-	void SetupHUD(); 
+	void SetupHUD() const; 
 	//~ end Xe Player Character
 
 
@@ -98,6 +100,6 @@ private:
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	//~ end Camera
 
-	void HandleFirstSpawn();
-	void HandleRespawn();
+	void HandleFirstSpawn() const;
+	void HandleRespawn() const;
 };

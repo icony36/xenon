@@ -55,7 +55,7 @@ public:
 	
 	virtual void BindCallbacksToDependencies();
 
-	virtual void UnbindCallbacksToDependencies();
+	virtual void UnbindCallbacksFromDependencies();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void BroadcastInitialValues();

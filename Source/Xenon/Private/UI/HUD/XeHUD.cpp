@@ -53,7 +53,7 @@ void AXeHUD::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	// Unbind delegate callbacks.
 	if (OverlayWidgetController)
 	{
-		OverlayWidgetController->UnbindCallbacksToDependencies();
+		OverlayWidgetController->UnbindCallbacksFromDependencies();
 	}
 	
 	Super::EndPlay(EndPlayReason);

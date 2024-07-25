@@ -16,7 +16,7 @@ class XENON_API UXeOverlayWidgetController : public UXeWidgetController
 
 public:
 	virtual void BindCallbacksToDependencies() override;
-	virtual void UnbindCallbacksToDependencies() override;
+	virtual void UnbindCallbacksFromDependencies() override;
 	virtual void BroadcastInitialValues() override;
 
 	UPROPERTY(BlueprintAssignable, Category="Combat|Attribute")

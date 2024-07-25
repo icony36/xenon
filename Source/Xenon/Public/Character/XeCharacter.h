@@ -95,11 +95,13 @@ protected:
 	
 	virtual void InitializeCharacter();
 
-	virtual void SetupOverheadWidget();
-
 	virtual void BindCallbacksToDependencies();
 
 	virtual void UnbindCallbacksFromDependencies();
+
+	virtual void BroadcastInitialValues(); 
+
+	virtual void SetupOverheadWidget();
 	//~ end Combat
 
 	

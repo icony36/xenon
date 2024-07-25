@@ -98,7 +98,7 @@ void UXeOverlayWidgetController::BindCallbacksToDependencies()
 	);
 }
 
-void UXeOverlayWidgetController::UnbindCallbacksToDependencies()
+void UXeOverlayWidgetController::UnbindCallbacksFromDependencies()
 {
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).Remove(OnHealthChangedDelegateHandle);
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).Remove(OnMaxHealthChangedDelegateHandle);

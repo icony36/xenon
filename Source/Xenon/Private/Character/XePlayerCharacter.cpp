@@ -171,7 +171,7 @@ void AXePlayerCharacter::InitializeCharacter()
 	SetupOverheadWidget();
 }
 
-void AXePlayerCharacter::HandleFirstSpawn()
+void AXePlayerCharacter::HandleFirstSpawn() const
 {
 	if (HasAuthority())
 	{
@@ -182,10 +182,11 @@ void AXePlayerCharacter::HandleFirstSpawn()
 	// Setup HUD on local controlled Character.
 	SetupHUD();
 
+	// The following spawn will be respawning.
 	XePlayerState->bIsFirstSpawn = false;
 }
 
-void AXePlayerCharacter::HandleRespawn()
+void AXePlayerCharacter::HandleRespawn() const
 {
 	if (HasAuthority())
 	{
@@ -194,7 +195,7 @@ void AXePlayerCharacter::HandleRespawn()
 	}
 }
 
-void AXePlayerCharacter::SetupHUD()
+void AXePlayerCharacter::SetupHUD() const
 {
 	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * only server and locally controller character have HUD
 	{
@@ -220,11 +221,7 @@ void AXePlayerCharacter::SetupOverheadWidget()
 	BindCallbacksToDependencies();
 	
 	// Broadcast initial values for Overhead Widget
-	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
-	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
-	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
-	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
-	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
+	BroadcastInitialValues();
 }
 
 void AXePlayerCharacter::BindCallbacksToDependencies()
@@ -274,6 +271,15 @@ void AXePlayerCharacter::UnbindCallbacksFromDependencies()
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).Remove(OnManaChangedDelegateHandle);
 	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).Remove(OnMaxManaChangedDelegateHandle);
 	XePlayerState->OnCombatLevelChangedDelegate.Remove(OnCombatLevelChangedDelegateHandle);
+}
+
+void AXePlayerCharacter::BroadcastInitialValues()
+{
+	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
+	OnMaxHealthChangedDelegate.Broadcast(XeAttributeSet->GetMaxHealth());
+	OnManaChangedDelegate.Broadcast(XeAttributeSet->GetMana());
+	OnMaxManaChangedDelegate.Broadcast(XeAttributeSet->GetMaxMana());
+	OnCombatLevelChangedDelegate.Broadcast(XePlayerState->GetCombatLevel());
 }
 
 void AXePlayerCharacter::MulticastPlayLevelUpEffects_Implementation() const

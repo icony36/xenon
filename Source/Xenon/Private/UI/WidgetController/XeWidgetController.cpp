@@ -26,7 +26,7 @@ void UXeWidgetController::BindCallbacksToDependencies()
 	// Implement in child class.
 }
 
-void UXeWidgetController::UnbindCallbacksToDependencies()
+void UXeWidgetController::UnbindCallbacksFromDependencies()
 {
 	// Implement in child class.
 }

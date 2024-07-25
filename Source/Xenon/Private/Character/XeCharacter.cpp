@@ -137,6 +137,11 @@ void AXeCharacter::UnbindCallbacksFromDependencies()
 	// Implement in child class.
 }
 
+void AXeCharacter::BroadcastInitialValues()
+{
+	// Implemt in child class.
+}
+
 void AXeCharacter::MulticastHandleDeath_Implementation()
 {
 	// Set bIsDead to true (calling in Multicast will apply to both client and server without making it replicated).
