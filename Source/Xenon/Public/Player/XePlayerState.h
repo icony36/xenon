@@ -32,7 +32,7 @@ public:
 	
 	
 	//~ Combat
-	bool bIsRespawn = false;
+	bool bIsFirstSpawn = true;
 	
 	FOnPlayerStateChanged OnCombatLevelChangedDelegate; 
 	FOnPlayerStateChanged OnExperienceChangedDelegate;

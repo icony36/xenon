@@ -148,47 +148,56 @@ void AXePlayerCharacter::LevelUp_Implementation()
 void AXePlayerCharacter::InitializeCharacter()
 {
 	// Set Character owned Player State;
-	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	XePlayerState = GetPlayerState<AXePlayerState>();
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 	
 	// Set Ability System Component ability actor info.
 	XePlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(XePlayerState, this);
 
 	// Set Character owned Ability System Component and Attribute Set.
-	if (!IsValid(XeAbilitySystemComponent)) XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
-	if (!IsValid(XeAttributeSet)) XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
+	XeAbilitySystemComponent = CastChecked<UXeAbilitySystemComponent>(XePlayerState->GetAbilitySystemComponent());
+	XeAttributeSet = CastChecked<UXeAttributeSet>(XePlayerState->GetAttributeSet());
 	
-	// Bind callbacks to attributes changed.
-	BindCallbacksToDependencies();
-	
-	// Set Attributes.
-	if (HasAuthority())
+	// Check if is first time spawning in the game.
+	if (XePlayerState->bIsFirstSpawn)
 	{
-		if (!XePlayerState->bIsRespawn)
-		{
-			// Initialize default Attributes for first spawning in the world.
-			InitializeDefaultAttributes();
-			XePlayerState->bIsRespawn = true;
-		}
-		else
-		{
-			// Reset health and mana for respawn.
-			XeAttributeSet->SetHealth(XeAttributeSet->GetMaxHealth());
-			XeAttributeSet->SetMana(XeAttributeSet->GetMaxMana());
-		}
+		HandleFirstSpawn();
 	}
-	
-	// Setup HUD on local controlled Character.
-	SetupHUD();
+	else
+	{
+		HandleRespawn();
+	}
 
 	// Setup Overhead Widget.
 	SetupOverheadWidget();
 }
 
+void AXePlayerCharacter::HandleFirstSpawn()
+{
+	if (HasAuthority())
+	{
+		// Initialize all default Attributes.
+		InitializeDefaultAttributes();
+	}
+
+	// Setup HUD on local controlled Character.
+	SetupHUD();
+
+	XePlayerState->bIsFirstSpawn = false;
+}
+
+void AXePlayerCharacter::HandleRespawn()
+{
+	if (HasAuthority())
+	{
+		// Reset health and mana for respawn.
+		ApplyEffectToSelf(DefaultVitalAttributes, 1.f);
+	}
+}
+
 void AXePlayerCharacter::SetupHUD()
 {
-	if (!IsValid(XePlayerController)) XePlayerController = Cast<AXePlayerController>(GetController());
-	if (XePlayerController != nullptr) // * character might not have Player Controller (non locally controlled character)
+	if (AXePlayerController* XePlayerController = Cast<AXePlayerController>(GetController())) // * character might not have Player Controller (non locally controlled character)
 	{
 		if (AXeHUD* XeHUD = XePlayerController->GetHUD<AXeHUD>())
 		{
@@ -207,6 +216,9 @@ void AXePlayerCharacter::SetupOverheadWidget()
 	{
 		XeOverheadWidget->SetWidgetController(this);
 	}
+
+	// Bind callbacks to Attributes changed.
+	BindCallbacksToDependencies();
 	
 	// Broadcast initial values for Overhead Widget
 	OnHealthChangedDelegate.Broadcast(XeAttributeSet->GetHealth());
@@ -277,14 +289,4 @@ void AXePlayerCharacter::RespawnTimerFinished()
 	{
 		XeGameMode->RespawnPlayer(this, Controller);
 	}
-
-	// // Disable ragdoll effect.
-	// GetMesh()->SetSimulatePhysics(false);
-	// GetMesh()->SetEnableGravity(true);
-	// GetCapsuleComponent()->SetCollisionProfileName(FName("CharacterMesh"));
-	//
-	// // Set collision.
-	// GetCapsuleComponent()->SetCollisionProfileName(FName("Pawn"));
-
-	// OnRespawnDelegate.Broadcast();
 }

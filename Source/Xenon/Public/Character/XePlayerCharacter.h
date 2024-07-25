@@ -55,8 +55,6 @@ public:
 
 protected:
 	UPROPERTY()
-	TObjectPtr<AXePlayerController> XePlayerController;
-	UPROPERTY()
 	TObjectPtr<AXePlayerState> XePlayerState;
 
 	
@@ -97,4 +95,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USpringArmComponent> CameraBoom;
 	//~ end Camera
+
+	void HandleFirstSpawn();
+	void HandleRespawn();
 };
