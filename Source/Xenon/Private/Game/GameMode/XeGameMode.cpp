@@ -8,8 +8,6 @@
 #include "Abilities/GameplayAbilityTypes.h"
 
 
-struct FXeGameplayTags;
-
 void AXeGameMode::EliminateCharacter(ACharacter* VictimCharacter, ACharacter* AttackerCharacter, AController* VictimController,
                                    AController* AttackerController)
 {
