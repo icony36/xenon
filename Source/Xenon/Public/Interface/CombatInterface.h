@@ -44,7 +44,7 @@ public:
 	bool GetIsDead() const;
 
 	/**
-	 * @param	RespawnTime		Time delay for character respawn. Less than 0 means no respawn.
+	 * @param	RespawnTime		Time delay for character respawn. If < 0, no respawn.
 	 */
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
 	void Die(float RespawnTime = -1.f); 
