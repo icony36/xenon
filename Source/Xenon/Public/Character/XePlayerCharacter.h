@@ -63,6 +63,8 @@ protected:
 
 	virtual void BindCallbacksToDependencies() override;
 
+	virtual void UnbindCallbacksFromDependencies() override;
+
 	virtual void SetupOverheadWidget() override;
 	//~ end Xe Character
 

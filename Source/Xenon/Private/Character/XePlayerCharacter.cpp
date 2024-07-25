@@ -10,7 +10,6 @@
 #include "AbilitySystem/XeAttributeSet.h"
 #include "AbilitySystem/Data/LevelInfo.h"
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Game/GameMode/XeGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -231,28 +230,28 @@ void AXePlayerCharacter::SetupOverheadWidget()
 void AXePlayerCharacter::BindCallbacksToDependencies()
 {
 	// Bind delegates for Attributes changed.
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
+	OnHealthChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
 		{
 			OnHealthChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 	
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
+	OnMaxHealthChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxHealthChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
+	OnManaChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
 		{
 			OnManaChangedDelegate.Broadcast(Data.NewValue);
 		}
 	);
 
-	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).AddLambda(
+	OnMaxManaChangedDelegateHandle = XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).AddLambda(
 	[this](const FOnAttributeChangeData& Data)
 		{
 			OnMaxManaChangedDelegate.Broadcast(Data.NewValue);
@@ -260,12 +259,21 @@ void AXePlayerCharacter::BindCallbacksToDependencies()
 	);
 
 	// Bind delegates for Level changed.
-	XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
+	OnCombatLevelChangedDelegateHandle = XePlayerState->OnCombatLevelChangedDelegate.AddLambda(
 		[this](const int32 NewLevel)
 		{
 			OnCombatLevelChangedDelegate.Broadcast(NewLevel);
 		}
 	);
+}
+
+void AXePlayerCharacter::UnbindCallbacksFromDependencies()
+{
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetHealthAttribute()).Remove(OnHealthChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxHealthAttribute()).Remove(OnMaxHealthChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetManaAttribute()).Remove(OnManaChangedDelegateHandle);
+	XeAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(XeAttributeSet->GetMaxManaAttribute()).Remove(OnMaxManaChangedDelegateHandle);
+	XePlayerState->OnCombatLevelChangedDelegate.Remove(OnCombatLevelChangedDelegateHandle);
 }
 
 void AXePlayerCharacter::MulticastPlayLevelUpEffects_Implementation() const

@@ -81,11 +81,11 @@ void AXeCharacter::Die_Implementation(float RespawnTime)
 	}
 }
 
-void AXeCharacter::Destroyed()
+void AXeCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	// UnbindAllCallbacksToDependencies();
-
-	Super::Destroyed();
+	UnbindCallbacksFromDependencies();
+	
+	Super::EndPlay(EndPlayReason);
 }
 
 void AXeCharacter::InitializeDefaultAttributes() const
@@ -132,15 +132,9 @@ void AXeCharacter::BindCallbacksToDependencies()
 	// Implement in child class.
 }
 
-void AXeCharacter::UnbindAllCallbacksToDependencies()
+void AXeCharacter::UnbindCallbacksFromDependencies()
 {
-	OnHealthChangedDelegate.RemoveAll(this);
-	OnMaxHealthChangedDelegate.RemoveAll(this);
-	OnManaChangedDelegate.RemoveAll(this);
-	OnMaxManaChangedDelegate.RemoveAll(this);
-	OnCombatLevelChangedDelegate.RemoveAll(this);
-	OnDeathDelegate.RemoveAll(this);
-	OnRespawnDelegate.RemoveAll(this);
+	// Implement in child class.
 }
 
 void AXeCharacter::MulticastHandleDeath_Implementation()

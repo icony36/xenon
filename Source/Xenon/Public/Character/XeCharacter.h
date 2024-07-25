@@ -10,8 +10,6 @@
 #include "Interface/CombatInterface.h"
 #include "XeCharacter.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRespawn);
-
 class UWidgetComponent;
 class UGameplayAbility;
 class UGameplayEffect;
@@ -42,7 +40,7 @@ public:
 	
 	
 protected:
-	virtual void Destroyed() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	//~ Ability System
 	UPROPERTY()
@@ -82,8 +80,12 @@ protected:
 	FOnAttributeChanged OnMaxManaChangedDelegate;
 	UPROPERTY(BlueprintAssignable)
 	FOnCombatStateChanged OnCombatLevelChangedDelegate;
-	UPROPERTY(BlueprintAssignable)
-	FOnRespawn OnRespawnDelegate;
+	
+	FDelegateHandle OnHealthChangedDelegateHandle;
+	FDelegateHandle OnMaxHealthChangedDelegateHandle;
+	FDelegateHandle OnManaChangedDelegateHandle;
+	FDelegateHandle OnMaxManaChangedDelegateHandle;
+	FDelegateHandle OnCombatLevelChangedDelegateHandle;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
 	FGameplayTag CharacterTag;
@@ -96,8 +98,8 @@ protected:
 	virtual void SetupOverheadWidget();
 
 	virtual void BindCallbacksToDependencies();
-	
-	virtual void UnbindAllCallbacksToDependencies();
+
+	virtual void UnbindCallbacksFromDependencies();
 	//~ end Combat
 
 	
