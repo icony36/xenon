@@ -7,23 +7,20 @@
 #include "Interface/CombatInterface.h"
 
 
-void UXeProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	const FGameplayEventData* TriggerEventData)
-{
-	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-}
-
-void UXeProjectileAbility::SpawnProjectile(FRotator SpawnRotation, const FGameplayTag& SpawnSocketTag,
+void UXeProjectileAbility::SpawnProjectile(const FGameplayTag& SpawnSocketTag,
                                            bool bShouldOverridePitch, float PitchOverride)
 {
+	AActor* OwnerActor = GetAvatarActorFromActorInfo();
+	
 	// Only server can spawn projectile.
-	if (!GetAvatarActorFromActorInfo()->HasAuthority()) return;
+	if (!OwnerActor->HasAuthority()) return;
 
 	// Get spawning location.
-	const FVector SocketLocation = ICombatInterface::Execute_GetSocketLocation(GetAvatarActorFromActorInfo(), SpawnSocketTag);
-	
+	const FVector SocketLocation = ICombatInterface::Execute_GetSocketLocation(OwnerActor, SpawnSocketTag);
 
+	// Get spawning rotation.
+	FRotator SpawnRotation = OwnerActor->GetActorForwardVector().Rotation();
+	
 	// Override projectile pitch if needed.
 	if (bShouldOverridePitch)
 	{

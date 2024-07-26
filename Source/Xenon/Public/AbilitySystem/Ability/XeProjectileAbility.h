@@ -15,9 +15,6 @@ class XENON_API UXeProjectileAbility : public UXeAbility
 {
 	GENERATED_BODY()
 
-public:
-	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
-	
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Projectile")
 	TSubclassOf<AXeProjectile> ProjectileClass;
@@ -26,5 +23,5 @@ protected:
 	float Range = 100.f;
 
 	UFUNCTION(BlueprintCallable, Category="XeAbility|Projectile")
-	void SpawnProjectile(FRotator SpawnRotation, const FGameplayTag& SpawnSocketTag, bool bShouldOverridePitch, float PitchOverride = 0.f);
+	void SpawnProjectile(const FGameplayTag& SpawnSocketTag, bool bShouldOverridePitch, float PitchOverride = 0.f);
 };
