@@ -8,6 +8,14 @@
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAttributeSet.h"
 
+void UXeAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	OwnerActor = GetAvatarActorFromActorInfo();
+}
+
 void UXeAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute) const
 {
 	if (TargetActor == nullptr) return;

@@ -6,8 +6,16 @@
 #include "AbilitySystem/Actor/XeProjectile.h"
 #include "Interface/CombatInterface.h"
 
-void UXeProjectileAbility::SpawnProjectile(FRotator& SpawnRotation, const FGameplayTag& SpawnSocketTag,
-	bool bShouldOverridePitch, float PitchOverride)
+
+void UXeProjectileAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+	const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
+
+void UXeProjectileAbility::SpawnProjectile(FRotator SpawnRotation, const FGameplayTag& SpawnSocketTag,
+                                           bool bShouldOverridePitch, float PitchOverride)
 {
 	// Only server can spawn projectile.
 	if (!GetAvatarActorFromActorInfo()->HasAuthority()) return;

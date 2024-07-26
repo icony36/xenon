@@ -45,7 +45,7 @@ private:
 	bool bHasPlayImpact = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Combat")
-	float LifeSpan = 15.f;
+	float LifeSpan = 5.f;
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<UNiagaraSystem> ImpactEffect;

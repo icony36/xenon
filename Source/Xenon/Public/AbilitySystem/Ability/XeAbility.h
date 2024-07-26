@@ -33,6 +33,8 @@ class XENON_API UXeAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+	
 	//~ Input
 	UPROPERTY(EditDefaultsOnly, Category="Input")
 	FGameplayTag StartupInputTag; // * only for start up
@@ -54,6 +56,9 @@ public:
 	//~ end Damage
 	
 protected:
+	UPROPERTY(BlueprintReadOnly, Category="XeAbility")
+	TObjectPtr<AActor> OwnerActor;
+	
 	//~ Visual and Sound
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
 	TArray<FTaggedMontage> AbilityMontages;
