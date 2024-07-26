@@ -74,7 +74,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluationParameters.TargetTags = Spec.CapturedTargetTags.GetAggregatedTags();
 
 	// Get Damage from Set By Caller Magnitude.
-	float Damage = Spec.GetSetByCallerMagnitude(FXeGameplayTags::Get().Damage, false);
+	float Damage = Spec.GetSetByCallerMagnitude(FXeGameplayTags::Get().Data_Damage, false);
 
 	// TODO: Modify Damage - Armor, Critical, Block, Shield
 

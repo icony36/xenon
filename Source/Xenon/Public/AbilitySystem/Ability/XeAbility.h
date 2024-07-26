@@ -33,19 +33,44 @@ class XENON_API UXeAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
-	// Input Tag only for startup.
+	//~ Input
 	UPROPERTY(EditDefaultsOnly, Category="Input")
-	FGameplayTag StartupInputTag;
+	FGameplayTag StartupInputTag; // * only for start up
+	//~ end Input
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+
+	//~ Ability
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	bool bIsPassive = false; // * ability system component will activate passive skill differently
+	//~ end Ability
+
+
+	//~ Damage
+	UFUNCTION(BlueprintCallable, Category="XeAbility")
+	virtual void CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute = false) const;
+	
+	UFUNCTION(BlueprintPure)
+	virtual float GetDamageAtLevel() const;
+	//~ end Damage
+	
+protected:
+	//~ Visual and Sound
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
 	TArray<FTaggedMontage> AbilityMontages;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
 	TArray<USoundBase*> AbilitySound;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Effects")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
 	TArray<UNiagaraSystem*> AbilityEffects;
+	//~ end Visual and Sound
+	
+	
+	//~ Damage
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
-	bool bIsPassive = false;
+	UPROPERTY(EditDefaultsOnly, Category="Damage")
+	FScalableFloat SkillDamage;
+	//~ end Damage
 };

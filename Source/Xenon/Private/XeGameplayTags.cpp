@@ -58,9 +58,9 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 	
 
 	/** Combat */
-	GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Damage"),
-		FString("Damage tag for Set By Caller Magnitude."));
+	GameplayTags.Data_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Data.Damage"),
+		FString("Data Damage tag for Set By Caller Magnitude."));
 
 
 	/** Attributes */

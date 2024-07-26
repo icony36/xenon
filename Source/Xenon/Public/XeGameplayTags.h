@@ -42,9 +42,9 @@ public:
  //~ end Sockets
 
  
- //~ Combat
- FGameplayTag Damage;
- //~ end Combat
+ //~ Data Tags
+ FGameplayTag Data_Damage;
+ //~ end Data Tags
 
 
  //~ Attributes (for Listen For Event Gameplay Ability)
