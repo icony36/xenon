@@ -6,7 +6,6 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
-#include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "AbilitySystem/Data/LevelInfo.h"
 #include "Game/GameMode/XeGameMode.h"
 #include "GameFramework/Character.h"
@@ -85,65 +84,6 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	{
 		HandleIncomingEXP(Props);
 	}
-}
-
-void UXeAttributeSet::MakeEffectProperties(const FGameplayEffectModCallbackData& Data,
-                                           FEffectProperties& OutProperties)
-{
-	/**
-	 * Source = Causer of the effect
-	 * Target = Target of the effect (owner of this Attribute Set)
-	 */
-
-	// Set Effect Context Handle from Effect Spec of incoming Data.
-	OutProperties.EffectContextHandle = Data.EffectSpec.GetContext();
-
-	// Set Source Ability System Component from Effect Context Handle.
-	OutProperties.SourceASC = OutProperties.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
-
-	// Check if Source Ability System, its Ability Actor Info and its Avatar Actor is valid.
-	if (IsValid(OutProperties.SourceASC) && OutProperties.SourceASC->AbilityActorInfo.IsValid() && OutProperties.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
-	{
-		// Set Source Avatar Actor from Source Ability System.
-		OutProperties.SourceAvatarActor = OutProperties.SourceASC->AbilityActorInfo->AvatarActor.Get();
-
-		// Set Source Controller from Source Ability System
-		OutProperties.SourceController = OutProperties.SourceASC->AbilityActorInfo->PlayerController.Get();
-
-		// If we can't get the Source Controller from Source Ability System, get it from Source Avatar Actor.
-		if (OutProperties.SourceController == nullptr && OutProperties.SourceAvatarActor != nullptr)
-		{
-			const APawn* Pawn = Cast<APawn>(OutProperties.SourceAvatarActor);
-			if (Pawn != nullptr)
-			{
-				OutProperties.SourceController = Pawn->GetController();
-			}
-		}
-
-		// If Source Controller is not null, set the Source Character from Source Controller.
-		if (OutProperties.SourceController != nullptr)
-		{
-			OutProperties.SourceCharacter = Cast<ACharacter>(OutProperties.SourceController->GetPawn());
-		}
-	}
-
-	// Check if Target (owner of this Attribute Set) Ability Actor Info and its Avatar Actor is valid.
-	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
-	{
-		// Set Target Avatar Actor from incoming Data Target.
-		OutProperties.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
-
-		// Set Target Controller from incoming Data Target.
-		OutProperties.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
-
-		// Set Target Character from Target Avatar Actor.
-		OutProperties.TargetCharacter = Cast<ACharacter>(OutProperties.TargetAvatarActor);
-
-		// Set Target Ability System from Target Avatar.
-		OutProperties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OutProperties.TargetAvatarActor);
-	}
-
-	/** Variables in OutProperties might be null, check before using. */
 }
 
 void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
@@ -237,6 +177,64 @@ void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 	}
 }
 
+void UXeAttributeSet::MakeEffectProperties(const FGameplayEffectModCallbackData& Data,
+                                           FEffectProperties& OutProperties)
+{
+	/**
+	 * Source = Causer of the effect
+	 * Target = Target of the effect (owner of this Attribute Set)
+	 */
+
+	// Set Effect Context Handle from Effect Spec of incoming Data.
+	OutProperties.EffectContextHandle = Data.EffectSpec.GetContext();
+
+	// Set Source Ability System Component from Effect Context Handle.
+	OutProperties.SourceASC = OutProperties.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent();
+
+	// Check if Source Ability System, its Ability Actor Info and its Avatar Actor is valid.
+	if (IsValid(OutProperties.SourceASC) && OutProperties.SourceASC->AbilityActorInfo.IsValid() && OutProperties.SourceASC->AbilityActorInfo->AvatarActor.IsValid())
+	{
+		// Set Source Avatar Actor from Source Ability System.
+		OutProperties.SourceAvatarActor = OutProperties.SourceASC->AbilityActorInfo->AvatarActor.Get();
+
+		// Set Source Controller from Source Ability System
+		OutProperties.SourceController = OutProperties.SourceASC->AbilityActorInfo->PlayerController.Get();
+
+		// If we can't get the Source Controller from Source Ability System, get it from Source Avatar Actor.
+		if (OutProperties.SourceController == nullptr && OutProperties.SourceAvatarActor != nullptr)
+		{
+			const APawn* Pawn = Cast<APawn>(OutProperties.SourceAvatarActor);
+			if (Pawn != nullptr)
+			{
+				OutProperties.SourceController = Pawn->GetController();
+			}
+		}
+
+		// If Source Controller is not null, set the Source Character from Source Controller.
+		if (OutProperties.SourceController != nullptr)
+		{
+			OutProperties.SourceCharacter = Cast<ACharacter>(OutProperties.SourceController->GetPawn());
+		}
+	}
+
+	// Check if Target (owner of this Attribute Set) Ability Actor Info and its Avatar Actor is valid.
+	if (Data.Target.AbilityActorInfo.IsValid() && Data.Target.AbilityActorInfo->AvatarActor.IsValid())
+	{
+		// Set Target Avatar Actor from incoming Data Target.
+		OutProperties.TargetAvatarActor = Data.Target.AbilityActorInfo->AvatarActor.Get();
+
+		// Set Target Controller from incoming Data Target.
+		OutProperties.TargetController = Data.Target.AbilityActorInfo->PlayerController.Get();
+
+		// Set Target Character from Target Avatar Actor.
+		OutProperties.TargetCharacter = Cast<ACharacter>(OutProperties.TargetAvatarActor);
+
+		// Set Target Ability System from Target Avatar.
+		OutProperties.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OutProperties.TargetAvatarActor);
+	}
+
+	/** Variables in OutProperties might be null, check before using. */
+}
 
 void UXeAttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const
 {

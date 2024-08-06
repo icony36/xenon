@@ -101,17 +101,17 @@ public:
 	//~ end Essential Attributes
 
 
-	//~ Basic Attributes
-	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_Damage)
+	//~ Combat Attributes
+	UPROPERTY(BlueprintReadOnly, Category="Combat Attributes", ReplicatedUsing=OnRep_Damage)
 	FGameplayAttributeData Damage;
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, Damage);
-	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_Armor)
+	UPROPERTY(BlueprintReadOnly, Category="Combat Attributes", ReplicatedUsing=OnRep_Armor)
 	FGameplayAttributeData Armor;
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, Armor);
-	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_MovementSpeed)
+	UPROPERTY(BlueprintReadOnly, Category="Combat Attributes", ReplicatedUsing=OnRep_MovementSpeed)
 	FGameplayAttributeData MovementSpeed;
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MovementSpeed);
-	UPROPERTY(BlueprintReadOnly, Category="Basic Attributes", ReplicatedUsing=OnRep_AttackSpeed)
+	UPROPERTY(BlueprintReadOnly, Category="Combat Attributes", ReplicatedUsing=OnRep_AttackSpeed)
 	FGameplayAttributeData AttackSpeed;
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, AttackSpeed);
 	
@@ -123,7 +123,7 @@ public:
 	void OnRep_MovementSpeed(const FGameplayAttributeData& OldDamage) const;
 	UFUNCTION()
 	void OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const;
-	//~ end Basic Attributes
+	//~ end Combat Attributes
 
 	
 	//~ Meta Attributes

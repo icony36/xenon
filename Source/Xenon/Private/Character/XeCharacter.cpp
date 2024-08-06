@@ -94,7 +94,7 @@ void AXeCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
 void AXeCharacter::InitializeDefaultAttributes() const
 {
-	ApplyEffectToSelf(DefaultBasicAttributes, 1.f);
+	ApplyEffectToSelf(DefaultCombatAttributes, 1.f);
 	ApplyEffectToSelf(DefaultEssentialAttributes, 1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes, 1.f); // * apply Vital Attributes last as they depend on Essential Attributes
 }

@@ -56,7 +56,7 @@ protected:
 	TSubclassOf<UGameplayEffect> DefaultEssentialAttributes;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
-	TSubclassOf<UGameplayEffect> DefaultBasicAttributes;
+	TSubclassOf<UGameplayEffect> DefaultCombatAttributes;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat|Attributes")
 	TSubclassOf<UGameplayEffect> DefaultAdvancedAttributes;

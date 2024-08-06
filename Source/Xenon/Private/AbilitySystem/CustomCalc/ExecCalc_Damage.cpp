@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAttributeSet.h"
+#include "AbilitySystem/XeGameplayEffectTypes.h"
 #include "Interface/CombatInterface.h"
 
 // Raw Struct (not FStruct) - to store captured Attribute
@@ -67,6 +68,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// Get Gameplay Effect Context Handle from Gameplay Effect Spec.
 	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+
+	// Get Xe Gameplay Effect Context from Gameplay Effect Context Handle.
+	FGameplayEffectContext* EffectContext = EffectContextHandle.Get();
+	FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContext);
 
 	// Create Evaluation Parameters for captured Attributes.
 	FAggregatorEvaluateParameters EvaluationParameters;
