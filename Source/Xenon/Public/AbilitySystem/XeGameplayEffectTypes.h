@@ -32,7 +32,7 @@ public:
 	}
 
 protected:
-	// Implement additional data for Gameplay Effect Context here. (IsBlockedHit, IsCriticalHit)
+	// Implement additional data for Gameplay Effect Context here. (e.g.: IsBlockedHit, IsCriticalHit)
 	
 };
 
