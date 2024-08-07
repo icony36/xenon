@@ -50,17 +50,17 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
 
 	// Get source Level.
-	int32 SourceCombatLevel = 1;
+	int32 SourceLevel = 1;
 	if (SourceAvatar->Implements<UCombatInterface>())
 	{
-		SourceCombatLevel = ICombatInterface::Execute_GetCombatLevel(SourceAvatar);
+		SourceLevel = ICombatInterface::Execute_GetCombatLevel(SourceAvatar);
 	}
 
 	// Get target Level.
-	int32 TargetCombatLevel = 1;
+	int32 TargetLevel = 1;
 	if (TargetAvatar->Implements<UCombatInterface>())
 	{
-		TargetCombatLevel = ICombatInterface::Execute_GetCombatLevel(TargetAvatar);
+		TargetLevel = ICombatInterface::Execute_GetCombatLevel(TargetAvatar);
 	}
 
 	// Get Gameplay Effect Spec from incoming Params.
@@ -81,7 +81,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	// Get Damage from Set By Caller Magnitude.
 	float Damage = Spec.GetSetByCallerMagnitude(FXeGameplayTags::Get().Data_Damage, false);
 
-	// TODO: Modify Damage - Armor, Critical, Block, Shield
+	// TODO: Modify Damage - Armor
 
 	// Capture Armor on target.
 	float TargetArmor = 0.f;

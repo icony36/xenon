@@ -52,18 +52,27 @@ public:
 	UFUNCTION(BlueprintPure)
 	virtual float GetDamageAtLevel() const;
 	//~ end Damage
+
+
+	//~ Montage
+	UFUNCTION(BlueprintPure, Category="XeAbility")
+	FTaggedMontage GetAbilityMontage(const bool bShouldRandom);
+	//~ end Montage
 	
 protected:
-	//~ Visual and Sound
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
+	//~ Montage
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Animation")
 	TArray<FTaggedMontage> AbilityMontages;
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
-	TArray<USoundBase*> AbilitySound;
+	//~ end Montage
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Visual and Sound")
-	TArray<UNiagaraSystem*> AbilityEffects;
-	//~ end Visual and Sound
+	
+	//~ VFX and SFX
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="VFX & SFX")
+	TArray<USoundBase*> AbilitySFX;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="VFX & SFX")
+	TArray<UNiagaraSystem*> AbilityVFX;
+	//~ VFX and SFX
 	
 	
 	//~ Damage
@@ -73,4 +82,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Damage")
 	FScalableFloat SkillDamage;
 	//~ end Damage
+
+private:
+	//~ Montage
+	int32 CurrentMontageIndex = 0;
+	//~ end Montage
 };

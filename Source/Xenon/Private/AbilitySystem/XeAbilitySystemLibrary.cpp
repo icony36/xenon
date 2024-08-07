@@ -3,13 +3,8 @@
 
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 
-#include "AbilitySystemBlueprintLibrary.h"
-#include "XeGameplayTags.h"
-#include "Abilities/GameplayAbilityTypes.h"
 #include "AbilitySystem/XeAttributeSet.h"
-#include "AbilitySystem/Data/CharacterInfo.h"
 #include "Engine/OverlapResult.h"
-#include "Game/GameMode/XeGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Interface/CombatInterface.h"
 #include "Player/XePlayerState.h"

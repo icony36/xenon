@@ -48,3 +48,35 @@ float UXeAbility::GetDamageAtLevel() const
 {
 	return SkillDamage.GetValueAtLevel(GetAbilityLevel());	
 }
+
+FTaggedMontage UXeAbility::GetAbilityMontage(const bool bShouldRandom)
+{
+	const int32 MontagesNum = AbilityMontages.Num();
+
+	if (MontagesNum <= 1)
+	{
+		 return AbilityMontages[0];
+	}
+
+	// Get random Montage.
+	if (bShouldRandom)
+	{
+		const int32 RandomNum = FMath::RandRange(0, MontagesNum - 1);
+
+		return AbilityMontages[RandomNum];
+	}
+
+	// Get Montage based on order.
+	const int32 LocalIndex = CurrentMontageIndex;
+	
+	if (CurrentMontageIndex < MontagesNum - 1)
+	{
+		CurrentMontageIndex++;
+	}
+	else
+	{
+		CurrentMontageIndex = 0;
+	}	
+
+	return AbilityMontages[LocalIndex];
+}

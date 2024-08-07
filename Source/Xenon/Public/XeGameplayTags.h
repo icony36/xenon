@@ -48,7 +48,7 @@ public:
 
 
  //~ Attributes (for Listen For Event Gameplay Ability)
- FGameplayTag Attribute_Meta_IncomingEXP;
+ FGameplayTag Attribute_Meta_IncomingEXP; // Data_Attribute_IncomingEXP
  //~ end Attributes
 
 private:
