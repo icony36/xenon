@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAttributeSet.h"
+#include "GameFramework/Character.h"
 
 
 void UXeAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute) const
@@ -79,4 +80,15 @@ FTaggedMontage UXeAbility::GetAbilityMontage(const bool bShouldRandom)
 	}	
 
 	return AbilityMontages[LocalIndex];
+}
+
+FName UXeAbility::GetCurrentMontageSection() const
+{
+	if (const ACharacter* AvatarCharacter = Cast<ACharacter>(GetAvatarActorFromActorInfo()))
+	{
+		const UAnimInstance* AnimInstance = AvatarCharacter->GetMesh()->GetAnimInstance();
+		return AnimInstance->Montage_GetCurrentSection();
+	}
+
+	return FName();
 }

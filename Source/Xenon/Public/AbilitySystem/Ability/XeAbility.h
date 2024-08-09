@@ -56,7 +56,10 @@ public:
 
 	//~ Montage
 	UFUNCTION(BlueprintPure, Category="XeAbility")
-	FTaggedMontage GetAbilityMontage(const bool bShouldRandom);
+	FTaggedMontage GetAbilityMontage(const bool bShouldRandom = false);
+
+	UFUNCTION(BlueprintPure, Category="XeAbility")
+	FName GetCurrentMontageSection() const;
 	//~ end Montage
 	
 protected:
