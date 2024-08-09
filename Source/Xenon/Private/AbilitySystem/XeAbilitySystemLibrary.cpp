@@ -52,7 +52,7 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 
 void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,
                                                          TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin,
-                                                         float Radius, bool bShowDebug)
+                                                         const float Radius, const bool bShowDebug, const float ShowDebugTime)
 {
 	FCollisionQueryParams SphereParams;
 	SphereParams.AddIgnoredActors(ActorsToIgnore);
@@ -81,7 +81,7 @@ void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCon
 				12,
 				FColor::Red,
 				false,
-				2
+				ShowDebugTime
 			);
 		}
 

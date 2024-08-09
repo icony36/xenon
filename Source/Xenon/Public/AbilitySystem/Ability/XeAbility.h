@@ -61,8 +61,28 @@ public:
 	UFUNCTION(BlueprintPure, Category="XeAbility")
 	FName GetCurrentMontageSection() const;
 	//~ end Montage
+
+
+	//~ Transform
+	UFUNCTION(BlueprintPure, Category="XeAbility")
+	FVector GetActorLocation() const;
+
+	UFUNCTION(BlueprintPure, Category="XeAbility")
+	FVector GetActorForwardVector() const;
+
+	UFUNCTION(BlueprintPure, Category="XeAbility")
+	FVector GetCastAtFrontLocation() const;
+	//~ end Transform
 	
 protected:
+	//~ Ability
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	float CastRadius = 100.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	float CastRange = 100.f;
+	//~ end Ability
+	
 	//~ Montage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Animation")
 	TArray<FTaggedMontage> AbilityMontages;

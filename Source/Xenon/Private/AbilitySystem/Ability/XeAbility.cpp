@@ -92,3 +92,18 @@ FName UXeAbility::GetCurrentMontageSection() const
 
 	return FName();
 }
+
+FVector UXeAbility::GetActorLocation() const
+{
+	return GetAvatarActorFromActorInfo()->GetActorLocation();
+}
+
+FVector UXeAbility::GetActorForwardVector() const
+{
+	return GetAvatarActorFromActorInfo()->GetActorForwardVector();
+}
+
+FVector UXeAbility::GetCastAtFrontLocation() const
+{
+	return GetActorLocation() + (GetActorForwardVector() * CastRange);
+}
