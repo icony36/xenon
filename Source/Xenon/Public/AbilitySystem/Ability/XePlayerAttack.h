@@ -16,4 +16,7 @@ class XENON_API UXePlayerAttack : public UXeAbility
 
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Attack")
+	float CombatActorDetectRadius = 500.f;
 };

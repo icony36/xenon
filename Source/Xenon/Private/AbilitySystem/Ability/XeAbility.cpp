@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
 #include "XeGameplayTags.h"
+#include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "GameFramework/Character.h"
 
@@ -50,7 +51,7 @@ float UXeAbility::GetDamageAtLevel() const
 	return SkillDamage.GetValueAtLevel(GetAbilityLevel());	
 }
 
-FTaggedMontage UXeAbility::GetAbilityMontage(const bool bShouldRandom)
+FTaggedMontage UXeAbility::GetMontageToPlay(const bool bRandomOrder)
 {
 	const int32 MontagesNum = AbilityMontages.Num();
 
@@ -60,7 +61,7 @@ FTaggedMontage UXeAbility::GetAbilityMontage(const bool bShouldRandom)
 	}
 
 	// Get random Montage.
-	if (bShouldRandom)
+	if (bRandomOrder)
 	{
 		const int32 RandomNum = FMath::RandRange(0, MontagesNum - 1);
 
@@ -106,4 +107,45 @@ FVector UXeAbility::GetActorForwardVector() const
 FVector UXeAbility::GetCastAtFrontLocation() const
 {
 	return GetActorLocation() + (GetActorForwardVector() * CastRange);
+}
+
+void UXeAbility::RotateToFace(AActor* TargetActor) const
+{
+	if (TargetActor == nullptr)
+	{
+		return;
+	}
+
+	// Get the actor current rotation.
+	AActor* AvatarActor = GetAvatarActorFromActorInfo();
+	const FRotator AvatarRotation = AvatarActor->GetActorRotation();
+
+	// Calculate the direction to the target.
+	FVector Direction = TargetActor->GetActorLocation() - AvatarActor->GetActorLocation();
+	Direction.Z = 0.0f; // * ignore Z axis for horizontal rotation
+
+	// Calculate the desired rotation to face the target
+	const FRotator TargetRotation = Direction.Rotation();
+
+	// Set the player's rotation to face the target
+	AvatarActor->SetActorRotation(FRotator(AvatarRotation.Pitch, TargetRotation.Yaw, AvatarRotation.Roll));
+}
+
+
+void UXeAbility::RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const float Radius,
+	const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor) const
+{
+	const AActor* AvatarActor = GetAvatarActorFromActorInfo();
+
+	// Get nearest actor to face.
+	AActor* TargetActor = UXeAbilitySystemLibrary::GetNearestCombatActor(
+		AvatarActor,
+		ActorsToIgnore,
+		Radius,
+		bShowDebug,
+		ShowDebugTime,
+		DebugColor);
+
+	// Rotate avatar actor.
+	RotateToFace(TargetActor);
 }

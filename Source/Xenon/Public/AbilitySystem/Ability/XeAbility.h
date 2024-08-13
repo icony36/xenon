@@ -18,10 +18,7 @@ struct FTaggedMontage
 	UAnimMontage* Montage = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag EventTag;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	FGameplayTag SocketTag;
+	FGameplayTag CastSocket;
 };
 
 /**
@@ -49,14 +46,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category="XeAbility")
 	virtual void CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute = false) const;
 	
-	UFUNCTION(BlueprintPure)
+	UFUNCTION(BlueprintPure, Category="XeAbility")
 	virtual float GetDamageAtLevel() const;
 	//~ end Damage
 
 
 	//~ Montage
 	UFUNCTION(BlueprintPure, Category="XeAbility")
-	FTaggedMontage GetAbilityMontage(const bool bShouldRandom = false);
+	FTaggedMontage GetMontageToPlay(const bool bRandomOrder = false);
 
 	UFUNCTION(BlueprintPure, Category="XeAbility")
 	FName GetCurrentMontageSection() const;
@@ -72,6 +69,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="XeAbility")
 	FVector GetCastAtFrontLocation() const;
+
+	UFUNCTION(BlueprintCallable, Category="XeAbility")
+	void RotateToFace(AActor* TargetActor) const;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
+	void RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const float Radius, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Green) const;
 	//~ end Transform
 	
 protected:

@@ -11,6 +11,19 @@
 #include "UI/HUD/XeHUD.h"
 #include "UI/WidgetController/XeWidgetController.h"
 
+void UXeAbilitySystemLibrary::ShowDebugSphere(const UObject* WorldContextObject, const FVector& Center, const float Radius,
+	const int32 Segments, const FLinearColor Color, const float LifeTime)
+{
+	DrawDebugSphere(
+			GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull),
+			Center,
+			Radius,
+			Segments,
+			Color.ToFColor(true),
+			false,
+			LifeTime);
+}
+
 bool UXeAbilitySystemLibrary::MakeWidgetControllerParams(const UObject* WorldContextObject,
 	FWidgetControllerParams& OutWidgetControllerParams, AXeHUD*& OutXeHUD)
 {
@@ -50,9 +63,9 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	return nullptr;
 }
 
-void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldContextObject,
-                                                         TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& SphereOrigin,
-                                                         const float Radius, const bool bShowDebug, const float ShowDebugTime)
+void UXeAbilitySystemLibrary::GetLiveCombatActorsWithinRadius(const UObject* WorldContextObject,
+                                                         TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& Center,
+                                                         const float Radius, const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor)
 {
 	FCollisionQueryParams SphereParams;
 	SphereParams.AddIgnoredActors(ActorsToIgnore);
@@ -64,25 +77,22 @@ void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCon
 		// Get overlap actors from World.
 		World->OverlapMultiByObjectType(
 			Overlaps,
-			SphereOrigin,
+			Center,
 			FQuat::Identity,
 			FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects),
 			FCollisionShape::MakeSphere(Radius),
-			SphereParams
-		);
+			SphereParams);
 
 		// Draw debug sphere
 		if (bShowDebug)
 		{
-			DrawDebugSphere(
+			ShowDebugSphere(
 				World,
-				SphereOrigin,
+				Center,
 				Radius,
-				12,
-				FColor::Red,
-				false,
-				ShowDebugTime
-			);
+				24,
+				DebugColor,
+				ShowDebugTime);
 		}
 
 		// Add non-dead overlapped actors to out array.
@@ -95,4 +105,46 @@ void UXeAbilitySystemLibrary::GetLivePlayersWithinRadius(const UObject* WorldCon
 			}
 		}
 	}
+}
+
+
+AActor* UXeAbilitySystemLibrary::GetNearestCombatActor(const AActor* CenterActor, const TArray<AActor*>& ActorsToIgnore,
+	const float Radius, const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor)
+{
+	// Get center location.
+	const FVector Center = CenterActor->GetActorLocation();
+	
+	// Get all overlapping actors that is Combat Interface and not dead.
+	TArray<AActor*> OverlappingActors;
+	GetLiveCombatActorsWithinRadius(CenterActor, OverlappingActors, ActorsToIgnore, Center, Radius, bShowDebug, ShowDebugTime, DebugColor);
+
+	// Get nearest actor.
+	AActor* NearestActor = nullptr;
+	float MinDistance = MAX_FLT;
+	for (AActor* Actor : OverlappingActors)
+	{
+		// Calculate the distance between the center and the actor.
+		float Distance = FVector::Dist(Center, Actor->GetActorLocation());
+
+		// Check if this is the closest actor so far.
+		if (Distance < MinDistance)
+		{
+			MinDistance = Distance;
+			NearestActor = Actor;
+		}
+	}
+
+	// Show debug on nearest actor.
+	if (bShowDebug && NearestActor != nullptr)
+	{
+		ShowDebugSphere(
+			GEngine->GetWorldFromContextObject(CenterActor, EGetWorldErrorMode::LogAndReturnNull),
+			NearestActor->GetActorLocation(),
+			50,
+			8,
+			DebugColor,
+			ShowDebugTime);
+	}
+	
+	return NearestActor;
 }
