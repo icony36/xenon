@@ -70,7 +70,7 @@ void UXeAbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag)) 
 		{
 			// Tell Ability Spec the input is pressed.
-			AbilitySpecInputPressed(AbilitySpec); 
+			AbilitySpecInputPressed(AbilitySpec);
 
 			// If Ability is not activated yet. 
 			if (!AbilitySpec.IsActive()) 
