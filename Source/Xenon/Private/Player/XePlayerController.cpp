@@ -6,6 +6,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "Character/XePlayerCharacter.h"
 #include "Input/XeInputComponent.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 
@@ -52,6 +53,7 @@ void AXePlayerController::SetupInputComponent()
 	// Bind Input Actions.
 	UXeInputComponent* XeInputComponent = CastChecked<UXeInputComponent>(InputComponent);
 	XeInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXePlayerController::Move);
+	XeInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AXePlayerController::MoveCompleted);
 	XeInputComponent->BindAbilityActions(InputTagConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
@@ -62,10 +64,26 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 	// Retrieve vector 2D values from input.
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
 
-	if (APawn* ControlledPawn = GetPawn<APawn>()) // * move might be called before Pawn is valid
+	if (AXePlayerCharacter* ControlledPawn = GetPawn<AXePlayerCharacter>()) // * move might be called before Pawn is valid
 	{
 		ControlledPawn->AddMovementInput(FVector::RightVector, InputAxisVector.X);
 		ControlledPawn->AddMovementInput(FVector::ForwardVector, InputAxisVector.Y);
+
+		ControlledPawn->MoveInputValue.X = InputAxisVector.X;
+		ControlledPawn->MoveInputValue.Y = InputAxisVector.Y;
+	}
+}
+
+// ReSharper disable once CppMemberFunctionMayBeConst
+void AXePlayerController::MoveCompleted(const FInputActionValue& InputActionValue)
+{
+	// Retrieve vector 2D values from input.
+	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
+	
+	if (AXePlayerCharacter* ControlledPawn = GetPawn<AXePlayerCharacter>()) // * move might be called before Pawn is valid
+	{
+		ControlledPawn->MoveInputValue.X = InputAxisVector.X;
+		ControlledPawn->MoveInputValue.Y = InputAxisVector.Y;
 	}
 }
 

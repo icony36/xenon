@@ -53,6 +53,12 @@ public:
 	virtual void LevelUp_Implementation() override;
 	//~ end Player Interface
 
+
+	//~ Movement
+	UPROPERTY(BlueprintReadOnly)
+	FVector MoveInputValue;
+	//~ end Movement
+
 protected:
 	UPROPERTY()
 	TObjectPtr<AXePlayerState> XePlayerState;
