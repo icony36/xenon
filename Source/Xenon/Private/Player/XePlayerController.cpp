@@ -70,8 +70,6 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 		if (bCanTurnOnly)
 		{
 			ControlledPawn->AddControllerYawInput(InputAxisVector.X);
-			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Input X: %f"), InputAxisVector.X));
-			
 		}
 		else
 		{
