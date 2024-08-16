@@ -69,7 +69,7 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 	{
 		if (bCanTurnOnly)
 		{
-			ControlledPawn->AddControllerYawInput(InputAxisVector.X);
+			ControlledPawn->AddControllerYawInput(InputAxisVector.X * TurnSpeed);
 		}
 		else
 		{

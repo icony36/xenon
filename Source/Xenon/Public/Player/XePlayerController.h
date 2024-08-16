@@ -29,6 +29,10 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bCanTurnOnly = false;
+
+	
+	UPROPERTY(BlueprintReadWrite)
+	float TurnSpeed = 1.f;
 	
 protected:
 	virtual void BeginPlay() override;
