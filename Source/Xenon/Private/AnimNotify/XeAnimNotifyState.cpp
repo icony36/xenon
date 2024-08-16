@@ -18,3 +18,5 @@ void UXeAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequ
 		}
 	}
 }
+
+

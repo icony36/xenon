@@ -6,7 +6,6 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
-#include "Character/XePlayerCharacter.h"
 #include "Input/XeInputComponent.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
 
@@ -53,8 +52,10 @@ void AXePlayerController::SetupInputComponent()
 	// Bind Input Actions.
 	UXeInputComponent* XeInputComponent = CastChecked<UXeInputComponent>(InputComponent);
 	XeInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AXePlayerController::Move);
-	XeInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &AXePlayerController::MoveCompleted);
 	XeInputComponent->BindAbilityActions(InputTagConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
+
+	// Bind Input Action value.
+	MoveActionBinding =  &XeInputComponent->BindActionValue(MoveAction);
 }
 
 
@@ -64,26 +65,19 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 	// Retrieve vector 2D values from input.
 	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
 
-	if (AXePlayerCharacter* ControlledPawn = GetPawn<AXePlayerCharacter>()) // * move might be called before Pawn is valid
+	if (APawn* ControlledPawn = GetPawn<APawn>()) // * move might be called before Pawn is valid
 	{
-		ControlledPawn->AddMovementInput(FVector::RightVector, InputAxisVector.X);
-		ControlledPawn->AddMovementInput(FVector::ForwardVector, InputAxisVector.Y);
-
-		ControlledPawn->MoveInputValue.X = InputAxisVector.X;
-		ControlledPawn->MoveInputValue.Y = InputAxisVector.Y;
-	}
-}
-
-// ReSharper disable once CppMemberFunctionMayBeConst
-void AXePlayerController::MoveCompleted(const FInputActionValue& InputActionValue)
-{
-	// Retrieve vector 2D values from input.
-	const FVector2d InputAxisVector = InputActionValue.Get<FVector2d>();
-	
-	if (AXePlayerCharacter* ControlledPawn = GetPawn<AXePlayerCharacter>()) // * move might be called before Pawn is valid
-	{
-		ControlledPawn->MoveInputValue.X = InputAxisVector.X;
-		ControlledPawn->MoveInputValue.Y = InputAxisVector.Y;
+		if (bCanTurnOnly)
+		{
+			ControlledPawn->AddControllerYawInput(InputAxisVector.X);
+			GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("Input X: %f"), InputAxisVector.X));
+			
+		}
+		else
+		{
+			ControlledPawn->AddMovementInput(FVector::RightVector, InputAxisVector.X);
+			ControlledPawn->AddMovementInput(FVector::ForwardVector, InputAxisVector.Y);
+		}
 	}
 }
 

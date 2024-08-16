@@ -23,6 +23,8 @@ class XENON_API AXePlayerCharacter : public AXeCharacter, public IPlayerInterfac
 public:
 	AXePlayerCharacter();
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// Called in server only.
 	virtual void PossessedBy(AController* NewController) override;
 
@@ -53,11 +55,6 @@ public:
 	virtual void LevelUp_Implementation() override;
 	//~ end Player Interface
 
-
-	//~ Movement
-	UPROPERTY(BlueprintReadOnly)
-	FVector MoveInputValue;
-	//~ end Movement
 
 protected:
 	UPROPERTY()

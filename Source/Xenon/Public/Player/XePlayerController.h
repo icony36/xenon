@@ -24,6 +24,11 @@ class XENON_API AXePlayerController : public APlayerController
 
 public:
 	AXePlayerController();
+
+	struct FEnhancedInputActionValueBinding* MoveActionBinding;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bCanTurnOnly = false;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -46,7 +51,6 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 
 	void Move(const FInputActionValue& InputActionValue);
-	void MoveCompleted(const FInputActionValue& InputActionValue);
 
 	void AbilityInputTagPressed(const FGameplayTag InputTag);
 	void AbilityInputTagReleased(const FGameplayTag InputTag);

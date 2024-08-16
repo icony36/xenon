@@ -38,7 +38,6 @@ public:
 	virtual void Die_Implementation(float RespawnTime) override;
 	//~ end Combat Interface
 	
-	
 protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	

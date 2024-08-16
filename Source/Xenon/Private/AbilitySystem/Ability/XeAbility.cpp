@@ -131,9 +131,8 @@ void UXeAbility::RotateToFace(AActor* TargetActor) const
 	AvatarActor->SetActorRotation(FRotator(AvatarRotation.Pitch, TargetRotation.Yaw, AvatarRotation.Roll));
 }
 
-
 void UXeAbility::RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const float Radius,
-	const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor) const
+                                                const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor) const
 {
 	const AActor* AvatarActor = GetAvatarActorFromActorInfo();
 

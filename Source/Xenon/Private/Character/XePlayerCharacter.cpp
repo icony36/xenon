@@ -4,6 +4,7 @@
 #include "Character/XePlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
+#include "EnhancedInputComponent.h"
 #include "NiagaraComponent.h"
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
@@ -15,6 +16,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "Player/XePlayerController.h"
 #include "Player/XePlayerState.h"
 #include "UI/HUD/XeHUD.h"
@@ -54,6 +56,14 @@ AXePlayerCharacter::AXePlayerCharacter()
 	LevelUpNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>("LevelUpNiagaraComponent");
 	LevelUpNiagaraComponent->SetupAttachment(GetRootComponent());
 	LevelUpNiagaraComponent->bAutoActivate = false;
+}
+
+void AXePlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// Register replicated variables.
+	// DOREPLIFETIME_CONDITION_NOTIFY(AXePlayerCharacter, MoveInputValue, COND_None, REPNOTIFY_OnChanged);
 }
 
 void AXePlayerCharacter::PossessedBy(AController* NewController)
@@ -143,6 +153,19 @@ void AXePlayerCharacter::LevelUp_Implementation()
 {
 	MulticastPlayLevelUpEffects();
 }
+
+// void AXePlayerCharacter::TurnInPlace_Implementation(const float TurnSpeed)
+// {
+// 	if (IsLocallyControlled())
+// 	{
+// 		const float ActorYaw = GetActorRotation().Yaw;
+// 		const float RotationIncrement = MoveInputValue.X * TurnSpeed;
+//
+// 		const FRotator NewRotation = FRotator(0.f, ActorYaw + RotationIncrement, 0.f);
+//
+// 		SetActorRotation(NewRotation);
+// 	}
+// }
 
 void AXePlayerCharacter::InitializeCharacter()
 {
