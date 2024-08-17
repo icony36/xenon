@@ -34,7 +34,6 @@ void UXeAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, Damage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, Armor, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, MovementSpeed, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UXeAttributeSet, AttackSpeed, COND_None, REPNOTIFY_Always);
 }
 
 void UXeAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -288,10 +287,4 @@ void UXeAttributeSet::OnRep_MovementSpeed(const FGameplayAttributeData& OldMovem
 {
 	// Handle attributes that will be predicted.
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, MovementSpeed, OldMovementSpeed);
-}
-
-void UXeAttributeSet::OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const
-{
-	// Handle attributes that will be predicted.
-	GAMEPLAYATTRIBUTE_REPNOTIFY(UXeAttributeSet, AttackSpeed, OldAttackSpeed);
 }

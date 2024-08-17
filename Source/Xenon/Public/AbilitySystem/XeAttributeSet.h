@@ -111,9 +111,6 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category="Combat Attributes", ReplicatedUsing=OnRep_MovementSpeed)
 	FGameplayAttributeData MovementSpeed;
 	ATTRIBUTE_ACCESSORS(UXeAttributeSet, MovementSpeed);
-	UPROPERTY(BlueprintReadOnly, Category="Combat Attributes", ReplicatedUsing=OnRep_AttackSpeed)
-	FGameplayAttributeData AttackSpeed;
-	ATTRIBUTE_ACCESSORS(UXeAttributeSet, AttackSpeed);
 	
 	UFUNCTION()
 	void OnRep_Damage(const FGameplayAttributeData& OldDamage) const;
@@ -121,8 +118,6 @@ public:
 	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
 	UFUNCTION()
 	void OnRep_MovementSpeed(const FGameplayAttributeData& OldDamage) const;
-	UFUNCTION()
-	void OnRep_AttackSpeed(const FGameplayAttributeData& OldAttackSpeed) const;
 	//~ end Combat Attributes
 
 	
