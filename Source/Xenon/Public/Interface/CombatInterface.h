@@ -43,6 +43,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
 	bool GetIsDead() const;
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
+	void ActivateHitReact(const FGameplayTag& HitReactTag, const FVector& Direction);
+
 	/**
 	 * @param	RespawnTime		Time delay for character respawn. If < 0, no respawn.
 	 */

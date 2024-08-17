@@ -65,6 +65,11 @@ FGameplayTag AXeCharacter::GetCharacterTag_Implementation()
 	return CharacterTag;
 }
 
+void AXeCharacter::ActivateHitReact_Implementation(const FGameplayTag& HitReactTag, const FVector& Direction)
+{
+	
+}
+
 bool AXeCharacter::GetIsDead_Implementation() const
 {
 	return bIsDead;
