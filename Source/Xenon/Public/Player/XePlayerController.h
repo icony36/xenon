@@ -27,12 +27,13 @@ public:
 
 	struct FEnhancedInputActionValueBinding* MoveActionBinding;
 
+	//~ Turn In Place
 	UPROPERTY(BlueprintReadWrite)
-	bool bCanTurnOnly = false;
-
+	bool bCanTurnOnly = false; 
 	
 	UPROPERTY(BlueprintReadWrite)
 	float TurnSpeed = 1.f;
+	//~ end Turn In Place
 	
 protected:
 	virtual void BeginPlay() override;

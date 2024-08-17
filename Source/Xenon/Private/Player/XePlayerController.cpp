@@ -69,7 +69,7 @@ void AXePlayerController::Move(const FInputActionValue& InputActionValue)
 	{
 		if (bCanTurnOnly)
 		{
-			ControlledPawn->AddControllerYawInput(InputAxisVector.X * TurnSpeed);
+			ControlledPawn->AddControllerYawInput(InputAxisVector.X * TurnSpeed); // * set Pawn bUseControllerRotationYaw to true and Character Movement bOrientRotationToMovement to false for this to work
 		}
 		else
 		{
