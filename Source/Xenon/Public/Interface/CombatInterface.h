@@ -44,7 +44,7 @@ public:
 	bool GetIsDead() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable) 
-	void ActivateHitReact(const FGameplayTag& HitReactTag, const FVector& Direction);
+	UAnimMontage* GetHitReactMontage(const FGameplayTag& HitReactTag);
 
 	/**
 	 * @param	RespawnTime		Time delay for character respawn. If < 0, no respawn.

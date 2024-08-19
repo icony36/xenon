@@ -36,11 +36,15 @@ bool FXeGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool
 		{
 			RepBits |= 1 << 6;
 		}
+		if (HitReactTag.IsValid())
+		{
+			RepBits |= 1 << 7;
+		}
 	}
 
 
 	// Serialize RepBits.
-	Ar.SerializeBits(&RepBits, 7);
+	Ar.SerializeBits(&RepBits, 8);
 
 
 	// Store data to archive.
@@ -83,6 +87,17 @@ bool FXeGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool
 	else
 	{
 		bHasWorldOrigin = false;
+	}
+	if (RepBits & (1 << 7))
+	{
+		if (Ar.IsLoading())
+		{
+			if (!HitReactTag.IsValid())
+			{
+				HitReactTag = TSharedPtr<FGameplayTag>(new FGameplayTag());
+			}
+		}
+		HitReactTag->NetSerialize(Ar, Map, bOutSuccess);
 	}
 
 

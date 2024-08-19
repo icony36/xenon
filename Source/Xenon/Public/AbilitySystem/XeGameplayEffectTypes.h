@@ -31,8 +31,16 @@ public:
 		return NewContext;
 	}
 
+
+	/** Getter */
+	TSharedPtr<FGameplayTag> GetHitReactTag() const { return HitReactTag;}
+
+	/** Setter */
+	void SetHitReactTag(TSharedPtr<FGameplayTag> InHitReactTag) { HitReactTag = InHitReactTag; }
+	
 protected:
 	// Implement additional data for Gameplay Effect Context here. (e.g.: IsBlockedHit, IsCriticalHit)
+	TSharedPtr<FGameplayTag> HitReactTag; // No UPROPERTY as TSharedPtr handles the GC itself.
 	
 };
 

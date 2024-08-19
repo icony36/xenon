@@ -13,8 +13,9 @@ void UXeAbilitySystemComponent::AddCharacterActiveAbilities(const TArray<TSubcla
 		if (const UXeAbility* XeAbility = Cast<UXeAbility>(AbilitySpec.Ability))
 		{
 			AbilitySpec.DynamicAbilityTags.AddTag(XeAbility->StartupInputTag);
-			GiveAbility(AbilitySpec);
 		}
+		
+		GiveAbility(AbilitySpec);
 	}
 }
 

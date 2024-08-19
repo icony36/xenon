@@ -57,12 +57,18 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 		FString("Socket tag for WeaponTip."));
 	
 
-	/** Combat */
+	/** Data */
 	GameplayTags.Data_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Data.Damage"),
 		FString("Data Damage tag for Set By Caller Magnitude."));
 
 
+	/** Events */
+	GameplayTags.Event_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.HitReact"),
+		FString("Event tag to trigger Hit React."));
+
+	
 	/** Attributes */
 	GameplayTags.Attribute_Meta_IncomingEXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attribute.Meta.IncomingEXP"),

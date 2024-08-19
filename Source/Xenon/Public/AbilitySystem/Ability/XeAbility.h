@@ -43,8 +43,8 @@ public:
 
 
 	//~ Damage
-	UFUNCTION(BlueprintCallable, Category="XeAbility")
-	virtual void CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute = false) const;
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
+	virtual void CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute = false, const bool bShouldReactToHit = false, const FGameplayTag& HitReactTag = FGameplayTag()) const;
 	
 	UFUNCTION(BlueprintPure, Category="XeAbility")
 	virtual float GetDamageAtLevel() const;

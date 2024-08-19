@@ -34,7 +34,7 @@ public:
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual FVector GetSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
 	virtual FGameplayTag GetCharacterTag_Implementation() override;
-	virtual void ActivateHitReact_Implementation(const FGameplayTag& HitReactTag, const FVector& Direction) override;
+	virtual UAnimMontage* GetHitReactMontage_Implementation(const FGameplayTag& HitReactTag) override;
 	virtual bool GetIsDead_Implementation() const override;
 	virtual void Die_Implementation(float RespawnTime) override;
 	//~ end Combat Interface
@@ -89,12 +89,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Combat")
 	FGameplayTag CharacterTag;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<UWidgetComponent> OverheadWidget;
 
 	UPROPERTY(EditAnywhere, Category="Combat")
 	TMap<FGameplayTag, UAnimMontage*> HitReactMontages;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> OverheadWidget;
 	
 	virtual void InitializeCharacter();
 
@@ -115,7 +115,7 @@ protected:
 	FTimerHandle RespawnTimer;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	USoundBase* DeathSound;
+	TObjectPtr<USoundBase> DeathSound;
 
 	UPROPERTY(BlueprintAssignable)
 	FOnDeath OnDeathDelegate;

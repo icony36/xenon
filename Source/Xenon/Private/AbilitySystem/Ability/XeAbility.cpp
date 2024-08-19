@@ -11,13 +11,20 @@
 #include "GameFramework/Character.h"
 
 
-void UXeAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute) const
+void UXeAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute, const bool bShouldReactToHit, const FGameplayTag& HitReactTag) const
 {
 	if (TargetActor == nullptr) return;
 
 	// Create Effect Spec Handle.
 	const FGameplayEffectSpecHandle DamageSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass);
 
+	// Set Hit React and Hit Direction if target should react to hit.
+	if (bShouldReactToHit)
+	{
+		FGameplayEffectContextHandle EffectContextHandle = DamageSpecHandle.Data->GetEffectContext();
+		UXeAbilitySystemLibrary::SetHitReactTag(EffectContextHandle, HitReactTag);
+	}
+	
 	float Damage = 0.f;
 
 	if (bShouldUseDamageAttribute)

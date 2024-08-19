@@ -5,7 +5,9 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayEffectExtension.h"
+#include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "AbilitySystem/Data/LevelInfo.h"
 #include "Game/GameMode/XeGameMode.h"
 #include "GameFramework/Character.h"
@@ -108,6 +110,25 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 				XeGameMode->EliminateCharacter(Properties.TargetCharacter, Properties.SourceCharacter, Properties.TargetController, Properties.SourceController);
 			}
 		}
+		else // Check if activate hit react.
+		{
+			const FGameplayTag HitReactTag = UXeAbilitySystemLibrary::GetHitReactTag(Properties.EffectContextHandle);
+			if (HitReactTag.IsValid())
+			{
+				// Create payload for Gameplay Event.
+				FGameplayEventData EventData;
+				EventData.EventTag = FXeGameplayTags::Get().Event_HitReact;
+				EventData.Instigator = Properties.SourceAvatarActor;
+				EventData.TargetTags.AddTag(HitReactTag);
+				
+				// Send Gameplay Event to activate Hit React ability.
+				Properties.TargetASC->HandleGameplayEvent(EventData.EventTag, &EventData);
+			}
+		}
+
+		// TODO: If critical show floating text
+		// TODO: If blocked show floating text
+		// TODO: 
 	}
 }
 

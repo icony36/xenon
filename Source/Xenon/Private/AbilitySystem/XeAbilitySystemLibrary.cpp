@@ -4,6 +4,7 @@
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 
 #include "AbilitySystem/XeAttributeSet.h"
+#include "AbilitySystem/XeGameplayEffectTypes.h"
 #include "Engine/OverlapResult.h"
 #include "Kismet/GameplayStatics.h"
 #include "Interface/CombatInterface.h"
@@ -148,3 +149,27 @@ AActor* UXeAbilitySystemLibrary::GetNearestCombatActor(const AActor* CenterActor
 	
 	return NearestActor;
 }
+
+FGameplayTag UXeAbilitySystemLibrary::GetHitReactTag(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FXeGameplayEffectContext* XeEffectContext = static_cast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		if (XeEffectContext->GetHitReactTag().IsValid())
+		{
+			return *XeEffectContext->GetHitReactTag();
+		}
+	}
+
+	return FGameplayTag();
+}
+
+void UXeAbilitySystemLibrary::SetHitReactTag(FGameplayEffectContextHandle& EffectContextHandle,
+	const FGameplayTag& InHitReactTag)
+{
+	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		const TSharedPtr<FGameplayTag> HitReactTag = MakeShared<FGameplayTag>(InHitReactTag);
+		XeEffectContext->SetHitReactTag(HitReactTag);
+	}
+}
+

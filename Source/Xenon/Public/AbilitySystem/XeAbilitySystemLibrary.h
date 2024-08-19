@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffectTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "XeAbilitySystemLibrary.generated.h"
 
@@ -18,9 +19,10 @@ class XENON_API UXeAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	//~ Helper Functions
+	//~ Debug
 	static void ShowDebugSphere(const UObject* WorldContextObject, const FVector& Center, const float Radius, const int32 Segments, const FLinearColor Color, const float LifeTime);
-	//~ Helper Functions
+	//~ end Debug
+
 	
 	//~ Widget Controller
 	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|WidgetController", meta=(DefaultToSelf="WorldContextObject"))
@@ -38,4 +40,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
 	static AActor* GetNearestCombatActor(const AActor* CenterActor, const TArray<AActor*>& ActorsToIgnore, const float Radius, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Green); 
 	//~ end Gameplay Mechanics
+
+
+	//~ Effect Context
+	UFUNCTION(BlueprintPure, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
+	static FGameplayTag GetHitReactTag(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
+	static void SetHitReactTag(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InHitReactTag);
+	//~ end Effect Context
 };

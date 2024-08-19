@@ -65,10 +65,27 @@ FGameplayTag AXeCharacter::GetCharacterTag_Implementation()
 	return CharacterTag;
 }
 
-void AXeCharacter::ActivateHitReact_Implementation(const FGameplayTag& HitReactTag, const FVector& Direction)
+UAnimMontage* AXeCharacter::GetHitReactMontage_Implementation(const FGameplayTag& HitReactTag)
 {
+	// Return montage with given tag.
+	UAnimMontage** FoundMontage = HitReactMontages.Find(HitReactTag);
+	if (FoundMontage && *FoundMontage)
+	{
+		return *FoundMontage;
+	}
+
+	// Return first valid montage if found montage is not valid.
+	for (const TTuple<FGameplayTag, UAnimMontage*>& Pair : HitReactMontages)
+	{
+		if (Pair.Value)
+		{
+			return Pair.Value;
+		}
+	}
 	
+	return nullptr;
 }
+
 
 bool AXeCharacter::GetIsDead_Implementation() const
 {

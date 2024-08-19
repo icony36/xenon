@@ -154,19 +154,6 @@ void AXePlayerCharacter::LevelUp_Implementation()
 	MulticastPlayLevelUpEffects();
 }
 
-// void AXePlayerCharacter::TurnInPlace_Implementation(const float TurnSpeed)
-// {
-// 	if (IsLocallyControlled())
-// 	{
-// 		const float ActorYaw = GetActorRotation().Yaw;
-// 		const float RotationIncrement = MoveInputValue.X * TurnSpeed;
-//
-// 		const FRotator NewRotation = FRotator(0.f, ActorYaw + RotationIncrement, 0.f);
-//
-// 		SetActorRotation(NewRotation);
-// 	}
-// }
-
 void AXePlayerCharacter::InitializeCharacter()
 {
 	// Set Character owned Player State;
