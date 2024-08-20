@@ -3,60 +3,10 @@
 
 #include "AbilitySystem/Ability/XeAbility.h"
 
-#include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-#include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
-#include "AbilitySystem/XeAttributeSet.h"
 #include "GameFramework/Character.h"
 
-
-void UXeAbility::CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute, const bool bShouldReactToHit, const FGameplayTag& HitReactTag) const
-{
-	if (TargetActor == nullptr) return;
-
-	// Create Effect Spec Handle.
-	const FGameplayEffectSpecHandle DamageSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass);
-
-	// Set Hit React and Hit Direction if target should react to hit.
-	if (bShouldReactToHit)
-	{
-		FGameplayEffectContextHandle EffectContextHandle = DamageSpecHandle.Data->GetEffectContext();
-		UXeAbilitySystemLibrary::SetHitReactTag(EffectContextHandle, HitReactTag);
-	}
-	
-	float Damage = 0.f;
-
-	if (bShouldUseDamageAttribute)
-	{
-		// Get damage from Damage Attribute.
-		const FGameplayAttribute DamageAttribute = UXeAttributeSet::GetDamageAttribute();
-		const UAbilitySystemComponent* ASC = GetAbilitySystemComponentFromActorInfo();
-		if (ASC->HasAttributeSetForAttribute(DamageAttribute))
-		{
-			Damage = ASC->GetNumericAttribute(DamageAttribute);
-		}
-	}
-	else
-	{
-		// Get damage from curved table.
-		Damage = SkillDamage.GetValueAtLevel(GetAbilityLevel());
-	}
-
-	// Assign Tag and Damage for Set By Caller Magnitude.
-	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle, FXeGameplayTags::Get().Data_Damage, Damage);
-
-	// Apply damage Gameplay Effect to target.
-	GetAbilitySystemComponentFromActorInfo()->ApplyGameplayEffectSpecToTarget(
-		*DamageSpecHandle.Data.Get(),
-		UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor)
-	);
-}
-
-float UXeAbility::GetDamageAtLevel() const
-{
-	return SkillDamage.GetValueAtLevel(GetAbilityLevel());	
-}
 
 FTaggedMontage UXeAbility::GetMontageToPlay(const bool bRandomOrder)
 {
@@ -138,8 +88,7 @@ void UXeAbility::RotateToFace(AActor* TargetActor) const
 	AvatarActor->SetActorRotation(FRotator(AvatarRotation.Pitch, TargetRotation.Yaw, AvatarRotation.Roll));
 }
 
-void UXeAbility::RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const float Radius,
-                                                const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor) const
+void UXeAbility::RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor) const
 {
 	const AActor* AvatarActor = GetAvatarActorFromActorInfo();
 
@@ -147,7 +96,7 @@ void UXeAbility::RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToI
 	AActor* TargetActor = UXeAbilitySystemLibrary::GetNearestCombatActor(
 		AvatarActor,
 		ActorsToIgnore,
-		Radius,
+		CombatActorDetectRadius,
 		bShowDebug,
 		ShowDebugTime,
 		DebugColor);

@@ -3,20 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Ability/XeAbility.h"
+#include "AbilitySystem/Ability/XeDamageAbility.h"
 #include "XePlayerAttack.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class XENON_API UXePlayerAttack : public UXeAbility
+class XENON_API UXePlayerAttack : public UXeDamageAbility
 {
 	GENERATED_BODY()
 
 protected:
-	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Attack")
-	float CombatActorDetectRadius = 500.f;
+	virtual void CauseDamage(AActor* TargetActor, const float Damage, const bool bShouldReactToHit, const FGameplayTag& HitReactTag) const override;
 };

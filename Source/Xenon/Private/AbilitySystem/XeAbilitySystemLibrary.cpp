@@ -64,9 +64,14 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	return nullptr;
 }
 
+bool UXeAbilitySystemLibrary::GetIsChanceSuccess(const float Chance)
+{
+	return FMath::RandRange(0.0f, 1.0f) <= Chance;
+}
+
 void UXeAbilitySystemLibrary::GetLiveCombatActorsWithinRadius(const UObject* WorldContextObject,
-                                                         TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& Center,
-                                                         const float Radius, const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor)
+                                                              TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& Center,
+                                                              const float Radius, const bool bShowDebug, const float ShowDebugTime, const FLinearColor DebugColor)
 {
 	FCollisionQueryParams SphereParams;
 	SphereParams.AddIgnoredActors(ActorsToIgnore);

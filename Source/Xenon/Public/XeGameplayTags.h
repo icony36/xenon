@@ -47,15 +47,21 @@ public:
  //~ end Data Tags
 
 
- //~ Event Tags
- FGameplayTag Event_HitReact;
- //~ end Event Tags
-
-
  //~ Attributes (for Listen For Event Gameplay Ability)
  FGameplayTag Attribute_Meta_IncomingEXP; // Data_Attribute_IncomingEXP
  //~ end Attributes
 
+
+ //~ Event Tags
+ FGameplayTag Event_HitReact;
+ FGameplayTag Event_Attack;
+ //~ end Event Tags
+
+
+//~ Ability Tags
+ FGameplayTag Ability_HandleAttackDamage;
+ //~ end Ability Tags
+ 
 private:
  static FXeGameplayTags GameplayTags;
 }; 

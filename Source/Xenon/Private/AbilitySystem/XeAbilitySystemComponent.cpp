@@ -108,3 +108,23 @@ void UXeAbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& Inpu
 		}
 	}
 }
+
+bool UXeAbilitySystemComponent::HasAbilityWithTag(const FGameplayTag& AbilityTag)
+{
+	if (!AbilityTag.IsValid()) return false;
+
+	// Lock Active Scope to prevent modification of Ability.
+	FScopedAbilityListLock ActiveScopeLoc(*this);
+	
+	// Loop through all available abilities.
+	for (const FGameplayAbilitySpec& AbilitySpec : GetActivatableAbilities())
+	{
+		const FGameplayTagContainer AbilityTags = AbilitySpec.Ability->AbilityTags;
+		if (AbilityTags.IsValid() && AbilityTags.HasTagExact(AbilityTag) ) 
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

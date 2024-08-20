@@ -40,16 +40,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
 	bool bIsPassive = false; // * ability system component will activate passive skill differently
 	//~ end Ability
-
-
-	//~ Damage
-	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
-	virtual void CauseDamage(AActor* TargetActor, const bool bShouldUseDamageAttribute = false, const bool bShouldReactToHit = false, const FGameplayTag& HitReactTag = FGameplayTag()) const;
 	
-	UFUNCTION(BlueprintPure, Category="XeAbility")
-	virtual float GetDamageAtLevel() const;
-	//~ end Damage
-
 
 	//~ Montage
 	UFUNCTION(BlueprintPure, Category="XeAbility")
@@ -72,19 +63,23 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="XeAbility")
 	void RotateToFace(AActor* TargetActor) const;
-
-	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
-	void RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const float Radius, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Green) const;
 	//~ end Transform
 	
 protected:
-	//~ Ability
+	//~ Cast
+	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
+	void RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Green) const;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	float CombatActorDetectRadius = 500.f;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
 	float CastRadius = 100.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
 	float CastRange = 100.f;
-	//~ end Ability
+	//~ end Cast
+
 	
 	//~ Montage
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Animation")
@@ -99,15 +94,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="VFX & SFX")
 	TArray<UNiagaraSystem*> AbilityVFX;
 	//~ VFX and SFX
-	
-	
-	//~ Damage
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Damage")
-	TSubclassOf<UGameplayEffect> DamageEffectClass;
-
-	UPROPERTY(EditDefaultsOnly, Category="Damage")
-	FScalableFloat SkillDamage;
-	//~ end Damage
 
 private:
 	//~ Montage

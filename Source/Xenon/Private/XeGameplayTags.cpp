@@ -61,16 +61,26 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 	GameplayTags.Data_Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Data.Damage"),
 		FString("Data Damage tag for Set By Caller Magnitude."));
+	
+	
+	/** Attributes */
+	GameplayTags.Attribute_Meta_IncomingEXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attribute.Meta.IncomingEXP"),
+		FString("Attribute tag for IncomingEXP."));
 
 
 	/** Events */
 	GameplayTags.Event_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Event.HitReact"),
 		FString("Event tag to trigger Hit React."));
-
 	
-	/** Attributes */
-	GameplayTags.Attribute_Meta_IncomingEXP = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Attribute.Meta.IncomingEXP"),
-		FString("Attribute tag for IncomingEXP."));
+	GameplayTags.Event_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.Attack"),
+		FString("Event tag for attack triggered."));
+
+
+	/** Abilities */
+	GameplayTags.Ability_HandleAttackDamage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.HandleAttackDamage"),
+		FString("Ability tag for abilities that handle attack damage."));
 }
