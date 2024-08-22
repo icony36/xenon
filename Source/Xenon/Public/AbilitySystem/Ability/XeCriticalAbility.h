@@ -20,8 +20,8 @@ protected:
 	virtual void ReceiveDeactivate(const FGameplayTag& AbilityTag) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(ClampMin = "0.0", ClampMax = "1.0"), Category="Critical")
-	float CriticalChance = 0.f;
+	float CriticalChance = 0.f; // TODO: Make it scalable float
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(ClampMin = "1.0"), Category="Critical")
-	float CriticalRate = 1.f;
+	float CriticalRate = 1.f; // TODO: Make it scalable float
 };

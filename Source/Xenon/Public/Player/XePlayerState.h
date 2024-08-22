@@ -56,7 +56,10 @@ public:
 	
 	void AddCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate);
 	void AddBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage);
-
+	
+	void UpdateCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate);
+	void UpdateBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage);
+	
 	void RemoveCriticalData(const FGameplayTag& AbilityTag);
 	void RemoveBlockData(const FGameplayTag& AbilityTag);
 

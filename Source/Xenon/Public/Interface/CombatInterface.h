@@ -90,6 +90,11 @@ public:
 	void AddBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void UpdateCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate);
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void UpdateBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage);
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void RemoveCriticalData(const FGameplayTag& AbilityTag);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void RemoveBlockData(const FGameplayTag& AbilityTag);

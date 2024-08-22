@@ -83,6 +83,16 @@ void AXePlayerState::AddCriticalData(const FGameplayTag& AbilityTag, const float
 	CriticalDataContainer.Add(AbilityTag, CriticalData);
 }
 
+void AXePlayerState::UpdateCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance,
+	const float CriticalRate)
+{
+	FCriticalData CriticalData;
+	CriticalData.CriticalChance = CriticalChance;
+	CriticalData.CriticalRate = CriticalRate;
+
+	CriticalDataContainer[AbilityTag] = CriticalData;
+}
+
 void AXePlayerState::RemoveCriticalData(const FGameplayTag& AbilityTag)
 {
 	CriticalDataContainer.Remove(AbilityTag);
@@ -97,6 +107,17 @@ void AXePlayerState::AddBlockData(const FGameplayTag& AbilityTag, const float Bl
 	BlockData.bIsBlockRatePercentage = bIsBlockRatePercentage;
 
 	BlockDataContainer.Add(AbilityTag, BlockData);
+}
+
+void AXePlayerState::UpdateBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate,
+	const bool bIsBlockRatePercentage)
+{
+	FBlockData BlockData;
+	BlockData.BlockChance = BlockChance;
+	BlockData.BlockRate = BlockRate;
+	BlockData.bIsBlockRatePercentage = bIsBlockRatePercentage;
+	
+	BlockDataContainer[AbilityTag] = BlockData;
 }
 
 void AXePlayerState::RemoveBlockData(const FGameplayTag& AbilityTag)

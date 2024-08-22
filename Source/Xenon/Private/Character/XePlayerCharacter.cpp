@@ -109,6 +109,24 @@ void AXePlayerCharacter::AddBlockData_Implementation(const FGameplayTag& Ability
 	XePlayerState->AddBlockData(AbilityTag, BlockChance, BlockRate, bIsBlockRatePercentage);
 }
 
+void AXePlayerCharacter::UpdateCriticalData_Implementation(const FGameplayTag& AbilityTag, const float CriticalChance,
+	const float CriticalRate)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	XePlayerState->UpdateCriticalData(AbilityTag, CriticalChance, CriticalRate);
+}
+
+void AXePlayerCharacter::UpdateBlockData_Implementation(const FGameplayTag& AbilityTag, const float BlockChance,
+	const float BlockRate, const bool bIsBlockRatePercentage)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	XePlayerState->UpdateBlockData(AbilityTag, BlockChance, BlockRate, bIsBlockRatePercentage);
+}
+
 void AXePlayerCharacter::RemoveCriticalData_Implementation(const FGameplayTag& AbilityTag)
 {
 	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
