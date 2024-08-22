@@ -137,7 +137,7 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 			EventData.Target = Properties.TargetAvatarActor;
 			EventData.EventMagnitude = LocalIncomingDamage;
 				
-			// Send Gameplay Event to Critical ability.
+			// Send Gameplay Event with payload to Critical ability.
 			Properties.SourceASC->HandleGameplayEvent(EventData.EventTag, &EventData);
 		}
 		
@@ -152,7 +152,7 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 			EventData.Target = Properties.TargetAvatarActor;
 			EventData.EventMagnitude = LocalIncomingDamage;
 				
-			// Send Gameplay Event to Block ability.
+			// Send Gameplay Event with payload to Block ability.
 			Properties.TargetASC->HandleGameplayEvent(EventData.EventTag, &EventData);
 		}
 	}
