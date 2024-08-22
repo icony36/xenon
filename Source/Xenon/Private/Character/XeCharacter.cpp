@@ -68,12 +68,11 @@ FGameplayTag AXeCharacter::GetCharacterTag_Implementation()
 UAnimMontage* AXeCharacter::GetHitReactMontage_Implementation(const FGameplayTag& HitReactTag)
 {
 	// Return montage with given tag.
-	UAnimMontage** FoundMontage = HitReactMontages.Find(HitReactTag);
-	if (FoundMontage && *FoundMontage)
+	if (UAnimMontage* FoundMontage = HitReactMontages.FindChecked(HitReactTag))
 	{
-		return *FoundMontage;
+		return FoundMontage;
 	}
-
+	
 	// Return first valid montage if found montage is not valid.
 	for (const TTuple<FGameplayTag, UAnimMontage*>& Pair : HitReactMontages)
 	{
@@ -139,8 +138,7 @@ void AXeCharacter::AddStartupAbilities() const
 {
 	if (!HasAuthority()) return;
 	
-	XeAbilitySystemComponent->AddCharacterActiveAbilities(StartupActiveAbilities);
-	XeAbilitySystemComponent->AddCharacterPassiveAbilities(StartupPassiveAbilities);
+	XeAbilitySystemComponent->AddCharacterAbilities(StartupAbilities);
 }
 
 void AXeCharacter::InitializeCharacter()

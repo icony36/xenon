@@ -45,7 +45,7 @@ bool UXeAbilitySystemLibrary::MakeWidgetControllerParams(const UObject* WorldCon
 			return true;
 		}
 	}
-
+	
 	return false;
 }
 
@@ -168,8 +168,34 @@ FGameplayTag UXeAbilitySystemLibrary::GetHitReactTag(const FGameplayEffectContex
 	return FGameplayTag();
 }
 
+FGameplayTag UXeAbilitySystemLibrary::GetCriticalAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FXeGameplayEffectContext* XeEffectContext = static_cast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		if (XeEffectContext->GetCriticalAbilityTag().IsValid())
+		{
+			return *XeEffectContext->GetCriticalAbilityTag();
+		}
+	}
+
+	return FGameplayTag();
+}
+
+FGameplayTag UXeAbilitySystemLibrary::GetBlockAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FXeGameplayEffectContext* XeEffectContext = static_cast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		if (XeEffectContext->GetBlockAbilityTag().IsValid())
+		{
+			return *XeEffectContext->GetBlockAbilityTag();
+		}
+	}
+
+	return FGameplayTag();
+}
+
 void UXeAbilitySystemLibrary::SetHitReactTag(FGameplayEffectContextHandle& EffectContextHandle,
-	const FGameplayTag& InHitReactTag)
+                                             const FGameplayTag& InHitReactTag)
 {
 	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
@@ -178,3 +204,22 @@ void UXeAbilitySystemLibrary::SetHitReactTag(FGameplayEffectContextHandle& Effec
 	}
 }
 
+void UXeAbilitySystemLibrary::SetCriticalAbilityTag(FGameplayEffectContextHandle& EffectContextHandle,
+	const FGameplayTag& InCriticalAbilityTag)
+{
+	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		const TSharedPtr<FGameplayTag> CriticalAbilityTag = MakeShared<FGameplayTag>(InCriticalAbilityTag);
+		XeEffectContext->SetCriticalAbilityTag(CriticalAbilityTag);
+	}
+}
+
+void UXeAbilitySystemLibrary::SetBlockAbilityTag(FGameplayEffectContextHandle& EffectContextHandle,
+	const FGameplayTag& InBlockAbilityTag)
+{
+	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		const TSharedPtr<FGameplayTag> BlockAbilityTag = MakeShared<FGameplayTag>(InBlockAbilityTag);
+		XeEffectContext->SetBlockAbilityTag(BlockAbilityTag);
+	}
+}

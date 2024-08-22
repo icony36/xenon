@@ -7,7 +7,6 @@
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "GameFramework/Character.h"
 
-
 FTaggedMontage UXeAbility::GetMontageToPlay(const bool bRandomOrder)
 {
 	const int32 MontagesNum = AbilityMontages.Num();

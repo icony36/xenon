@@ -4,6 +4,7 @@
 #include "Player/XePlayerState.h"
 
 #include "AbilitySystem/XeAbilitySystemComponent.h"
+#include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 
@@ -70,6 +71,109 @@ void AXePlayerState::SetSkillPoint(int32 InSkillPoint)
 {
 	SkillPoint = InSkillPoint;
 	OnSkillPointChangedDelegate.Broadcast(SkillPoint);
+}
+
+void AXePlayerState::AddCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance,
+	const float CriticalRate)
+{
+	FCriticalData CriticalData;
+	CriticalData.CriticalChance = CriticalChance;
+	CriticalData.CriticalRate = CriticalRate;
+
+	CriticalDataContainer.Add(AbilityTag, CriticalData);
+}
+
+void AXePlayerState::RemoveCriticalData(const FGameplayTag& AbilityTag)
+{
+	CriticalDataContainer.Remove(AbilityTag);
+}
+
+void AXePlayerState::AddBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate,
+								  const bool bIsBlockRatePercentage)
+{
+	FBlockData BlockData;
+	BlockData.BlockChance = BlockChance;
+	BlockData.BlockRate = BlockRate;
+	BlockData.bIsBlockRatePercentage = bIsBlockRatePercentage;
+
+	BlockDataContainer.Add(AbilityTag, BlockData);
+}
+
+void AXePlayerState::RemoveBlockData(const FGameplayTag& AbilityTag)
+{
+	BlockDataContainer.Remove(AbilityTag);
+}
+
+FGameplayTag AXePlayerState::GetChosenCriticalData(FCriticalData& OutData)
+{
+	FGameplayTag AbilityTag;
+	FCriticalData CriticalData;
+	
+	for(TTuple<FGameplayTag, FCriticalData> Pair: CriticalDataContainer)
+	{
+		if (UXeAbilitySystemLibrary::GetIsChanceSuccess(Pair.Value.CriticalChance))
+		{
+			if (Pair.Value.CriticalRate > CriticalData.CriticalRate)
+			{
+				AbilityTag = Pair.Key;
+				CriticalData = Pair.Value;
+			}
+		}
+	}
+
+	if (AbilityTag.IsValid())
+	{
+		OutData = CriticalData;
+	}
+
+	return AbilityTag;
+}
+
+FGameplayTag AXePlayerState::GetChosenBlockData(FBlockData& OutData)
+{
+	FGameplayTag AbilityTag;
+	FBlockData BlockData;
+	float HighestValue = 0.f;
+
+	float CurrentMaxHealth = 0.f;
+
+	if (AbilitySystemComponent->HasAttributeSetForAttribute(UXeAttributeSet::GetMaxHealthAttribute()))
+	{
+		CurrentMaxHealth = AbilitySystemComponent->GetNumericAttribute(UXeAttributeSet::GetMaxHealthAttribute());
+	}
+
+	for(TTuple<FGameplayTag, FBlockData> Pair: BlockDataContainer)
+	{
+		if (UXeAbilitySystemLibrary::GetIsChanceSuccess(Pair.Value.BlockChance))
+		{
+			if (Pair.Value.bIsBlockRatePercentage)
+			{
+				const float Value = CurrentMaxHealth * Pair.Value.BlockRate;
+				if (Value > HighestValue)
+				{
+					HighestValue = Value;
+					AbilityTag = Pair.Key;
+					BlockData = Pair.Value;
+				}
+			}
+			else
+			{
+				if (Pair.Value.BlockRate > HighestValue)
+				{
+					HighestValue = Pair.Value.BlockRate;
+					AbilityTag = Pair.Key;
+					BlockData = Pair.Value;
+				}
+			}
+		}
+	}
+
+	if (AbilityTag.IsValid())
+	{
+		OutData = BlockData;
+	}
+	
+	return AbilityTag;
 }
 
 void AXePlayerState::OnRep_CombatLevel(int32 OldValue) const

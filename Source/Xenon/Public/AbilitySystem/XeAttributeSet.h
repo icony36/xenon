@@ -43,7 +43,6 @@ struct FEffectProperties
 	ACharacter* TargetCharacter = nullptr;
 };
 
-
 /**
  * 
  */

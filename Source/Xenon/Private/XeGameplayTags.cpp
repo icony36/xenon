@@ -80,7 +80,7 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 
 
 	/** Abilities */
-	GameplayTags.Ability_HandleAttackDamage = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Ability.HandleAttackDamage"),
-		FString("Ability tag for abilities that handle attack damage."));
+	// GameplayTags.Ability_HandleAttackDamage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	// 	FName("Ability.HandleAttackDamage"),
+	// 	FString("Ability tag for abilities that handle attack damage."));
 }

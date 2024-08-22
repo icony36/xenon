@@ -40,11 +40,19 @@ bool FXeGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool
 		{
 			RepBits |= 1 << 7;
 		}
+		if (CriticalAbilityTag.IsValid())
+		{
+			RepBits |= 1 << 8;
+		}
+		if (BlockAbilityTag.IsValid())
+		{
+			RepBits |= 1 << 9;
+		}
 	}
 
 
 	// Serialize RepBits.
-	Ar.SerializeBits(&RepBits, 8);
+	Ar.SerializeBits(&RepBits, 10);
 
 
 	// Store data to archive.
@@ -98,6 +106,28 @@ bool FXeGameplayEffectContext::NetSerialize(FArchive& Ar, UPackageMap* Map, bool
 			}
 		}
 		HitReactTag->NetSerialize(Ar, Map, bOutSuccess);
+	}
+	if (RepBits & (1 << 8))
+	{
+		if (Ar.IsLoading())
+		{
+			if (!CriticalAbilityTag.IsValid())
+			{
+				CriticalAbilityTag = TSharedPtr<FGameplayTag>(new FGameplayTag());
+			}
+		}
+		CriticalAbilityTag->NetSerialize(Ar, Map, bOutSuccess);
+	}
+	if (RepBits & (1 << 9))
+	{
+		if (Ar.IsLoading())
+		{
+			if (!BlockAbilityTag.IsValid())
+			{
+				BlockAbilityTag = TSharedPtr<FGameplayTag>(new FGameplayTag());
+			}
+		}
+		BlockAbilityTag->NetSerialize(Ar, Map, bOutSuccess);
 	}
 
 

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/GameplayAbility.h"
+#include "XeAbilityBase.h"
 #include "XeAbility.generated.h"
 
 class UNiagaraSystem;
@@ -25,23 +25,11 @@ struct FTaggedMontage
  * 
  */
 UCLASS()
-class XENON_API UXeAbility : public UGameplayAbility
+class XENON_API UXeAbility : public UXeAbilityBase
 {
 	GENERATED_BODY()
 
 public:
-	//~ Input
-	UPROPERTY(EditDefaultsOnly, Category="Input")
-	FGameplayTag StartupInputTag; // * only for start up
-	//~ end Input
-
-
-	//~ Ability
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
-	bool bIsPassive = false; // * ability system component will activate passive skill differently
-	//~ end Ability
-	
-
 	//~ Montage
 	UFUNCTION(BlueprintPure, Category="XeAbility")
 	FTaggedMontage GetMontageToPlay(const bool bRandomOrder = false);
@@ -70,13 +58,13 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
 	void RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Green) const;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Cast")
 	float CombatActorDetectRadius = 500.f;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Cast")
 	float CastRadius = 100.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Cast")
 	float CastRange = 100.f;
 	//~ end Cast
 

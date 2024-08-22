@@ -4,7 +4,6 @@
 #include "Character/XePlayerCharacter.h"
 
 #include "AbilitySystemComponent.h"
-#include "EnhancedInputComponent.h"
 #include "NiagaraComponent.h"
 #include "XeGameplayTags.h"
 #include "AbilitySystem/XeAbilitySystemComponent.h"
@@ -16,7 +15,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Net/UnrealNetwork.h"
 #include "Player/XePlayerController.h"
 #include "Player/XePlayerState.h"
 #include "UI/HUD/XeHUD.h"
@@ -91,6 +89,56 @@ int32 AXePlayerCharacter::GetCombatLevel_Implementation()
 	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
 
 	return XePlayerState->GetCombatLevel();
+}
+
+void AXePlayerCharacter::AddCriticalData_Implementation(const FGameplayTag& AbilityTag, const float CriticalChance,
+	const float CriticalRate)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	XePlayerState->AddCriticalData(AbilityTag, CriticalChance, CriticalRate);
+}
+
+void AXePlayerCharacter::AddBlockData_Implementation(const FGameplayTag& AbilityTag, const float BlockChance,
+	const float BlockRate, const bool bIsBlockRatePercentage)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	XePlayerState->AddBlockData(AbilityTag, BlockChance, BlockRate, bIsBlockRatePercentage);
+}
+
+void AXePlayerCharacter::RemoveCriticalData_Implementation(const FGameplayTag& AbilityTag)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	XePlayerState->RemoveCriticalData(AbilityTag);
+}
+
+void AXePlayerCharacter::RemoveBlockData_Implementation(const FGameplayTag& AbilityTag)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+
+	XePlayerState->RemoveBlockData(AbilityTag);
+}
+
+FGameplayTag AXePlayerCharacter::GetChosenCriticalData_Implementation(FCriticalData& OutData)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	return XePlayerState->GetChosenCriticalData(OutData);
+}
+
+FGameplayTag AXePlayerCharacter::GetChosenBlockData_Implementation(FBlockData& OutData)
+{
+	if (!IsValid(XePlayerState)) XePlayerState = GetPlayerState<AXePlayerState>();
+	checkf(XePlayerState, TEXT("XePlayerState is not valid in XePlayerCharacter."));
+	
+	return XePlayerState->GetChosenBlockData(OutData);
 }
 
 int32 AXePlayerCharacter::FindCombatLevelWithEXP_Implementation(int32 InEXP)

@@ -5,7 +5,7 @@
 
 #include "AbilitySystem/Ability/XeAbility.h"
 
-void UXeAbilitySystemComponent::AddCharacterActiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses)
+void UXeAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses)
 {
 	for (const TSubclassOf<UGameplayAbility> AbilityClass: AbilityClasses)
 	{
@@ -16,16 +16,6 @@ void UXeAbilitySystemComponent::AddCharacterActiveAbilities(const TArray<TSubcla
 		}
 		
 		GiveAbility(AbilitySpec);
-	}
-}
-
-void UXeAbilitySystemComponent::AddCharacterPassiveAbilities(
-	const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses)
-{
-	for (const TSubclassOf<UGameplayAbility> AbilityClass: AbilityClasses)
-	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		GiveAbilityAndActivateOnce(AbilitySpec);
 	}
 }
 

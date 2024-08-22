@@ -131,9 +131,6 @@ protected:
 private:
 	//~ Ability System
 	UPROPERTY(EditAnywhere, Category="Combat|Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupActiveAbilities;
-	
-	UPROPERTY(EditAnywhere, Category="Combat|Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 	//~ end Ability System
 };

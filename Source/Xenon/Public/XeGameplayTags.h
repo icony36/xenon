@@ -59,7 +59,7 @@ public:
 
 
 //~ Ability Tags
- FGameplayTag Ability_HandleAttackDamage;
+ // FGameplayTag Ability_HandleAttackDamage;
  //~ end Ability Tags
  
 private:

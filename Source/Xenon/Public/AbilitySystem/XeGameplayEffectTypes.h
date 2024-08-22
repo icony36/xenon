@@ -34,13 +34,21 @@ public:
 
 	/** Getter */
 	TSharedPtr<FGameplayTag> GetHitReactTag() const { return HitReactTag;}
+	TSharedPtr<FGameplayTag> GetCriticalAbilityTag() const { return CriticalAbilityTag;}
+	TSharedPtr<FGameplayTag> GetBlockAbilityTag() const { return BlockAbilityTag;}
 
 	/** Setter */
 	void SetHitReactTag(TSharedPtr<FGameplayTag> InHitReactTag) { HitReactTag = InHitReactTag; }
+	void SetCriticalAbilityTag(TSharedPtr<FGameplayTag> InCriticalAbilityTag) { CriticalAbilityTag = InCriticalAbilityTag; }
+	void SetBlockAbilityTag(TSharedPtr<FGameplayTag> InBlockAbilityTag) { BlockAbilityTag = InBlockAbilityTag; }
 	
 protected:
 	// Implement additional data for Gameplay Effect Context here. (e.g.: IsBlockedHit, IsCriticalHit)
 	TSharedPtr<FGameplayTag> HitReactTag; // No UPROPERTY as TSharedPtr handles the GC itself.
+	
+	TSharedPtr<FGameplayTag> CriticalAbilityTag;
+
+	TSharedPtr<FGameplayTag> BlockAbilityTag;
 	
 };
 

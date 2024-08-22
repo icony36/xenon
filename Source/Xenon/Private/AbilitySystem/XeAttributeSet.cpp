@@ -126,9 +126,35 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 			}
 		}
 
-		// TODO: If critical show floating text
-		// TODO: If blocked show floating text
-		// TODO: 
+		// Handle Critical effects.
+		const FGameplayTag CriticalAbilityTag = UXeAbilitySystemLibrary::GetCriticalAbilityTag(Properties.EffectContextHandle);
+		if (CriticalAbilityTag.IsValid())
+		{
+			// Create payload for Gameplay Event.
+			FGameplayEventData EventData;
+			EventData.EventTag = CriticalAbilityTag;
+			EventData.Instigator = Properties.SourceAvatarActor;
+			EventData.Target = Properties.TargetAvatarActor;
+			EventData.EventMagnitude = LocalIncomingDamage;
+				
+			// Send Gameplay Event to Critical ability.
+			Properties.SourceASC->HandleGameplayEvent(EventData.EventTag, &EventData);
+		}
+		
+		// Handle Block effects.
+		const FGameplayTag BlockAbilityTag = UXeAbilitySystemLibrary::GetBlockAbilityTag(Properties.EffectContextHandle);
+		if (BlockAbilityTag.IsValid())
+		{
+			// Create payload for Gameplay Event.
+			FGameplayEventData EventData;
+			EventData.EventTag = BlockAbilityTag;
+			EventData.Instigator = Properties.SourceAvatarActor;
+			EventData.Target = Properties.TargetAvatarActor;
+			EventData.EventMagnitude = LocalIncomingDamage;
+				
+			// Send Gameplay Event to Block ability.
+			Properties.TargetASC->HandleGameplayEvent(EventData.EventTag, &EventData);
+		}
 	}
 }
 

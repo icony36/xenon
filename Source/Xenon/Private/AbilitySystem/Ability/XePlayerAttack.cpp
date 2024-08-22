@@ -16,18 +16,11 @@ void UXePlayerAttack::CauseDamage(AActor* TargetActor, const float Damage, const
 	// Get ability system component of this ability.
 	UXeAbilitySystemComponent* XeASC = Cast<UXeAbilitySystemComponent>(GetAbilitySystemComponentFromActorInfo());
 
-	// Check if there is ability that handle the attack damage
-	if (XeASC->HasAbilityWithTag(FXeGameplayTags::Get().Ability_HandleAttackDamage))
-	{
-		// Send gameplay event to trigger the other abilities.
-		FGameplayEventData EventData;
-		EventData.EventTag = FXeGameplayTags::Get().Event_Attack;
-		EventData.Target = TargetActor;
-		XeASC->HandleGameplayEvent(EventData.EventTag, &EventData);
-	}
-	else
-	{
-		// Proceed to normal Cause Damage. 
-		Super::CauseDamage(TargetActor, Damage, bShouldReactToHit, HitReactTag);
-	}
+	// Send gameplay event to trigger other abilities that will modifier normal attack (e.g.: slow, poison).
+	FGameplayEventData EventData;
+	EventData.EventTag = FXeGameplayTags::Get().Event_Attack;
+	EventData.Target = TargetActor;
+	XeASC->HandleGameplayEvent(EventData.EventTag, &EventData);
+	
+	Super::CauseDamage(TargetActor, Damage, bShouldReactToHit, HitReactTag);
 }

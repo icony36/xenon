@@ -6,6 +6,8 @@
 #include "AbilitySystemComponent.h"
 #include "XeAbilitySystemComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FDeactivatePassiveAbility, const FGameplayTag& /*AbilityTag*/);
+
 /**
  * 
  */
@@ -15,8 +17,9 @@ class XENON_API UXeAbilitySystemComponent : public UAbilitySystemComponent
 	GENERATED_BODY()
 
 public:
-	void AddCharacterActiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
-	void AddCharacterPassiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
+	FDeactivatePassiveAbility DeactivatePassiveAbility;
+	
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
 
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
