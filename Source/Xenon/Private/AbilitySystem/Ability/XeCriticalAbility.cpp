@@ -6,6 +6,11 @@
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "Interface/CombatInterface.h"
 
+UXeCriticalAbility::UXeCriticalAbility()
+{
+	bPassiveAbility = true;
+}
+
 void UXeCriticalAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                          const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                          const FGameplayEventData* TriggerEventData)

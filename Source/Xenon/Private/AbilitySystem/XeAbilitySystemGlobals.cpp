@@ -7,5 +7,6 @@
 
 FGameplayEffectContext* UXeAbilitySystemGlobals::AllocGameplayEffectContext() const
 {
+	// Use our custom Gameplay Effect Context.
 	return new FXeGameplayEffectContext();
 }

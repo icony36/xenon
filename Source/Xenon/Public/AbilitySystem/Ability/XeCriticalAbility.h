@@ -14,6 +14,9 @@ class XENON_API UXeCriticalAbility : public UXeAbilityBase
 {
 	GENERATED_BODY()
 
+public:
+	UXeCriticalAbility();
+
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
