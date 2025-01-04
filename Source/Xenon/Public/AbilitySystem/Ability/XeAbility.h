@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "XeAbilityBase.h"
+#include "Abilities/GameplayAbility.h"
 #include "XeAbility.generated.h"
 
 class UNiagaraSystem;
@@ -25,11 +25,20 @@ struct FTaggedMontage
  * 
  */
 UCLASS()
-class XENON_API UXeAbility : public UXeAbilityBase
+class XENON_API UXeAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 
 public:
+	//~ Override
+	virtual void OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
+	//~ end Override
+
+	//~ Input
+	UPROPERTY(EditDefaultsOnly, Category="Input")
+	FGameplayTag StartupInputTag; // * only for start up
+	//~ end Input
+	
 	//~ Montage
 	UFUNCTION(BlueprintPure, Category="XeAbility")
 	FTaggedMontage GetMontageToPlay(const bool bRandomOrder = false);
@@ -52,8 +61,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category="XeAbility")
 	void RotateToFace(AActor* TargetActor) const;
 	//~ end Transform
+
+	/** Getter */
+	FORCEINLINE bool GetIsPassiveAbility() const { return bIsPassiveAbility; }
 	
 protected:
+	//~ Override
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+	//~ end Override
+
+	//~ Callbacks
+	// Callback function when Ability System Component deactivate ability
+	virtual void ReceiveDeactivate(const FGameplayTag& AbilityTag);
+	//~ end Callbacks
+	
 	//~ Cast
 	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category="XeAbility")
 	void RotateToFaceNearestCombatActor(const TArray<AActor*>& ActorsToIgnore, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Green) const;
@@ -84,6 +105,8 @@ protected:
 	//~ VFX and SFX
 
 private:
+	bool bIsPassiveAbility = false;
+	
 	//~ Montage
 	int32 CurrentMontageIndex = 0;
 	//~ end Montage

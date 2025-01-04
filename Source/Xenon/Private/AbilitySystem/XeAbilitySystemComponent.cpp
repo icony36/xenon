@@ -4,19 +4,35 @@
 #include "AbilitySystem/XeAbilitySystemComponent.h"
 
 #include "AbilitySystem/Ability/XeAbility.h"
+#include "AbilitySystem/Ability/XeAttackModifierAbility.h"
 
-void UXeAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses)
+FGameplayAbilitySpecHandle UXeAbilitySystemComponent::AddAbility(const TSubclassOf<UGameplayAbility>& AbilityClass)
 {
-	for (const TSubclassOf<UGameplayAbility> AbilityClass: AbilityClasses)
+	FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+	if (UXeAbility* XeAbility = Cast<UXeAbility>(AbilitySpec.Ability))
 	{
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		if (const UXeAbility* XeAbility = Cast<UXeAbility>(AbilitySpec.Ability))
+		AbilitySpec.DynamicAbilityTags.AddTag(XeAbility->StartupInputTag);
+
+		if (UXeAttackModifierAbility* AttackModifierAbility = Cast<UXeAttackModifierAbility>(XeAbility))
 		{
-			AbilitySpec.DynamicAbilityTags.AddTag(XeAbility->StartupInputTag);
+			AttackModifierAbilities.Add(AttackModifierAbility);
 		}
-		
-		GiveAbility(AbilitySpec);
 	}
+
+	return GiveAbility(AbilitySpec);
+}
+
+void UXeAbilitySystemComponent::RemoveAbility(const FGameplayAbilitySpecHandle& AbilitySpecHandle)
+{
+	const FGameplayAbilitySpec* AbilitySpec = FindAbilitySpecFromHandle(AbilitySpecHandle);
+	if (UXeAttackModifierAbility* AttackModifierAbility = Cast<UXeAttackModifierAbility>(AbilitySpec->Ability))
+	{
+		AttackModifierAbilities.Remove(AttackModifierAbility);
+	}
+
+	DeactivatePassiveAbility.Broadcast(AbilitySpec->Ability->AbilityTags.First());
+	
+	ClearAbility(AbilitySpecHandle);
 }
 
 void UXeAbilitySystemComponent::AbilityInputTagPressed(const FGameplayTag& InputTag)

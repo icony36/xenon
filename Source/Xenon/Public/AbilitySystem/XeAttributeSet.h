@@ -134,5 +134,5 @@ private:
 	static void MakeEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectProperties& OutProperties);
 
 	void HandleIncomingDamage(const FEffectProperties& Properties);
-	void HandleIncomingEXP(const FEffectProperties& Properties);
+	void HandleIncomingExp(const FEffectProperties& Properties);
 };

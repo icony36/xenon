@@ -34,13 +34,18 @@ void UXeDamageAbility::CauseDamage(AActor* TargetActor, const float Damage, cons
 	// Create Effect Spec Handle.
 	const FGameplayEffectSpecHandle DamageSpecHandle = MakeOutgoingGameplayEffectSpec(DamageEffectClass);
 
+	// Get Effect Context to set custom properties.
+	FGameplayEffectContextHandle EffectContextHandle = DamageSpecHandle.Data->GetEffectContext();
+
+	// Set Ability Tag in the Effect Context.
+	UXeAbilitySystemLibrary::SetAbilityTag(EffectContextHandle, AbilityTags.First());
+
 	// Set Hit React and Hit Direction if target should react to hit.
 	if (bShouldReactToHit)
 	{
-		FGameplayEffectContextHandle EffectContextHandle = DamageSpecHandle.Data->GetEffectContext();
 		UXeAbilitySystemLibrary::SetHitReactTag(EffectContextHandle, HitReactTag);
 	}
-
+	
 	// Assign Tag and Damage for Set By Caller Magnitude.
 	UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(
 		DamageSpecHandle,

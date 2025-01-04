@@ -47,21 +47,15 @@ public:
 
 	//~ Effect Context
 	UFUNCTION(BlueprintPure, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
-	static FGameplayTag GetHitReactTag(const FGameplayEffectContextHandle& EffectContextHandle);
+	static FGameplayTag GetAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle);
 
 	UFUNCTION(BlueprintPure, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
-	static FGameplayTag GetCriticalAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle);
-	
-	UFUNCTION(BlueprintPure, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
-	static FGameplayTag GetBlockAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle);
+	static FGameplayTag GetHitReactTag(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
+	static void SetAbilityTag(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InAbilityTag);
 
 	UFUNCTION(BlueprintCallable, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
 	static void SetHitReactTag(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InHitReactTag);
-
-	UFUNCTION(BlueprintCallable, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
-	static void SetCriticalAbilityTag(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InCriticalAbilityTag);
-	
-	UFUNCTION(BlueprintCallable, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
-	static void SetBlockAbilityTag(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InBlockAbilityTag);
 	//~ end Effect Context
 };

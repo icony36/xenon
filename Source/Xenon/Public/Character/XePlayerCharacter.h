@@ -34,15 +34,6 @@ public:
 	
 	//~ Combat Interface
 	virtual int32 GetCombatLevel_Implementation() override;
-
-	virtual void AddCriticalData_Implementation(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate) override;
-	virtual void AddBlockData_Implementation(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage) override;
-	virtual void UpdateCriticalData_Implementation(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate) override;
-	virtual void UpdateBlockData_Implementation(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage) override;
-	virtual void RemoveCriticalData_Implementation(const FGameplayTag& AbilityTag) override;
-	virtual void RemoveBlockData_Implementation(const FGameplayTag& AbilityTag) override;
-	virtual FGameplayTag GetChosenCriticalData_Implementation(FCriticalData& OutData) override;
-	virtual FGameplayTag GetChosenBlockData_Implementation(FBlockData& OutData) override;
 	//~ end Combat Interface
 
 

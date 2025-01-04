@@ -53,18 +53,6 @@ public:
 	void AddToCombatLevel(int32 Value);
 	void AddToExperience(int32 Value);
 	void AddToSkillPoint(int32 Value);
-	
-	void AddCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate);
-	void AddBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage);
-	
-	void UpdateCriticalData(const FGameplayTag& AbilityTag, const float CriticalChance, const float CriticalRate);
-	void UpdateBlockData(const FGameplayTag& AbilityTag, const float BlockChance, const float BlockRate, const bool bIsBlockRatePercentage);
-	
-	void RemoveCriticalData(const FGameplayTag& AbilityTag);
-	void RemoveBlockData(const FGameplayTag& AbilityTag);
-
-	FGameplayTag GetChosenCriticalData(FCriticalData& OutData);
-	FGameplayTag GetChosenBlockData(FBlockData& OutData);
 	//~ end Combat
 
 protected:
@@ -89,12 +77,6 @@ private:
 	
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing=OnRep_SkillPoint)
 	int32 SkillPoint = 0;
-
-	UPROPERTY()
-	TMap<FGameplayTag, FCriticalData> CriticalDataContainer;
-
-	UPROPERTY()
-	TMap<FGameplayTag, FBlockData> BlockDataContainer;
 	
 	UFUNCTION()
 	void OnRep_CombatLevel(int32 OldValue) const;

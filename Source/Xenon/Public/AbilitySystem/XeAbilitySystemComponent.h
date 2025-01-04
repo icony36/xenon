@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "XeAbilitySystemComponent.generated.h"
 
+class UXeAttackModifierAbility;
 DECLARE_MULTICAST_DELEGATE_OneParam(FDeactivatePassiveAbility, const FGameplayTag& /*AbilityTag*/);
 
 /**
@@ -19,11 +20,14 @@ class XENON_API UXeAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	FDeactivatePassiveAbility DeactivatePassiveAbility;
 	
-	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& AbilityClasses);
+	FGameplayAbilitySpecHandle AddAbility(const TSubclassOf<UGameplayAbility>& AbilityClass);
+	void RemoveAbility(const FGameplayAbilitySpecHandle& AbilitySpecHandle);
 
 	void AbilityInputTagPressed(const FGameplayTag& InputTag);
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 
 	bool HasAbilityWithTag(const FGameplayTag& AbilityTag);
+
+	TArray<TWeakObjectPtr<UXeAttackModifierAbility>> AttackModifierAbilities;
 };

@@ -4,8 +4,44 @@
 #include "AbilitySystem/Ability/XeAbility.h"
 
 #include "AbilitySystemComponent.h"
+#include "XeGameplayTags.h"
+#include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "GameFramework/Character.h"
+
+void UXeAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
+{
+	Super::OnAvatarSet(ActorInfo, Spec);
+	
+	if (AbilityTags.HasTag(FXeGameplayTags::Get().Ability_Passive))
+	{
+		bIsPassiveAbility = true;
+		ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle, false);
+	}
+}
+
+void UXeAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+	const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	if (bIsPassiveAbility)
+	{
+		if (UXeAbilitySystemComponent* XeAsc = Cast<UXeAbilitySystemComponent>(GetAbilitySystemComponentFromActorInfo()))
+		{
+			XeAsc->DeactivatePassiveAbility.AddUObject(this, &UXeAbility::ReceiveDeactivate);
+		}
+	}
+}
+
+void UXeAbility::ReceiveDeactivate(const FGameplayTag& AbilityTag)
+{
+	if (AbilityTags.HasTagExact(AbilityTag))
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, true);
+	}
+}
 
 FTaggedMontage UXeAbility::GetMontageToPlay(const bool bRandomOrder)
 {

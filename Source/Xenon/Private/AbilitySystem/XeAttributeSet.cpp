@@ -83,7 +83,7 @@ void UXeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	// GA_ListenForAttributeEvents listen for Gameplay Event with IncomingXP tag and applies GE_AttributeEvents, adding to IncomingXP
 	if (Data.EvaluatedData.Attribute == GetIncomingEXPAttribute())
 	{
-		HandleIncomingEXP(Props);
+		HandleIncomingExp(Props);
 	}
 }
 
@@ -125,43 +125,13 @@ void UXeAttributeSet::HandleIncomingDamage(const FEffectProperties& Properties)
 				Properties.TargetASC->HandleGameplayEvent(EventData.EventTag, &EventData);
 			}
 		}
-
-		// Handle Critical effects.
-		const FGameplayTag CriticalAbilityTag = UXeAbilitySystemLibrary::GetCriticalAbilityTag(Properties.EffectContextHandle);
-		if (CriticalAbilityTag.IsValid())
-		{
-			// Create payload for Gameplay Event.
-			FGameplayEventData EventData;
-			EventData.EventTag = CriticalAbilityTag;
-			EventData.Instigator = Properties.SourceAvatarActor;
-			EventData.Target = Properties.TargetAvatarActor;
-			EventData.EventMagnitude = LocalIncomingDamage;
-				
-			// Send Gameplay Event with payload to Critical ability.
-			Properties.SourceASC->HandleGameplayEvent(EventData.EventTag, &EventData);
-		}
-		
-		// Handle Block effects.
-		const FGameplayTag BlockAbilityTag = UXeAbilitySystemLibrary::GetBlockAbilityTag(Properties.EffectContextHandle);
-		if (BlockAbilityTag.IsValid())
-		{
-			// Create payload for Gameplay Event.
-			FGameplayEventData EventData;
-			EventData.EventTag = BlockAbilityTag;
-			EventData.Instigator = Properties.SourceAvatarActor;
-			EventData.Target = Properties.TargetAvatarActor;
-			EventData.EventMagnitude = LocalIncomingDamage;
-				
-			// Send Gameplay Event with payload to Block ability.
-			Properties.TargetASC->HandleGameplayEvent(EventData.EventTag, &EventData);
-		}
 	}
 }
 
-void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
+void UXeAttributeSet::HandleIncomingExp(const FEffectProperties& Properties)
 {
 	// Cached incoming EXP.
-	const float LocalIncomingEXP = GetIncomingEXP();
+	const float LocalIncomingExp = GetIncomingEXP();
 
 	// Zero out meta attribute after used.
 	SetIncomingEXP(0.f);
@@ -171,10 +141,10 @@ void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 	{
 		// Get source character current level and current EXP.
 		const int32 CurrentLevel = ICombatInterface::Execute_GetCombatLevel(Properties.SourceCharacter);
-		const int32 CurrentEXP = IPlayerInterface::Execute_GetEXP(Properties.SourceCharacter);
+		const int32 CurrentExp = IPlayerInterface::Execute_GetEXP(Properties.SourceCharacter);
 
 		// Get new level with incoming EXP.
-		const int32 NewLevel = IPlayerInterface::Execute_FindCombatLevelWithEXP(Properties.SourceCharacter, CurrentEXP + LocalIncomingEXP);
+		const int32 NewLevel = IPlayerInterface::Execute_FindCombatLevelWithEXP(Properties.SourceCharacter, CurrentExp + LocalIncomingExp);
 
 		// Check if there is difference between new level and current level.
 		const int32 NumLevelUps = NewLevel - CurrentLevel;
@@ -219,7 +189,7 @@ void UXeAttributeSet::HandleIncomingEXP(const FEffectProperties& Properties)
 		}
 
 		// Add EXP.
-		IPlayerInterface::Execute_AddToEXP(Properties.SourceCharacter, LocalIncomingEXP);
+		IPlayerInterface::Execute_AddToEXP(Properties.SourceCharacter, LocalIncomingExp);
 	}
 }
 

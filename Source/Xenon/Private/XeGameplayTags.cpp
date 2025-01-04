@@ -80,7 +80,15 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 
 
 	/** Abilities */
-	// GameplayTags.Ability_HandleAttackDamage = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	// 	FName("Ability.HandleAttackDamage"),
-	// 	FString("Ability tag for abilities that handle attack damage."));
+	GameplayTags.Ability_Active = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.Active"),
+		FString("Ability tag for Active Abilities."));
+
+	GameplayTags.Ability_Passive = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.Passive"),
+		FString("Ability tag for Passive Abilities."));
+		
+    GameplayTags.Ability_NormalAttack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+        FName("Ability.Active.NormalAttack"),
+        FString("Ability tag for Normal Attack Ability."));
 }

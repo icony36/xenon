@@ -155,9 +155,22 @@ AActor* UXeAbilitySystemLibrary::GetNearestCombatActor(const AActor* CenterActor
 	return NearestActor;
 }
 
+FGameplayTag UXeAbilitySystemLibrary::GetAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FXeGameplayEffectContext* XeEffectContext = StaticCast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		if (XeEffectContext->GetAbilityTag().IsValid())
+		{
+			return *XeEffectContext->GetAbilityTag();
+		}
+	}
+
+	return FGameplayTag();
+}
+
 FGameplayTag UXeAbilitySystemLibrary::GetHitReactTag(const FGameplayEffectContextHandle& EffectContextHandle)
 {
-	if (const FXeGameplayEffectContext* XeEffectContext = static_cast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (const FXeGameplayEffectContext* XeEffectContext = StaticCast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
 		if (XeEffectContext->GetHitReactTag().IsValid())
 		{
@@ -168,58 +181,22 @@ FGameplayTag UXeAbilitySystemLibrary::GetHitReactTag(const FGameplayEffectContex
 	return FGameplayTag();
 }
 
-FGameplayTag UXeAbilitySystemLibrary::GetCriticalAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle)
+void UXeAbilitySystemLibrary::SetAbilityTag(FGameplayEffectContextHandle& EffectContextHandle,
+	const FGameplayTag& InAbilityTag)
 {
-	if (const FXeGameplayEffectContext* XeEffectContext = static_cast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FXeGameplayEffectContext* XeEffectContext = StaticCast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
-		if (XeEffectContext->GetCriticalAbilityTag().IsValid())
-		{
-			return *XeEffectContext->GetCriticalAbilityTag();
-		}
+		const TSharedPtr<FGameplayTag> AbilityTag = MakeShared<FGameplayTag>(InAbilityTag);
+		XeEffectContext->SetAbilityTag(AbilityTag);
 	}
-
-	return FGameplayTag();
-}
-
-FGameplayTag UXeAbilitySystemLibrary::GetBlockAbilityTag(const FGameplayEffectContextHandle& EffectContextHandle)
-{
-	if (const FXeGameplayEffectContext* XeEffectContext = static_cast<const FXeGameplayEffectContext*>(EffectContextHandle.Get()))
-	{
-		if (XeEffectContext->GetBlockAbilityTag().IsValid())
-		{
-			return *XeEffectContext->GetBlockAbilityTag();
-		}
-	}
-
-	return FGameplayTag();
 }
 
 void UXeAbilitySystemLibrary::SetHitReactTag(FGameplayEffectContextHandle& EffectContextHandle,
                                              const FGameplayTag& InHitReactTag)
 {
-	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
+	if (FXeGameplayEffectContext* XeEffectContext = StaticCast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
 	{
 		const TSharedPtr<FGameplayTag> HitReactTag = MakeShared<FGameplayTag>(InHitReactTag);
 		XeEffectContext->SetHitReactTag(HitReactTag);
-	}
-}
-
-void UXeAbilitySystemLibrary::SetCriticalAbilityTag(FGameplayEffectContextHandle& EffectContextHandle,
-	const FGameplayTag& InCriticalAbilityTag)
-{
-	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
-	{
-		const TSharedPtr<FGameplayTag> CriticalAbilityTag = MakeShared<FGameplayTag>(InCriticalAbilityTag);
-		XeEffectContext->SetCriticalAbilityTag(CriticalAbilityTag);
-	}
-}
-
-void UXeAbilitySystemLibrary::SetBlockAbilityTag(FGameplayEffectContextHandle& EffectContextHandle,
-	const FGameplayTag& InBlockAbilityTag)
-{
-	if (FXeGameplayEffectContext* XeEffectContext = static_cast<FXeGameplayEffectContext*>(EffectContextHandle.Get()))
-	{
-		const TSharedPtr<FGameplayTag> BlockAbilityTag = MakeShared<FGameplayTag>(InBlockAbilityTag);
-		XeEffectContext->SetBlockAbilityTag(BlockAbilityTag);
 	}
 }

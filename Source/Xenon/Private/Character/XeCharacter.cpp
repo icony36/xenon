@@ -137,8 +137,11 @@ void AXeCharacter::ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& Gamepla
 void AXeCharacter::AddStartupAbilities() const
 {
 	if (!HasAuthority()) return;
-	
-	XeAbilitySystemComponent->AddCharacterAbilities(StartupAbilities);
+
+	for (const TSubclassOf<UGameplayAbility> AbilityClass: StartupAbilities)
+	{
+		XeAbilitySystemComponent->AddAbility(AbilityClass);
+	}
 }
 
 void AXeCharacter::InitializeCharacter()

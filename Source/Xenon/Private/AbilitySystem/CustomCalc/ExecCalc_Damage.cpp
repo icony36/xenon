@@ -5,9 +5,11 @@
 
 #include "AbilitySystemComponent.h"
 #include "XeGameplayTags.h"
+#include "AbilitySystem/XeAbilitySystemComponent.h"
 #include "AbilitySystem/XeAbilitySystemLibrary.h"
 #include "AbilitySystem/XeAttributeSet.h"
 #include "AbilitySystem/XeGameplayEffectTypes.h"
+#include "AbilitySystem/Ability/XeAttackModifierAbility.h"
 #include "Interface/CombatInterface.h"
 
 // Raw Struct (not FStruct) - to store captured Attribute
@@ -43,31 +45,31 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
                                               FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
 	/// Get source and target Ability System Component from incoming Params.
-	const UAbilitySystemComponent* SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
-	const UAbilitySystemComponent* TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
+	UXeAbilitySystemComponent* SourceAsc = StaticCast<UXeAbilitySystemComponent*>(ExecutionParams.GetSourceAbilitySystemComponent());
+	UXeAbilitySystemComponent* TargetAsc = StaticCast<UXeAbilitySystemComponent*>(ExecutionParams.GetTargetAbilitySystemComponent());
 
 	// Get Avatar from Ability System Component
-	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
-	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
+	AActor* SourceAvatar = SourceAsc ? SourceAsc->GetAvatarActor() : nullptr;
+	AActor* TargetAvatar = TargetAsc ? TargetAsc->GetAvatarActor() : nullptr;
 
 	// Get source Level and Critical Data.
 	int32 SourceLevel = 1;
-	FCriticalData CriticalData;
-	FGameplayTag CriticalAbilityTag;
+	// FCriticalData CriticalData;
+	// FGameplayTag CriticalAbilityTag;
 	if (SourceAvatar->Implements<UCombatInterface>())
 	{
 		SourceLevel = ICombatInterface::Execute_GetCombatLevel(SourceAvatar);
-		CriticalAbilityTag = ICombatInterface::Execute_GetChosenCriticalData(SourceAvatar, CriticalData);
+		// CriticalAbilityTag = ICombatInterface::Execute_GetChosenCriticalData(SourceAvatar, CriticalData);
 	}
 
 	// Get target Level and Block Data.
 	int32 TargetLevel = 1;
-	FBlockData BlockData;
-	FGameplayTag BlockAbilityTag;
+	// FBlockData BlockData;
+	// FGameplayTag BlockAbilityTag;
 	if (TargetAvatar->Implements<UCombatInterface>())
 	{
 		TargetLevel = ICombatInterface::Execute_GetCombatLevel(TargetAvatar);
-		BlockAbilityTag = ICombatInterface::Execute_GetChosenBlockData(TargetAvatar, BlockData);
+		// BlockAbilityTag = ICombatInterface::Execute_GetChosenBlockData(TargetAvatar, BlockData);
 	}
 
 	// Get Gameplay Effect Spec from incoming Params.
@@ -85,30 +87,51 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	float Damage = Spec.GetSetByCallerMagnitude(FXeGameplayTags::Get().Data_Damage, false);
 
 	
-	/** Modify damage with Critical Ability. */
-	if (CriticalAbilityTag.IsValid())
-	{
-		Damage *= CriticalData.CriticalRate;
-		UXeAbilitySystemLibrary::SetCriticalAbilityTag(EffectContextHandle, CriticalAbilityTag);
-	}
-	/***/
+	// /** Modify damage with Critical Ability. */
+	// if (CriticalAbilityTag.IsValid())
+	// {
+	// 	Damage *= CriticalData.CriticalRate;
+	// 	UXeAbilitySystemLibrary::SetCriticalAbilityTag(EffectContextHandle, CriticalAbilityTag);
+	// }
+	// /***/
+	//
+	//
+	// /** Modify damage with Block Ability. */
+	// if (BlockAbilityTag.IsValid())
+	// {
+	// 	if (BlockData.bIsBlockRatePercentage)
+	// 	{
+	// 		Damage *= (1-BlockData.BlockRate);
+	// 	}
+	// 	else
+	// 	{
+	// 		Damage -= BlockData.BlockRate;
+	// 	}
+	//
+	// 	UXeAbilitySystemLibrary::SetBlockAbilityTag(EffectContextHandle, BlockAbilityTag);
+	// }
+
+	// TODO: Removed Critical and Block Attribute
+	// TODO: Get floating text from execution param
+	// TODO: Spawn floating text here (critical or block)
 
 	
-	/** Modify damage with Block Ability. */
-	if (BlockAbilityTag.IsValid())
+	if (UXeAbilitySystemLibrary::GetAbilityTag(EffectContextHandle).MatchesTag(FXeGameplayTags::Get().Ability_NormalAttack))
 	{
-		if (BlockData.bIsBlockRatePercentage)
+		for(const TWeakObjectPtr<UXeAttackModifierAbility> AttackModifierAbility: SourceAsc->AttackModifierAbilities)
 		{
-			Damage *= (1-BlockData.BlockRate);
+			if (AttackModifierAbility->ApplyAttackModifier(Damage, Damage))
+			{
+				FGameplayEventData EventData;
+				EventData.EventTag = AttackModifierAbility->AbilityTags.First();
+				EventData.EventMagnitude = Damage;
+				SourceAsc->HandleGameplayEvent(EventData.EventTag, &EventData);
+				break;
+			}
 		}
-		else
-		{
-			Damage -= BlockData.BlockRate;
-		}
-
-		UXeAbilitySystemLibrary::SetBlockAbilityTag(EffectContextHandle, BlockAbilityTag);
 	}
-	/***/
+
+	// TODO: Execute DefenseModifiers from TargetAsc
 
 	
 	/** Modify damage with Block. */
@@ -123,6 +146,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 
 	// Apply modified Damage.
-	const FGameplayModifierEvaluatedData EvaluatedData(UXeAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
-	OutExecutionOutput.AddOutputModifier(EvaluatedData);
+	if (Damage > 0.f)
+	{
+		const FGameplayModifierEvaluatedData EvaluatedData(UXeAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
+		OutExecutionOutput.AddOutputModifier(EvaluatedData);
+	}
 }
