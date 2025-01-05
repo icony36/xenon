@@ -64,9 +64,9 @@ UXeOverlayWidgetController* UXeAbilitySystemLibrary::GetOverlayWidgetController(
 	return nullptr;
 }
 
-bool UXeAbilitySystemLibrary::GetIsChanceSuccess(const float Chance)
+bool UXeAbilitySystemLibrary::GetIsChanceSuccess(const float Chance, const float Min, const float Max)
 {
-	return FMath::RandRange(0.0f, 1.0f) <= Chance;
+	return FMath::RandRange(Min, Max) <= Chance;
 }
 
 void UXeAbilitySystemLibrary::GetLiveCombatActorsWithinRadius(const UObject* WorldContextObject,
@@ -200,3 +200,18 @@ void UXeAbilitySystemLibrary::SetHitReactTag(FGameplayEffectContextHandle& Effec
 		XeEffectContext->SetHitReactTag(HitReactTag);
 	}
 }
+
+FGameplayTag UXeAbilitySystemLibrary::GetTagWithParent(const FGameplayTagContainer& TagContainer,
+	const FGameplayTag& ParentTag)
+{
+	for (FGameplayTag Tag : TagContainer)
+	{
+		if (Tag.MatchesTag(ParentTag))
+		{
+			return Tag;
+		}
+	}
+
+	return FGameplayTag();
+}
+

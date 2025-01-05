@@ -44,7 +44,7 @@ UXeOverlayWidgetController* AXeHUD::GetOverlayWidgetController(const FWidgetCont
 		// Bind delegates for changes.
 		OverlayWidgetController->BindCallbacksToDependencies();
 	}
-
+	
 	return  OverlayWidgetController;
 }
 

@@ -13,7 +13,7 @@ void UXeAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const F
 {
 	Super::OnAvatarSet(ActorInfo, Spec);
 	
-	if (AbilityTags.HasTag(FXeGameplayTags::Get().Ability_Passive))
+	if (AbilityTags.HasTag(FXeGameplayTags::Get().Ability_Skill_Passive))
 	{
 		bIsPassiveAbility = true;
 		ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle, false);

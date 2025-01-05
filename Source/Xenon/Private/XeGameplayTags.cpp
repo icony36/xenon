@@ -78,17 +78,33 @@ void FXeGameplayTags::InitializeNativeGameplayTags()
 		FName("Event.Attack"),
 		FString("Event tag for attack triggered."));
 
+	GameplayTags.Event_DamageDealt = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.DamageDealt"),
+	FString("Event tag when attacker dealt damage."));
+	
+	GameplayTags.Event_DamageTaken = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Event.DamageTaken"),
+	FString("Event tag when victim took damage."));
+
 
 	/** Abilities */
-	GameplayTags.Ability_Active = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Ability.Active"),
-		FString("Ability tag for Active Abilities."));
+	GameplayTags.Ability = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability"),
+		FString("Ability tag for all Abilities."));
 
-	GameplayTags.Ability_Passive = UGameplayTagsManager::Get().AddNativeGameplayTag(
-		FName("Ability.Passive"),
-		FString("Ability tag for Passive Abilities."));
-		
-    GameplayTags.Ability_NormalAttack = UGameplayTagsManager::Get().AddNativeGameplayTag(
-        FName("Ability.Active.NormalAttack"),
-        FString("Ability tag for Normal Attack Ability."));
+	GameplayTags.Ability_NormalAttack = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.NormalAttack"),
+		FString("Ability tag for Normal Attack Abilities."));
+
+	GameplayTags.Ability_Skill = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.Skill"),
+		FString("Ability tag for all Skill Abilities."));
+	
+	GameplayTags.Ability_Skill_Active = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.Skill.Active"),
+		FString("Ability tag for Active Skill Abilities."));
+
+	GameplayTags.Ability_Skill_Passive = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Ability.Skill.Passive"),
+		FString("Ability tag for Passive Skill Abilities."));
 }

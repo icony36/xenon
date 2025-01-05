@@ -34,8 +34,15 @@ public:
 
 	
 	//~ Gameplay Mechanics
+	/**
+	 * 
+	 * @param Chance Between Min and Max.
+	 * @param Min Minimum possible float.
+	 * @param Max Maximum possible float.
+	 * @return True if success.
+	 */
 	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
-	static bool GetIsChanceSuccess(const float Chance);
+	static bool GetIsChanceSuccess(const float Chance, const float Min=0.0f, const float Max=1.0f);
 	
 	UFUNCTION(BlueprintCallable, Category="XeAbilitySystemLibrary|GameplayMechanics")
 	static void GetLiveCombatActorsWithinRadius(const UObject* WorldContextObject, TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, const FVector& Center, const float Radius, const bool bShowDebug = false, const float ShowDebugTime = 1.f, const FLinearColor DebugColor = FLinearColor::Red);
@@ -58,4 +65,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "XeAbilitySystemLibrary|GameplayEffectContext")
 	static void SetHitReactTag(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle, const FGameplayTag& InHitReactTag);
 	//~ end Effect Context
+
+
+	//~ Helper
+	UFUNCTION(BlueprintPure, Category="XeAbilitySystemLibrary|Helper")
+	static FGameplayTag GetTagWithParent(const FGameplayTagContainer& TagContainer, const FGameplayTag& ParentTag);
+	//~ end Helper
 };

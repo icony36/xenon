@@ -52,31 +52,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	AActor* SourceAvatar = SourceAsc ? SourceAsc->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetAsc ? TargetAsc->GetAvatarActor() : nullptr;
 
-	// Get source Level and Critical Data.
-	int32 SourceLevel = 1;
-	// FCriticalData CriticalData;
-	// FGameplayTag CriticalAbilityTag;
-	if (SourceAvatar->Implements<UCombatInterface>())
-	{
-		SourceLevel = ICombatInterface::Execute_GetCombatLevel(SourceAvatar);
-		// CriticalAbilityTag = ICombatInterface::Execute_GetChosenCriticalData(SourceAvatar, CriticalData);
-	}
-
-	// Get target Level and Block Data.
-	int32 TargetLevel = 1;
-	// FBlockData BlockData;
-	// FGameplayTag BlockAbilityTag;
-	if (TargetAvatar->Implements<UCombatInterface>())
-	{
-		TargetLevel = ICombatInterface::Execute_GetCombatLevel(TargetAvatar);
-		// BlockAbilityTag = ICombatInterface::Execute_GetChosenBlockData(TargetAvatar, BlockData);
-	}
-
 	// Get Gameplay Effect Spec from incoming Params.
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 	
 	// Get Gameplay Effect Context Handle from Gameplay Effect Spec.
-	FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
+	const FGameplayEffectContextHandle EffectContextHandle = Spec.GetContext();
 
 	// Create Evaluation Parameters for captured Attributes.
 	FAggregatorEvaluateParameters EvaluationParameters;
@@ -85,54 +65,28 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// Get Damage from Set By Caller Magnitude.
 	float Damage = Spec.GetSetByCallerMagnitude(FXeGameplayTags::Get().Data_Damage, false);
-
 	
-	// /** Modify damage with Critical Ability. */
-	// if (CriticalAbilityTag.IsValid())
-	// {
-	// 	Damage *= CriticalData.CriticalRate;
-	// 	UXeAbilitySystemLibrary::SetCriticalAbilityTag(EffectContextHandle, CriticalAbilityTag);
-	// }
-	// /***/
-	//
-	//
-	// /** Modify damage with Block Ability. */
-	// if (BlockAbilityTag.IsValid())
-	// {
-	// 	if (BlockData.bIsBlockRatePercentage)
-	// 	{
-	// 		Damage *= (1-BlockData.BlockRate);
-	// 	}
-	// 	else
-	// 	{
-	// 		Damage -= BlockData.BlockRate;
-	// 	}
-	//
-	// 	UXeAbilitySystemLibrary::SetBlockAbilityTag(EffectContextHandle, BlockAbilityTag);
-	// }
-
-	// TODO: Removed Critical and Block Attribute
 	// TODO: Get floating text from execution param
 	// TODO: Spawn floating text here (critical or block)
-
 	
+	/** Modify normal attack damage with Attack Modifier Ability. */
+	FGameplayTag AttackModifierEvent;
 	if (UXeAbilitySystemLibrary::GetAbilityTag(EffectContextHandle).MatchesTag(FXeGameplayTags::Get().Ability_NormalAttack))
 	{
+		
+		// TODO: Determine attack modifier application sequence logic
 		for(const TWeakObjectPtr<UXeAttackModifierAbility> AttackModifierAbility: SourceAsc->AttackModifierAbilities)
 		{
 			if (AttackModifierAbility->ApplyAttackModifier(Damage, Damage))
 			{
-				FGameplayEventData EventData;
-				EventData.EventTag = AttackModifierAbility->AbilityTags.First();
-				EventData.EventMagnitude = Damage;
-				SourceAsc->HandleGameplayEvent(EventData.EventTag, &EventData);
+				AttackModifierEvent = UXeAbilitySystemLibrary::GetTagWithParent(AttackModifierAbility->AbilityTags, FXeGameplayTags::Get().Ability);;
 				break;
 			}
 		}
 	}
 
 	// TODO: Execute DefenseModifiers from TargetAsc
-
+	/** Modify all damage with Defensive Modifier Ability. */
 	
 	/** Modify damage with Block. */
 	// TODO: Modify Damage - Armor
@@ -143,11 +97,38 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	// Get Armor Coefficient from curve table.
 	/***/
-	
+
+	// Send Events
+	if (AttackModifierEvent.IsValid())
+	{
+		FGameplayEventData EventData;
+		EventData.EventTag = AttackModifierEvent;
+		EventData.EventMagnitude = Damage;
+		EventData.Instigator = SourceAvatar;
+		EventData.Target = TargetAvatar;
+		SourceAsc->HandleGameplayEvent(EventData.EventTag, &EventData);
+	}
 
 	// Apply modified Damage.
 	if (Damage > 0.f)
 	{
+		// Send Damage Dealt Event to attacker for abilities that need to do post-damage dealt effect.
+		FGameplayEventData SourceEventData;
+		SourceEventData.EventTag = FXeGameplayTags::Get().Event_DamageDealt;
+		SourceEventData.EventMagnitude = Damage;
+		SourceEventData.Instigator = SourceAvatar;
+		SourceEventData.Target = TargetAvatar;
+		SourceAsc->HandleGameplayEvent(SourceEventData.EventTag, &SourceEventData);
+
+		// Send Damage Taken Event to victim for abilities that need to do post-damage received effect.
+		FGameplayEventData TargetEventData;
+		TargetEventData.EventTag = FXeGameplayTags::Get().Event_DamageTaken;
+		TargetEventData.EventMagnitude = Damage;
+		TargetEventData.Instigator = SourceAvatar;
+		TargetEventData.Target = TargetAvatar;
+		TargetAsc->HandleGameplayEvent(TargetEventData.EventTag, &TargetEventData);
+
+		// Apply Damage.
 		const FGameplayModifierEvaluatedData EvaluatedData(UXeAttributeSet::GetIncomingDamageAttribute(), EGameplayModOp::Additive, Damage);
 		OutExecutionOutput.AddOutputModifier(EvaluatedData);
 	}
